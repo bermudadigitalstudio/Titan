@@ -26,7 +26,7 @@ middleware('*') { req in
   return
 }
 
-middleware('/user/*') {
+middleware('/user/**/') {
   guard req['Authentication'] == "password" else {
     throw .NotAuthorized
   }
