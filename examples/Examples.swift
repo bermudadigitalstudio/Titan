@@ -10,10 +10,9 @@ func middleware(_) {
   _TitanApp.middleware()
 }
 
-
 var start: Date
 var dbConn = ThreadSafePostgres()
-func unsafeDB(){
+func unsafeDB() {
   return Connections.lookupConnForThread(Thread.current) ?? UnsafePostgres()
 }
 
@@ -59,8 +58,6 @@ middleware() { req, res in
 ThreadedServer(app: TitanApp)
 
 --
-
-
 
 fn(req, res) fn
 
