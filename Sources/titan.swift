@@ -22,10 +22,6 @@ public protocol ResponseType {
 public struct Response {
   let code: Int
   public let body: String
-  let encoding: Encoding = .utf8
-  enum Encoding {
-    case utf8, utf16
-  }
 }
 
 public func TitanAppReset() {
@@ -47,7 +43,7 @@ public final class Titan {
   func route(method: String, path: String, handler: @escaping Middleware) {
     let routeWare: Middleware = { (req, res) in
       guard req.path == path && req.method == method else {
-        return (req, Response(code: 404, body: ""))
+        return (req, res)
       }
       return handler(req, res)
     }
@@ -57,7 +53,7 @@ public final class Titan {
   public func app(request: Request) -> ResponseType {
     typealias Result = (RequestType, ResponseType)
 
-    let initialReq = Request("", "")
+    let initialReq = request
     let initialRes = Response(code: 0, body: "")
     let initial: Result = (initialReq, initialRes)
     let res = middlewareStack.reduce(initial) { (res, next) -> Result in
