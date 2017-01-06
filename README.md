@@ -1,10 +1,10 @@
 # Titan
 
-A microframework for writing Swift web apps.
+A microframework for writing Swift web apps and container-based web services.
 
 ## Motivation
 
-The current landscape of Swift web frameworks is vertically integrated. These frameworks are unsuitable for specific microservice environments where very small codebases are the overriding concern. Additionally, they do not or just barely support modularized middleware and make it generally very hard to write, add, re-use and share middleware with the open-source community.
+The current landscape of Swift web frameworks is vertically integrated. These frameworks are unsuitable for specific microservice environments where very small codebases are the overriding concern. Additionally, they do not or just barely support modularized middleware and make it generally very hard to write, add, re-use and share middleware with the open-source community. 
 
 ## What
 
