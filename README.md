@@ -18,9 +18,11 @@ Titan is not a web server, and it has very few features. It was architected in o
 
 ...can be found in the `examples` directory.
 
-## Who
+## Contributing
 
-A couple of nerds who probably have no business doing this in the first place.
+Titan is maintained by Thomas Catterall ([@swizzlr](https://github.com/swizzlr)), Johannes Erhardt ([@johanneserhardt](https://github.com/johanneserhardt)), Sebastian Kreutzberger ([@skreutzberger](https://github.com/skreutzberger)) and Gabriel Peart ([@gabrielPeart](https://github.com/gabrielPeart)).
+
+Contributions are more than welcomed. You can either work on existing Github issues or discuss with us your ideas in a new Github issue. Thanks 🙌
 
 ## License
 
