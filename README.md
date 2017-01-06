@@ -22,7 +22,8 @@ Titan is not a web server, and it has very few features. It was architected in o
 
 A couple of nerds who probably have no business doing this in the first place.
 
+<br/>
+<br/>
 ## License
 
-MIT/Apache 2.0, depending on what third party code we end up using.
-
+Titan Framework is released under the [Apache 2.0 License](https://github.com/bermudadigitalstudio/titan/blob/master/LICENSE.txt).
