@@ -33,6 +33,22 @@ final class TitanAPITests: XCTestCase {
     XCTAssertEqual(TitanApp(Request("GET", "/username")).body, "swizzlr")
   }
 
+  func testMiddlewareFunction() {
+    var start = Date()
+    var end = start
+    middleware("*") {
+      start = Date()
+    }
+    get("/username") {
+      return "swizzlr"
+    }
+    middleware("*") {
+      end = Date()
+    }
+    _ = TitanApp(Request("GET", "/username"))
+    XCTAssertNotEqual(start, end)
+  }
+
   static var allTests: [(String, (TitanAPITests) -> () throws -> Void)] {
     return [
       ("testTitanGet", testTitanGet),
