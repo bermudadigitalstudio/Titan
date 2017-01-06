@@ -4,7 +4,7 @@ A microframework for writing Swift web apps.
 
 ## Motivation
 
-The current landscape of Swift web frameworks is vertically integrated. These frameworks are unsuitable for specific microservice environments where very small codebases are the overriding concern.
+The current landscape of Swift web frameworks is vertically integrated. These frameworks are unsuitable for specific microservice environments where very small codebases are the overriding concern. Additionally, they do not or just barely support modularized middleware and make it generally very hard to write, add, re-use and share middleware with the open-source community.
 
 ## What
 
@@ -22,8 +22,6 @@ Titan is not a web server, and it has very few features. It was architected in o
 
 A couple of nerds who probably have no business doing this in the first place.
 
-<br/>
-<br/>
 ## License
 
 Titan Framework is released under the [Apache 2.0 License](https://github.com/bermudadigitalstudio/titan/blob/master/LICENSE.txt).
