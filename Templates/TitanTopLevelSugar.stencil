@@ -1,4 +1,4 @@
-{% for method in type.Titan.methods %}public func {{ method.shortName }}({% for param in method.parameters %}{{ param.argumentLabel }} {{ param.name }}: {{ param.typeName }}{% if not forloop.last %}, {% endif %}{% endfor %}) {
+{% for method in type.Titan.methods %}public func {{ method.shortName }}({% for param in method.parameters %}{% if param.argumentLabel != param.name and param.argumentLabel != "_" %}{{ param.argumentLabel }}: {% endif %}{{ param.name }}: {{ param.typeName }}{% if not forloop.last %}, {% endif %}{% endfor %}) {
   GlobalDefaultTitanInstance.{{ method.shortName }}({% for param in method.parameters %}{% if param.argumentLabel != "_" %}{{ param.argumentLabel }}: {% endif %}{{ param.name }}{% if not forloop.last %}, {% endif %}{% endfor %})
 }
 
