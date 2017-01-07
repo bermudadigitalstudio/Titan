@@ -49,6 +49,50 @@ final class TitanAPITests: XCTestCase {
     XCTAssertNotEqual(start, end)
   }
 
+  func testDifferentMethods() {
+    get("/getSomething") {
+      return "swizzlrGotSomething!"
+    }
+
+    post("/postSomething") {
+      return "something posted"
+    }
+
+    put("/putSomething") {
+      return "i can confirm that stupid stuff is now on the server"
+    }
+
+    patch("/patchSomething") {
+      return "i guess we don't have a flat tire anymore?"
+    }
+
+    delete("/deleteSomething") {
+      return "error: could not find the USA or its principles"
+    }
+
+    options("/optionSomething") {
+      return "I sold movie rights!"
+    }
+
+  }
+
+  func testSamePathDifferentiationByMethod() {
+    var username = ""
+
+    get("/username") {
+      return username
+    }
+
+    post("/username") { req in
+      username = req.body
+      return 201
+    }
+
+    let resp = TitanApp(Request("POST", "/username", "Lisa"))
+    XCTAssert(resp.code, 201)
+    XCTAssert(TitanApp(Request("GET", "/username")).body, "Lisa")
+  }
+
   static var allTests: [(String, (TitanAPITests) -> () throws -> Void)] {
     return [
       ("testTitanGet", testTitanGet),

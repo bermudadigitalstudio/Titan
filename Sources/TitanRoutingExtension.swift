@@ -1,10 +1,6 @@
 extension Titan {
 
-  public func get(path: String, handler: @escaping Middleware) {
-    route(method: "GET", path: path, handler: handler)
-  }
-
-  private func route(method: String? = nil, path: String, handler: @escaping Middleware) {
+  public func route(method: String? = nil, path: String, handler: @escaping Middleware) {
     let routeWare: Middleware = { (req, res) in
       if let m = method, m.uppercased() != req.method.uppercased() {
         return (req, res)
@@ -17,9 +13,6 @@ extension Titan {
     middleware(middleware: routeWare)
   }
 
-  public func middleware(_ path: String, handler: @escaping Middleware) {
-    route(path: path, handler: handler)
-  }
 }
 
 private func matchRoute(path: String, route: String) -> Bool {

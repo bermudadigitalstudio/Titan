@@ -1,0 +1,7 @@
+extension Titan {
+  {% for method in type.HTTPMethod.cases %}
+  public func {{method.name | lowercase}}(path: String, handler: @escaping Middleware) {
+    route(method: "{{ method.name | uppercase }}", path: path, handler: handler)
+  }
+  {% endfor %}
+}
