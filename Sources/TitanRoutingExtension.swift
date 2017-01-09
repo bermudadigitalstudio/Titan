@@ -1,7 +1,7 @@
 extension Titan {
   /// Core routing handler for Titan Routing.
   /// Passing `nil` for the method results in matching all methods for a given path
-  /// Path matching is defined in `matchRoute` method, documented in `Routes.md`
+  /// Path matching is defined in `matchRoute` method, documented in `docs/Routes.md`
   public func route(method: String? = nil, path: String, handler: @escaping Middleware) {
     let routeWare: Middleware = { (req, res) in
       if let m = method, m.uppercased() != req.method.uppercased() {
