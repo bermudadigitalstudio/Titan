@@ -15,3 +15,9 @@ extension TitanCore.ResponseType {
     return Inquiline.Response(Status.accepted)
   }
 }
+
+public func toNestApplication(_ app: @escaping (TitanCore.RequestType) -> (TitanCore.ResponseType)) -> Nest.Application {
+  return { req in
+    return app(req.toTitanRequest()).toNestResponse()
+  }
+}
