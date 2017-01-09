@@ -5,8 +5,18 @@ var package = Package(
   dependencies: [
     .Package(url: "https://github.com/bermudadigitalstudio/titan-core.git", majorVersion: 0)
   ],
-  exclude: ["script", "Templates", "examples", "benchmark", "TitanServerDelegate"]
+  exclude: ["script", "Templates", "examples", "benchmark", "TitanServerDelegate", "TitanNestAdapter"]
 )
+
+// Uncomment the following to develop TitanNestAdapter
+//package.exclude = package.exclude.filter { $0 != "TitanNestAdapter" }
+//
+//package.dependencies.append(
+//  .Package(url: "https://github.com/nestproject/Nest.git", majorVersion: 0)
+//)
+//package.dependencies.append(
+//  .Package(url: "https://github.com/nestproject/Inquiline.git", majorVersion: 0)
+//)
 
 // Uncomment the following to develop TitanServerDelegate
 //package.exclude = package.exclude.filter { $0 != "TitanServerDelegate" }
