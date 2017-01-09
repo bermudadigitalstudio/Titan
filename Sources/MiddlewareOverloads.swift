@@ -25,7 +25,7 @@ extension Titan {
     get(path: path, handler: toMiddleware(handler))
   }
 
-//  public func middleware(_ path: String, handler: @escaping () -> ()) {
-//    middleware(path, handler: toMiddleware(handler))
-//  }
+  public func middleware(_ path: String, handler: @escaping () -> ()) {
+    middleware(path: path, handler: toMiddleware(handler))
+  }
 }

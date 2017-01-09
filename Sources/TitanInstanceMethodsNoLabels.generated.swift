@@ -1,36 +1,52 @@
 // Routing methods for Titan overloaded with no labels
 extension Titan {
   
+  public func get(path: String, _ handler: @escaping (RequestType) -> String) {
+    self.get(path, handler: handler)
+  }
+
+  public func get(path: String, _ handler: @escaping () -> String) {
+    self.get(path, handler: handler)
+  }
+
+  public func middleware(path: String, _ handler: @escaping () -> ()) {
+    self.middleware(path, handler: handler)
+  }
+
   public func get(_ path: String, _ handler: @escaping Middleware) {
-    get(path: path, handler: handler)
+    self.get(path: path, handler: handler)
   }
-  
+
   public func post(_ path: String, _ handler: @escaping Middleware) {
-    post(path: path, handler: handler)
+    self.post(path: path, handler: handler)
   }
-  
+
   public func put(_ path: String, _ handler: @escaping Middleware) {
-    put(path: path, handler: handler)
+    self.put(path: path, handler: handler)
   }
-  
+
   public func patch(_ path: String, _ handler: @escaping Middleware) {
-    patch(path: path, handler: handler)
+    self.patch(path: path, handler: handler)
   }
-  
+
   public func delete(_ path: String, _ handler: @escaping Middleware) {
-    delete(path: path, handler: handler)
+    self.delete(path: path, handler: handler)
   }
-  
+
   public func options(_ path: String, _ handler: @escaping Middleware) {
-    options(path: path, handler: handler)
+    self.options(path: path, handler: handler)
   }
-  
+
   public func head(_ path: String, _ handler: @escaping Middleware) {
-    head(path: path, handler: handler)
+    self.head(path: path, handler: handler)
   }
-  
-  public func route(_ path: String, _ handler: @escaping Middleware) {
-    route(path: path, handler: handler)
+
+  public func route(_ method: String?, _ path: String, _ handler: @escaping Middleware) {
+    self.route(method: method, path: path, handler: handler)
   }
-  
+
+  public func middleware(_ path: String, _ handler: @escaping Middleware) {
+    self.middleware(path: path, handler: handler)
+  }
+
 }

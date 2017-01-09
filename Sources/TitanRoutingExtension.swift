@@ -15,6 +15,11 @@ extension Titan {
     middleware(middleware: routeWare)
   }
 
+  /// Synonym for `route`
+  public func middleware(path: String, handler: @escaping Middleware) {
+    route(path: path, handler: handler)
+  }
+
 }
 
 private func matchRoute(path: String, route: String) -> Bool {
