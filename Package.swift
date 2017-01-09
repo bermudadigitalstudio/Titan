@@ -9,11 +9,11 @@ var package = Package(
 )
 
 // Uncomment the following to develop TitanServerDelegate
-package.exclude = package.exclude.filter { $0 != "TitanServerDelegate" }
-
-package.dependencies.append(
- .Package(url: "https://github.com/IBM-Swift/Kitura-net.git", majorVersion: 1)
-)
+//package.exclude = package.exclude.filter { $0 != "TitanServerDelegate" }
+//
+//package.dependencies.append(
+// .Package(url: "https://github.com/IBM-Swift/Kitura-net.git", majorVersion: 1)
+//)
 
 // Uncomment the following to install sourcery for development
 //package.dependencies.append(
