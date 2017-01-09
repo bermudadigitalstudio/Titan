@@ -1,0 +1,8 @@
+// Routing methods for Titan overloaded with no labels
+extension Titan {
+  {% for method in type.Titan.methods %}
+  public func {{ method.shortName }}(_ path: String, _ handler: @escaping Middleware) {
+    {{method.shortName}}(path: path, handler: handler)
+  }
+  {% endfor %}
+}
