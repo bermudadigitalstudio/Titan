@@ -1,0 +1,8 @@
+// Routing methods for Titan overloaded with no labels
+extension Titan {
+  {% for method in type.Titan.methods %}
+  public func {{ method.shortName }}({% for param in method.parameters %}{% if param.argumentLabel == param.name %}_ {% endif %}{{ param.name }}: {{ param.typeName }}{% if not forloop.last %}, {% endif %}{% endfor %}) {
+    self.{{ method.shortName }}({% for param in method.parameters %}{% if param.argumentLabel != "_" %}{{ param.argumentLabel }}: {% endif %}{{ param.name }}{% if not forloop.last %}, {% endif %}{% endfor %})
+  }
+{% endfor %}
+}
