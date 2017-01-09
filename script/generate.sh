@@ -14,6 +14,9 @@ then
   exit 1
 fi
 
+# We don't want our pipeline messed up by older versions – delete all generated files!
+rm Sources/*.generated.swift
+
 # We don't actually need this code in Titan, but we want to loop through HTTP methods in Templates, so we have to put it somewhere
 cat > Sources/HTTPMethods.swift <<EOD
 enum HTTPMethod {
