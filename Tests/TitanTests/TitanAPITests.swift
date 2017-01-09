@@ -82,6 +82,10 @@ final class TitanAPITests: XCTestCase {
       return "I sold movie rights!"
     }
 
+    head("/headSomething") {
+      return "OWN GOAL!!"
+    }
+
   }
 
   func testSamePathDifferentiationByMethod() {
@@ -91,14 +95,14 @@ final class TitanAPITests: XCTestCase {
       return username
     }
 
-    post("/username") { req in
+    post("/username") { (req: RequestType) in
       username = req.body
       return 201
     }
 
     let resp = TitanApp(Request("POST", "/username", "Lisa"))
-    XCTAssert(resp.code, 201)
-    XCTAssert(TitanApp(Request("GET", "/username")).body, "Lisa")
+    XCTAssertEqual(resp.code, 201)
+    XCTAssertEqual(TitanApp(Request("GET", "/username")).body, "Lisa")
   }
 
   static var allTests: [(String, (TitanAPITests) -> () throws -> Void)] {

@@ -5,8 +5,36 @@ extension Titan {
     self.get(path, handler: handler)
   }
 
+  public func post(path: String, _ handler: @escaping (RequestType) -> Int) {
+    self.post(path, handler: handler)
+  }
+
   public func get(path: String, _ handler: @escaping () -> String) {
     self.get(path, handler: handler)
+  }
+
+  public func options(path: String, _ handler: @escaping () -> String) {
+    self.options(path, handler: handler)
+  }
+
+  public func post(path: String, _ handler: @escaping () -> String) {
+    self.post(path, handler: handler)
+  }
+
+  public func patch(path: String, _ handler: @escaping () -> String) {
+    self.patch(path, handler: handler)
+  }
+
+  public func put(path: String, _ handler: @escaping () -> String) {
+    self.put(path, handler: handler)
+  }
+
+  public func delete(path: String, _ handler: @escaping () -> String) {
+    self.delete(path, handler: handler)
+  }
+
+  public func head(path: String, _ handler: @escaping () -> String) {
+    self.head(path, handler: handler)
   }
 
   public func middleware(path: String, _ handler: @escaping () -> ()) {
