@@ -9,14 +9,14 @@ var package = Package(
 )
 
 // Uncomment the following to develop TitanNestAdapter
-//package.exclude = package.exclude.filter { $0 != "TitanNestAdapter" }
-//
-//package.dependencies.append(
-//  .Package(url: "https://github.com/nestproject/Nest.git", majorVersion: 0)
-//)
-//package.dependencies.append(
-//  .Package(url: "https://github.com/nestproject/Inquiline.git", majorVersion: 0)
-//)
+package.exclude = package.exclude.filter { $0 != "TitanNestAdapter" }
+
+package.dependencies.append(
+ .Package(url: "https://github.com/nestproject/Nest.git", majorVersion: 0)
+)
+package.dependencies.append(
+ .Package(url: "https://github.com/nestproject/Inquiline.git", majorVersion: 0)
+)
 
 // Uncomment the following to develop TitanServerDelegate
 //package.exclude = package.exclude.filter { $0 != "TitanServerDelegate" }

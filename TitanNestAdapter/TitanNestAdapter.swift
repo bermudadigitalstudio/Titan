@@ -1,15 +1,19 @@
 import TitanCore
 import Nest
-import Inquiline // Todo: remove dependency on Inquiline
+import Inquiline
 
-@available(*, unavailable, message: "Incomplete implementation")
 extension Nest.RequestType {
   func toTitanRequest() -> TitanCore.RequestType {
-    return Request(method, path)
+    var body: String
+    if var payload = self.body {
+      body = payload.toString()
+    } else {
+      body = ""
+    }
+    return Request(method, path, body, headers: headers)
   }
 }
 
-@available(*, unavailable, message: "Incomplete implementation")
 extension TitanCore.ResponseType {
   func toNestResponse() -> Nest.ResponseType {
     return Inquiline.Response(Status.accepted)
@@ -19,5 +23,16 @@ extension TitanCore.ResponseType {
 public func toNestApplication(_ app: @escaping (TitanCore.RequestType) -> (TitanCore.ResponseType)) -> Nest.Application {
   return { req in
     return app(req.toTitanRequest()).toNestResponse()
+  }
+}
+
+extension Nest.PayloadType {
+  mutating func toString() -> String {
+    var buffer: [UInt8] = []
+
+    while let n = self.next() {
+      buffer += n
+    }
+    return String(validatingUTF8: buffer.map { Int8($0) }) ?? ""
   }
 }
