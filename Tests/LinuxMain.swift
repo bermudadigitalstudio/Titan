@@ -2,5 +2,5 @@ import XCTest
 @testable import TitanTests
 
 XCTMain([
-  testCase(TitanTests.allTests),
+  testCase(TitanAPITests.allTests),
 ])
