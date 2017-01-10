@@ -11,10 +11,11 @@ final class TitanAPITests: XCTestCase {
   }
 
   func testConvertingNestRequestToTitanRequest() {
+    let body = "Some body goes here"
     let req = Inquiline.Request(method: "PATCH",
                                 path: "/complexPath/with/comps?query=string&value=stuff",
-                                headers: [("Accept", "application/json")],
-                                content: "Some body goes here")
+                                headers: [("Accept", "application/json"), ("Content-Length", "\(body.utf8.count)")],
+                                content: body)
     var titanRequestConvertedFromNest: TitanCore.RequestType!
     titanInstance.middleware { (request, response) -> (TitanCore.RequestType, TitanCore.ResponseType) in
       titanRequestConvertedFromNest = request
