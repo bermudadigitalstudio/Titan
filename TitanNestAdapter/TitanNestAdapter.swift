@@ -16,7 +16,10 @@ extension Nest.RequestType {
 
 extension TitanCore.ResponseType {
   func toNestResponse() -> Nest.ResponseType {
-    return Inquiline.Response(Status.accepted)
+    guard let status = Status(rawValue: self.code) else { // Todo: this is a bit fragile – remove the inquiline dependency!
+      return Inquiline.Response(Status.badGateway, content: "Titan Nest Adapter could not parse the response from Titan")
+    }
+    return Inquiline.Response(status, headers: self.headers, content: self.body)
   }
 }
 
