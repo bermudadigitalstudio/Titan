@@ -17,6 +17,7 @@ extension TitanCore.ResponseType {
   }
 }
 
+/// When using TitanNestAdapter, a Content-Length header MUST be provided if the request has a body. Encoding is assumed to be utf-8.
 public func toNestApplication(_ app: @escaping (TitanCore.RequestType) -> (TitanCore.ResponseType)) -> Nest.Application {
   return { req in
     return app(req.toTitanRequest()).toNestResponse()
