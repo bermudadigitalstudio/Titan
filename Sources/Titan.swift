@@ -1,4 +1,5 @@
 @_exported import TitanCore
+@_exported import TitanRouter
 
 internal var GlobalDefaultTitanInstance = Titan()
 
