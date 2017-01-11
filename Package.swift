@@ -5,7 +5,7 @@ var package = Package(
   dependencies: [
     .Package(url: "https://github.com/bermudadigitalstudio/titan-core.git", majorVersion: 0)
   ],
-  exclude: ["script", "Templates", "examples", "benchmark", "TitanServerDelegate"]
+  exclude: ["script", "Templates", "examples"]
 )
 
 // Uncomment the following to install sourcery for development
