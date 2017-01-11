@@ -24,9 +24,9 @@ enum HTTPMethod {
 }
 EOD
 
-for file in "TitanInstanceRoutesByMethod" "TitanInstanceMethodsNoLabels" "TitanTopLevelSugar"
+for file in "TitanTopLevelSugar"
 do
-  .build/debug/sourcery Sources/ Templates/$file.stencil Sources/ # Generate source code
+  .build/debug/sourcery Packages/TitanRouter*/Sources Templates/$file.stencil Sources/ # Generate source code
   tail -n +4 Sources/$file.generated.swift > Sources/$file.generated.swift.temp # Trim first three lines of generated file into temp file
   rm Sources/$file.generated.swift # Remove original
   mv Sources/$file.generated.swift.temp Sources/$file.generated.swift # Rename to original
