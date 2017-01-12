@@ -26,6 +26,6 @@ Contributions are more than welcomed. You can either work on existing Github iss
 
 ## Background and License
 
-Titan was initially developed for a project run by the [Bermuda Digital Studio (BDS)](www.bdstudio.de). The BDS is a team devoted to enable great digital product management for the retail business of [innogy SE's](www.innogy.com). 
+Titan was initially developed in a project run with the [Bermuda Digital Studio (BDS)](www.bdstudio.de). The BDS is a team devoted to enable great digital product management, design and development for the retail business of [innogy SE's](www.innogy.com). Our goal is to digitize and disrupt energy.
 
 Titan Framework is released under the [Apache 2.0 License](https://github.com/bermudadigitalstudio/titan/blob/master/LICENSE.txt).
