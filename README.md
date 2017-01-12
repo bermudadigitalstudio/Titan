@@ -24,6 +24,8 @@ Titan is maintained by Thomas Catterall ([@swizzlr](https://github.com/swizzlr))
 
 Contributions are more than welcomed. You can either work on existing Github issues or discuss with us your ideas in a new Github issue. Thanks 🙌
 
-## License
+## Background and License
+
+Titan was initially developed in a project run with the [Bermuda Digital Studio (BDS)](www.bdstudio.de). The BDS is a team devoted to enable great digital product management, design and development for the retail business of [innogy SE's](www.innogy.com). Our goal is to digitize and disrupt energy.
 
 Titan Framework is released under the [Apache 2.0 License](https://github.com/bermudadigitalstudio/titan/blob/master/LICENSE.txt).
