@@ -5,6 +5,23 @@ final class TitanAPITests: XCTestCase {
   override func setUp() {
     TitanAppReset()
   }
+  func testMutableParams() {
+    let app = Titan()
+    app.get("/init") { (req, res) -> Void in
+      res.body = "Hello World"
+      req.path = "/rewritten"
+      res.code = 500
+    }
+    var rewrittenRequest: RequestType!
+    app.addFunction { (req, res) -> (RequestType, ResponseType) in
+      rewrittenRequest = req
+      return (req, res)
+    }
+    let response = app.app(request: Request("GET", "/init"))
+    XCTAssertEqual(response.code, 500)
+    XCTAssertEqual(response.body, "Hello World")
+    XCTAssertEqual(rewrittenRequest.path, "/rewritten")
+  }
   func testTitanGet() {
     get("/username") {
       return "swizzlr"
