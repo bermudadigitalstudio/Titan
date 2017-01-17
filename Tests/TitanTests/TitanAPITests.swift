@@ -2,8 +2,9 @@ import XCTest
 import Titan
 
 final class TitanAPITests: XCTestCase {
+  var titanInstance: Titan!
   override func setUp() {
-    TitanAppReset()
+    titanInstance = Titan()
   }
   func testMutableParams() {
     let app = Titan()
@@ -43,83 +44,83 @@ final class TitanAPITests: XCTestCase {
     XCTAssertEqual(response.body, "Hello World")
   }
   func testTitanGet() {
-    get("/username") {
+    titanInstance.get("/username") {
       return "swizzlr"
     }
-    XCTAssertEqual(TitanApp(Request("GET", "/username")).body, "swizzlr")
+    XCTAssertEqual(titanInstance.app(request: Request("GET", "/username")).body, "swizzlr")
   }
 
   func testTitanEcho() {
-    get("/echoMyBody") { req in
+    titanInstance.get("/echoMyBody") { req in
       return req.body
     }
-    XCTAssertEqual(TitanApp(Request("GET", "/echoMyBody", "hello, this is my body")).body,
+    XCTAssertEqual(titanInstance.app(request: Request("GET", "/echoMyBody", "hello, this is my body")).body,
                    "hello, this is my body")
   }
 
   func testMultipleRoutes() {
-    get("/username") {
+    titanInstance.get("/username") {
       return "swizzlr"
     }
 
-    get("/echoMyBody") { req in
+    titanInstance.get("/echoMyBody") { req in
       return req.body
     }
-    XCTAssertEqual(TitanApp(Request("GET", "/echoMyBody", "hello, this is my body")).body,
+    XCTAssertEqual(titanInstance.app(request: Request("GET", "/echoMyBody", "hello, this is my body")).body,
                    "hello, this is my body")
-    XCTAssertEqual(TitanApp(Request("GET", "/username")).body, "swizzlr")
+    XCTAssertEqual(titanInstance.app(request: Request("GET", "/username")).body, "swizzlr")
   }
 
   func testTitanSugar() {
     let somePremadeFunction: Function = { req, res in
       return (req, res)
     }
-    get(path: "/username", handler: somePremadeFunction)
-    get("/username", somePremadeFunction)
+    titanInstance.get(path: "/username", handler: somePremadeFunction)
+    titanInstance.get("/username", somePremadeFunction)
   }
 
   func testFunctionFunction() {
     var start = Date()
     var end = start
-    addFunction("*") {
+    titanInstance.addFunction("*") {
       start = Date()
     }
-    get("/username") {
+    titanInstance.get("/username") {
       return "swizzlr"
     }
-    addFunction("*") {
+    titanInstance.addFunction("*") {
       end = Date()
     }
-    _ = TitanApp(Request("GET", "/username"))
+    _ = titanInstance.app(request: Request("GET", "/username"))
     XCTAssertNotEqual(start, end)
   }
 
   func testDifferentMethods() {
-    get("/getSomething") {
+    titanInstance.get("/getSomething") {
       return "swizzlrGotSomething!"
     }
 
-    post("/postSomething") {
+    titanInstance.post("/postSomething") {
       return "something posted"
     }
 
-    put("/putSomething") {
+    titanInstance.put("/putSomething") {
       return "i can confirm that stupid stuff is now on the server"
     }
 
-    patch("/patchSomething") {
+    titanInstance.patch("/patchSomething") {
       return "i guess we don't have a flat tire anymore?"
     }
 
-    delete("/deleteSomething") {
+    titanInstance.delete("/deleteSomething") {
       return "error: could not find the USA or its principles"
     }
 
-    options("/optionSomething") {
+    titanInstance.options("/optionSomething") {
       return "I sold movie rights!"
     }
 
-    head("/headSomething") {
+    titanInstance.head("/headSomething") {
       return "OWN GOAL!!"
     }
 
@@ -128,18 +129,18 @@ final class TitanAPITests: XCTestCase {
   func testSamePathDifferentiationByMethod() {
     var username = ""
 
-    get("/username") {
+    titanInstance.get("/username") {
       return username
     }
 
-    post("/username") { (req: RequestType) -> Int in
+    titanInstance.post("/username") { (req: RequestType) -> Int in
       username = req.body
       return 201
     }
 
-    let resp = TitanApp(Request("POST", "/username", "Lisa"))
+    let resp = titanInstance.app(request: Request("POST", "/username", "Lisa"))
     XCTAssertEqual(resp.code, 201)
-    XCTAssertEqual(TitanApp(Request("GET", "/username")).body, "Lisa")
+    XCTAssertEqual(titanInstance.app(request: Request("GET", "/username")).body, "Lisa")
   }
 
   static var allTests: [(String, (TitanAPITests) -> () throws -> Void)] {
