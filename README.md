@@ -18,6 +18,25 @@ Titan is not a web server, and it has very few features. It was architected in o
 
 ...can be found in the `examples` directory.
 
+A bunch of different samples can be found [here](https://github.com/bermudadigitalstudio/TitanSamples).
+
+A `TodoExample` can be found [here](https://github.com/bermudadigitalstudio/TitanTodoBackend).
+
+## Other Packages You Can Use With Titan
+
+Please open a PR if you have something you would like to share with the class.
+
+### Server adapters
+- [TitanNestAdapter](https://github.com/bermudadigitalstudio/TitanNestAdapter): use Titan with any Nest compatible webserver
+- [TitanKituraAdapter](https://github.com/bermudadigitalstudio/TitanKituraAdapter): use Titan with Kitura's server backend
+
+### Sugar
+- [TitanTopLevel](https://github.com/bermudadigitalstudio/TitanTopLevel): expose Titan instance methods as top level functions
+
+### Little bits of functionality
+- [TitanCacheControlFunction](https://github.com/bermudadigitalstudio/TitanCacheControlFunction): insert Cache-Control headers into your responses, automatically!
+
+
 ## Contributing
 
 Titan is maintained by Thomas Catterall ([@swizzlr](https://github.com/swizzlr)), Johannes Erhardt ([@johanneserhardt](https://github.com/johanneserhardt)), Sebastian Kreutzberger ([@skreutzberger](https://github.com/skreutzberger)) and Gabriel Peart ([@gabrielPeart](https://github.com/gabrielPeart)).
