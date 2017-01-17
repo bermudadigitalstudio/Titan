@@ -7,6 +7,18 @@ public extension Titan {
     self.get(path: path, handler: toFunction(function))
   }
 
+  public func get(_ path: String, function: @escaping (inout Request, inout Response) -> (RequestType, ResponseType)) {
+    self.get(path: path, handler: toFunction(function))
+  }
+
+  private func toFunction(_ function: @escaping (inout Request, inout Response) -> (RequestType, ResponseType)) -> Function {
+    return { req, res in
+      var mutRequest = Request(req.method, req.path, req.body, headers: req.headers)
+      var mutResponse = Response(res.code, res.body, headers: res.headers)
+      return function(&mutRequest, &mutResponse)
+    }
+  }
+
   private func toFunction(_ function: @escaping (inout Request, inout Response) -> Void) -> Function {
     return { req, res in
       var mutRequest = Request(req.method, req.path, req.body, headers: req.headers)
