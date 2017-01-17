@@ -5,6 +5,43 @@ final class TitanAPITests: XCTestCase {
   override func setUp() {
     TitanAppReset()
   }
+  func testMutableParams() {
+    let app = Titan()
+    app.get("/init") { (req, res) -> Void in
+      res.body = "Hello World"
+      req.path = "/rewritten"
+      res.code = 500
+    }
+    app.addFunction { (req, res) -> (RequestType, ResponseType) in
+      XCTAssertEqual(req.path, "/rewritten")
+      return (req, res)
+    }
+    let response = app.app(request: Request("GET", "/init"))
+    XCTAssertEqual(response.code, 500)
+    XCTAssertEqual(response.body, "Hello World")
+  }
+
+  func testFunctionalMutableParams() {
+    let app = Titan()
+    app.get("/init") { (req: inout Request, res: inout Response) -> (RequestType, ResponseType) in
+      var newReq = req
+      var newRes = res
+      newRes.body = "Hello World"
+      newReq.path = "/rewritten"
+      newRes.code = 500
+      // Check that mutating the inout params has no effect on the function chain – ONLY the returned values should matter
+      res.code = 400
+      res.body = "Should not ever come into the response"
+      return (newReq, newRes)
+    }
+    app.addFunction { (req, res) -> (RequestType, ResponseType) in
+      XCTAssertEqual(req.path, "/rewritten")
+      return (req, res)
+    }
+    let response = app.app(request: Request("GET", "/init"))
+    XCTAssertEqual(response.code, 500)
+    XCTAssertEqual(response.body, "Hello World")
+  }
   func testTitanGet() {
     get("/username") {
       return "swizzlr"
