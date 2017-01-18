@@ -26,7 +26,7 @@ Provides quick access to decoded JSON in the request body.
 ### [Titan Query String](https://github.com/bermudadigitalstudio/TitanQueryString) (incomplete)
 Access the query string of the request.
 
-### [Titan Form URL Encoded Body Parser](https://github.com/bermudadigitalstudio/TitanFormURLEncodedBodyParser) (incomplete)
+### [Titan Form URL Encoded Body Parser](https://github.com/bermudadigitalstudio/TitanFormURLEncodedBodyParser)
 Decode `application/x-www-form-urlencoded` data in a POST body.
 
 ### [Titan 404](https://github.com/bermudadigitalstudio/Titan404) (incomplete)
