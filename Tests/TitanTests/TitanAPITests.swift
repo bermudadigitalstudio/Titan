@@ -184,6 +184,21 @@ final class TitanAPITests: XCTestCase {
     XCTAssertEqual(parsed[3].value, "when i was young\r\ni went to school")
   }
 
+  func testCanAccessQueryString() {
+    let path = "/users?verified=true&q=thomas%20catterall"
+    let request: RequestType = Request("GET", path, "", headers: [])
+    let parsedQuery = request.query
+    guard parsedQuery.count == 2 else {
+      XCTFail()
+      return
+    }
+    XCTAssertEqual(parsedQuery[0].key, "verified")
+    XCTAssertEqual(parsedQuery[0].value, "true")
+
+    XCTAssertEqual(parsedQuery[1].key, "q")
+    XCTAssertEqual(parsedQuery[1].value, "thomas catterall")
+  }
+
   static var allTests: [(String, (TitanAPITests) -> () throws -> Void)] {
     return [
       ("testTitanGet", testTitanGet),

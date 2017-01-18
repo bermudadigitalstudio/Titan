@@ -3,3 +3,4 @@
 @_exported import TitanErrorHandling
 @_exported import TitanJSONRequestBody
 @_exported import TitanFormURLEncodedBodyParser
+@_exported import TitanQueryString
