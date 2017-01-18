@@ -126,6 +126,19 @@ final class TitanAPITests: XCTestCase {
 
   }
 
+  func testErrorsAreCaught() {
+    let t = Titan()
+    let errorHandler: (Error) -> ResponseType = { (err: Error) in
+      let desc = String(describing: err)
+      return Response(500, desc)
+    }
+    t.addFunction(errorHandler: errorHandler) { (req, res) throws -> (RequestType, ResponseType) in
+      throw "Oh no"
+    }
+    XCTAssertEqual(t.app(request: Request("", "")).body, "Oh no")
+  }
+
+
   func testSamePathDifferentiationByMethod() {
     var username = ""
 
@@ -149,3 +162,5 @@ final class TitanAPITests: XCTestCase {
     ]
   }
 }
+
+extension String: Error {}
