@@ -7,5 +7,6 @@ let package = Package(
     .Package(url: "https://github.com/bermudadigitalstudio/TitanRouter.git", majorVersion: 0, minor: 1),
     .Package(url: "https://github.com/bermudadigitalstudio/TitanErrorHandling.git", majorVersion: 0, minor: 1),
     .Package(url: "https://github.com/bermudadigitalstudio/TitanJSONRequestBody.git", majorVersion: 0, minor: 1),
+    .Package(url: "https://github.com/bermudadigitalstudio/TitanFormURLEncodedBodyParser.git", majorVersion: 0, minor: 1),
   ]
 )

@@ -166,6 +166,24 @@ final class TitanAPITests: XCTestCase {
     XCTAssertEqual(json["data"]!, [1, 2, 3])
   }
 
+  func testCanAccessFormURLEncodedBody() {
+    let requestBody = "foo=bar&baz=&favorite+flavor=flies&resume=when+i+was+young%0D%0Ai+went+to+school"
+    let request = Request("POST", "/submit", requestBody, headers: [])
+    let parsed = request.formURLEncodedBody
+    // Simple
+    XCTAssertEqual(parsed[0].key, "foo")
+    XCTAssertEqual(parsed[0].value, "bar")
+    // Missing value
+    XCTAssertEqual(parsed[1].key, "baz")
+    XCTAssertEqual(parsed[1].value, "")
+    // Spaces
+    XCTAssertEqual(parsed[2].key, "favorite flavor")
+    XCTAssertEqual(parsed[2].value, "flies")
+    // Percent encoded new lines
+    XCTAssertEqual(parsed[3].key, "resume")
+    XCTAssertEqual(parsed[3].value, "when i was young\r\ni went to school")
+  }
+
   static var allTests: [(String, (TitanAPITests) -> () throws -> Void)] {
     return [
       ("testTitanGet", testTitanGet),
