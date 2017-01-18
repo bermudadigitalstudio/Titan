@@ -156,6 +156,16 @@ final class TitanAPITests: XCTestCase {
     XCTAssertEqual(titanInstance.app(request: Request("GET", "/username")).body, "Lisa")
   }
 
+  func testCanAccessJSONBody() {
+    let jsonBody = "{\"data\": [1, 2, 3]}"
+    let req: RequestType = Request("POST", "/ingest", jsonBody, headers: [])
+    guard let json = req.json as? Dictionary<String, Array<Int>> else {
+      XCTFail("Received: \(req.json)")
+      return
+    }
+    XCTAssertEqual(json["data"]!, [1, 2, 3])
+  }
+
   static var allTests: [(String, (TitanAPITests) -> () throws -> Void)] {
     return [
       ("testTitanGet", testTitanGet),
