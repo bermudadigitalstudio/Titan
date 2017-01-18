@@ -2,7 +2,7 @@
 
 Titan is a constellation of microframeworks, and an umbrella framework that has what we consider to be "the bare essentials".
 
-## Titan
+## [Titan](https://github.com/bermudadigitalstudio/Titan) (this repo)
 Just add a server adapter and you have a very slim server framework.
 
 ### [Titan Core](https://github.com/bermudadigitalstudio/TitanCore)
@@ -11,28 +11,28 @@ Declares the Titan class, Request/ResponseType protocols, and Request/Response s
 ### [Titan Router](https://github.com/bermudadigitalstudio/TitanRouter) (incomplete)
 Extends the Titan class, providing a `route` method which ensures that the Function is only executed when it matches.
 
-### Titan Router + Sugar (needs refactoring)
+### [Titan Router + Sugar](https://github.com/bermudadigitalstudio/TitanRouter-ByRouteSugar) (incomplete)
 Provides convenience methods to the router, e.g. `get`, `post` etc.
 
 ### [Titan Error Handling](https://github.com/bermudadigitalstudio/TitanErrorHandling)
 Extends the Titan class to take a `ThrowingFunction`.
 
-### Titan Error + Routing Sugar (needs creating)
+### [Titan Error + Routing Sugar](https://github.com/bermudadigitalstudio/TitanErrorHandling-RoutingSugar) (incomplete)
 Provides throwing function overloads to the router sugar.
 
-### Titan JSON Body Parser (needs creating)
+### [Titan JSON Request Body](https://github.com/bermudadigitalstudio/TitanJSONRequestBody) (incomplete)
 Provides quick access to decoded JSON in the request body.
 
-### Titan Query String Parser (needs creating)
+### [Titan Query String](https://github.com/bermudadigitalstudio/TitanQueryString) (incomplete)
 Access the query string of the request.
 
-### Titan FormData Parser (needs creating)
+### [Titan FormData](https://github.com/bermudadigitalstudio/TitanFormData) (incomplete)
 Decode the data in a POST body.
 
-### Titan 404
+### [Titan 404](https://github.com/bermudadigitalstudio/Titan404) (incomplete)
 A simple function that writes a cute 404 to the Response. Put it at the top of your Function stack to get a simple Not Found behaviour in case it... isn't found.
 
-## Titan On Steroids
+## [Titan On Steroids](https://github.com/bermudadigitalstudio/TitanOnSteroids) (incomplete)
 Titan plus the kitchen sink. Still as fast, expressive and powerful as Titan, but contains more features and conveniences, for advanced users only. Comes with a webserver. Enough batteries included to electrocute yourself.
 
 ### [Titan Top Level](https://github.com/bermudadigitalstudio/TitanTopLevel)
