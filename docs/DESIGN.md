@@ -11,7 +11,7 @@ Declares the Titan class, Request/ResponseType protocols, and Request/Response s
 ### [Titan Router](https://github.com/bermudadigitalstudio/TitanRouter) (incomplete)
 Extends the Titan class, providing a `route` method which ensures that the Function is only executed when it matches.
 
-### [Titan Router + Sugar](https://github.com/bermudadigitalstudio/TitanRouter-ByRouteSugar) (incomplete)
+### [Titan Router + Sugar](https://github.com/bermudadigitalstudio/TitanRouterMethodSugar)
 Provides convenience methods to the router, e.g. `get`, `post` etc.
 
 ### [Titan Error Handling](https://github.com/bermudadigitalstudio/TitanErrorHandling)
