@@ -5,16 +5,16 @@ Titan is a constellation of microframeworks, and an umbrella framework that has 
 ## Titan
 Just add a server adapter and you have a very slim server framework.
 
-### Titan Core
+### [Titan Core](https://github.com/bermudadigitalstudio/TitanCore)
 Declares the Titan class, Request/ResponseType protocols, and Request/Response structs. The Titan class exposes two methods, `addFunction` and `app`.
 
-### Titan Router (incomplete)
+### [Titan Router](https://github.com/bermudadigitalstudio/TitanRouter) (incomplete)
 Extends the Titan class, providing a `route` method which ensures that the Function is only executed when it matches.
 
 ### Titan Router + Sugar (needs refactoring)
 Provides convenience methods to the router, e.g. `get`, `post` etc.
 
-### Titan Error (incomplete)
+### [Titan Error Handling](https://github.com/bermudadigitalstudio/TitanErrorHandling)
 Extends the Titan class to take a `ThrowingFunction`.
 
 ### Titan Error + Routing Sugar (needs creating)
@@ -35,7 +35,7 @@ A simple function that writes a cute 404 to the Response. Put it at the top of y
 ## Titan On Steroids
 Titan plus the kitchen sink. Still as fast, expressive and powerful as Titan, but contains more features and conveniences, for advanced users only. Comes with a webserver. Enough batteries included to electrocute yourself.
 
-### Titan Top Level
+### [Titan Top Level](https://github.com/bermudadigitalstudio/TitanTopLevel)
 Redeclare all Titan instance methods in Titan On Steroids and Titan as top level functions, referring to a private instance. Useful for Sinatra-style DSLs.
 
 ### Titan ResponseType Convertible (needs creating)
