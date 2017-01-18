@@ -23,7 +23,7 @@ Provides throwing function overloads to the router sugar.
 ### [Titan JSON Request Body](https://github.com/bermudadigitalstudio/TitanJSONRequestBody)
 Provides quick access to decoded JSON in the request body.
 
-### [Titan Query String](https://github.com/bermudadigitalstudio/TitanQueryString) (incomplete)
+### [Titan Query String](https://github.com/bermudadigitalstudio/TitanQueryString)
 Access the query string of the request.
 
 ### [Titan Form URL Encoded Body Parser](https://github.com/bermudadigitalstudio/TitanFormURLEncodedBodyParser)
