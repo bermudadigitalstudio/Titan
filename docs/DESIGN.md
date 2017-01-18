@@ -20,14 +20,14 @@ Extends the Titan class to take a `ThrowingFunction`.
 ### [Titan Error + Routing Sugar](https://github.com/bermudadigitalstudio/TitanErrorHandling-RoutingSugar) (incomplete)
 Provides throwing function overloads to the router sugar.
 
-### [Titan JSON Request Body](https://github.com/bermudadigitalstudio/TitanJSONRequestBody) (incomplete)
+### [Titan JSON Request Body](https://github.com/bermudadigitalstudio/TitanJSONRequestBody)
 Provides quick access to decoded JSON in the request body.
 
 ### [Titan Query String](https://github.com/bermudadigitalstudio/TitanQueryString) (incomplete)
 Access the query string of the request.
 
-### [Titan FormData](https://github.com/bermudadigitalstudio/TitanFormData) (incomplete)
-Decode the data in a POST body.
+### [Titan Form URL Encoded Body Parser](https://github.com/bermudadigitalstudio/TitanFormURLEncodedBodyParser) (incomplete)
+Decode `application/x-www-form-urlencoded` data in a POST body.
 
 ### [Titan 404](https://github.com/bermudadigitalstudio/Titan404) (incomplete)
 A simple function that writes a cute 404 to the Response. Put it at the top of your Function stack to get a simple Not Found behaviour in case it... isn't found.
