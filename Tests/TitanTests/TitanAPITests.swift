@@ -44,27 +44,27 @@ final class TitanAPITests: XCTestCase {
     XCTAssertEqual(response.body, "Hello World")
   }
   func testTitanGet() {
-    titanInstance.get("/username") {
-      return "swizzlr"
+    titanInstance.get("/username") { req, _ in
+      return (req, Response(200, "swizzlr", headers: []))
     }
     XCTAssertEqual(titanInstance.app(request: Request("GET", "/username")).body, "swizzlr")
   }
 
   func testTitanEcho() {
-    titanInstance.get("/echoMyBody") { req in
-      return req.body
+    titanInstance.get("/echoMyBody") { req, _ in
+      return (req, Response(200, req.body, headers: []))
     }
     XCTAssertEqual(titanInstance.app(request: Request("GET", "/echoMyBody", "hello, this is my body")).body,
                    "hello, this is my body")
   }
 
   func testMultipleRoutes() {
-    titanInstance.get("/username") {
-      return "swizzlr"
+    titanInstance.get("/username") { req, _ in
+      return (req, Response(200, "swizzlr", headers: []))
     }
 
-    titanInstance.get("/echoMyBody") { req in
-      return req.body
+    titanInstance.get("/echoMyBody") { req, _ in
+      return (req, Response(200, req.body, headers: []))
     }
     XCTAssertEqual(titanInstance.app(request: Request("GET", "/echoMyBody", "hello, this is my body")).body,
                    "hello, this is my body")
@@ -82,46 +82,48 @@ final class TitanAPITests: XCTestCase {
   func testFunctionFunction() {
     var start = Date()
     var end = start
-    titanInstance.addFunction("*") {
+    titanInstance.addFunction("*") { (req: RequestType, res: ResponseType) -> (RequestType, ResponseType) in
       start = Date()
+      return (req, res)
     }
-    titanInstance.get("/username") {
-      return "swizzlr"
+    titanInstance.get("/username") { req, _ in
+      return (req, Response(200, "swizzlr", headers: []))
     }
-    titanInstance.addFunction("*") {
+    titanInstance.addFunction("*") { (req: RequestType, res: ResponseType) -> (RequestType, ResponseType) in
       end = Date()
+      return (req, res)
     }
     _ = titanInstance.app(request: Request("GET", "/username"))
-    XCTAssertNotEqual(start, end)
+    XCTAssertLessThan(start, end)
   }
 
   func testDifferentMethods() {
-    titanInstance.get("/getSomething") {
-      return "swizzlrGotSomething!"
+    titanInstance.get("/getSomething") { req, _ in
+      return (req, Response(200, "swizzlrGotSomething!", headers: []))
     }
 
-    titanInstance.post("/postSomething") {
-      return "something posted"
+    titanInstance.post("/postSomething") { req, _ in
+      return (req, Response(200, "something posted", headers: []))
     }
 
-    titanInstance.put("/putSomething") {
-      return "i can confirm that stupid stuff is now on the server"
+    titanInstance.put("/putSomething") { req, _ in
+      return (req, Response(200, "i can confirm that stupid stuff is now on the server", headers: []))
     }
 
-    titanInstance.patch("/patchSomething") {
-      return "i guess we don't have a flat tire anymore?"
+    titanInstance.patch("/patchSomething") { req, _ in
+      return (req, Response(200, "i guess we don't have a flat tire anymore?", headers: []))
     }
 
-    titanInstance.delete("/deleteSomething") {
-      return "error: could not find the USA or its principles"
+    titanInstance.delete("/deleteSomething") { req, _ in
+      return (req, Response(200, "error: could not find the USA or its principles", headers: []))
     }
 
-    titanInstance.options("/optionSomething") {
-      return "I sold movie rights!"
+    titanInstance.options("/optionSomething") { req, _ in
+      return (req, Response(200, "I sold movie rights!", headers: []))
     }
 
-    titanInstance.head("/headSomething") {
-      return "OWN GOAL!!"
+    titanInstance.head("/headSomething") { req, _ in
+      return (req, Response(200, "OWN GOAL!!", headers: []))
     }
 
   }
@@ -142,13 +144,13 @@ final class TitanAPITests: XCTestCase {
   func testSamePathDifferentiationByMethod() {
     var username = ""
 
-    titanInstance.get("/username") {
-      return username
+    titanInstance.get("/username") { req, _ in
+      return (req, Response(200, username, headers: []))
     }
 
-    titanInstance.post("/username") { (req: RequestType) -> Int in
+    titanInstance.post("/username") { (req: RequestType, _) in
       username = req.body
-      return 201
+      return (req, Response(201, "", headers: []))
     }
 
     let resp = titanInstance.app(request: Request("POST", "/username", "Lisa"))
