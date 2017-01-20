@@ -213,6 +213,14 @@ final class TitanAPITests: XCTestCase {
       ("testTitanGet", testTitanGet),
     ]
   }
+
+  func testTypesafePathParams() {
+    titanInstance.get("/foo/*/baz") { req, id, res in
+      return (req, Response(200, id))
+    }
+    let resp = titanInstance.app(request: Request("GET", "/foo/567/baz"))
+    XCTAssertEqual(resp.body, "567")
+  }
 }
 
 extension String: Error {}
