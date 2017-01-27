@@ -6,33 +6,15 @@ final class TitanAPITests: XCTestCase {
   override func setUp() {
     titanInstance = Titan()
   }
-  func testMutableParams() {
-    let app = Titan()
-    app.get("/init") { (req, res) -> Void in
-      res.body = "Hello World"
-      req.path = "/rewritten"
-      res.code = 500
-    }
-    app.addFunction { (req, res) -> (RequestType, ResponseType) in
-      XCTAssertEqual(req.path, "/rewritten")
-      return (req, res)
-    }
-    let response = app.app(request: Request("GET", "/init"))
-    XCTAssertEqual(response.code, 500)
-    XCTAssertEqual(response.body, "Hello World")
-  }
 
   func testFunctionalMutableParams() {
     let app = Titan()
-    app.get("/init") { (req: inout Request, res: inout Response) -> (RequestType, ResponseType) in
-      var newReq = req
-      var newRes = res
+    app.get("/init") { (req, res) -> (RequestType, ResponseType) in
+      var newReq = req.copy()
+      var newRes = res.copy()
       newRes.body = "Hello World"
       newReq.path = "/rewritten"
       newRes.code = 500
-      // Check that mutating the inout params has no effect on the function chain – ONLY the returned values should matter
-      res.code = 400
-      res.body = "Should not ever come into the response"
       return (newReq, newRes)
     }
     app.addFunction { (req, res) -> (RequestType, ResponseType) in
@@ -45,14 +27,14 @@ final class TitanAPITests: XCTestCase {
   }
   func testTitanGet() {
     titanInstance.get("/username") { req, _ in
-      return (req, Response(200, "swizzlr", headers: []))
+      return (req, Response(200, "swizzlr", []))
     }
     XCTAssertEqual(titanInstance.app(request: Request("GET", "/username")).body, "swizzlr")
   }
 
   func testTitanEcho() {
     titanInstance.get("/echoMyBody") { req, _ in
-      return (req, Response(200, req.body, headers: []))
+      return (req, Response(200, req.body, []))
     }
     XCTAssertEqual(titanInstance.app(request: Request("GET", "/echoMyBody", "hello, this is my body")).body,
                    "hello, this is my body")
@@ -60,11 +42,11 @@ final class TitanAPITests: XCTestCase {
 
   func testMultipleRoutes() {
     titanInstance.get("/username") { req, _ in
-      return (req, Response(200, "swizzlr", headers: []))
+      return (req, Response(200, "swizzlr", []))
     }
 
     titanInstance.get("/echoMyBody") { req, _ in
-      return (req, Response(200, req.body, headers: []))
+      return (req, Response(200, req.body))
     }
     XCTAssertEqual(titanInstance.app(request: Request("GET", "/echoMyBody", "hello, this is my body")).body,
                    "hello, this is my body")
@@ -87,7 +69,7 @@ final class TitanAPITests: XCTestCase {
       return (req, res)
     }
     titanInstance.get("/username") { req, _ in
-      return (req, Response(200, "swizzlr", headers: []))
+      return (req, Response(200, "swizzlr"))
     }
     titanInstance.addFunction("*") { (req: RequestType, res: ResponseType) -> (RequestType, ResponseType) in
       end = Date()
@@ -99,31 +81,31 @@ final class TitanAPITests: XCTestCase {
 
   func testDifferentMethods() {
     titanInstance.get("/getSomething") { req, _ in
-      return (req, Response(200, "swizzlrGotSomething!", headers: []))
+      return (req, Response(200, "swizzlrGotSomething!"))
     }
 
     titanInstance.post("/postSomething") { req, _ in
-      return (req, Response(200, "something posted", headers: []))
+      return (req, Response(200, "something posted"))
     }
 
     titanInstance.put("/putSomething") { req, _ in
-      return (req, Response(200, "i can confirm that stupid stuff is now on the server", headers: []))
+      return (req, Response(200, "i can confirm that stupid stuff is now on the server"))
     }
 
     titanInstance.patch("/patchSomething") { req, _ in
-      return (req, Response(200, "i guess we don't have a flat tire anymore?", headers: []))
+      return (req, Response(200, "i guess we don't have a flat tire anymore?"))
     }
 
     titanInstance.delete("/deleteSomething") { req, _ in
-      return (req, Response(200, "error: could not find the USA or its principles", headers: []))
+      return (req, Response(200, "error: could not find the USA or its principles"))
     }
 
     titanInstance.options("/optionSomething") { req, _ in
-      return (req, Response(200, "I sold movie rights!", headers: []))
+      return (req, Response(200, "I sold movie rights!"))
     }
 
     titanInstance.head("/headSomething") { req, _ in
-      return (req, Response(200, "OWN GOAL!!", headers: []))
+      return (req, Response(200, "OWN GOAL!!"))
     }
 
   }
@@ -145,12 +127,12 @@ final class TitanAPITests: XCTestCase {
     var username = ""
 
     titanInstance.get("/username") { req, _ in
-      return (req, Response(200, username, headers: []))
+      return (req, Response(200, username))
     }
 
     titanInstance.post("/username") { (req: RequestType, _) in
       username = req.body
-      return (req, Response(201, "", headers: []))
+      return (req, Response(201, ""))
     }
 
     let resp = titanInstance.app(request: Request("POST", "/username", "Lisa"))
@@ -160,7 +142,7 @@ final class TitanAPITests: XCTestCase {
 
   func testCanAccessJSONBody() {
     let jsonBody = "{\"data\": [1, 2, 3]}"
-    let req: RequestType = Request("POST", "/ingest", jsonBody, headers: [])
+    let req: RequestType = Request("POST", "/ingest", jsonBody)
     guard let json = req.json as? Dictionary<String, Array<Int>> else {
       XCTFail("Received: \(req.json)")
       return
@@ -170,22 +152,22 @@ final class TitanAPITests: XCTestCase {
 
   func testCanAccessFormURLEncodedBody() {
     let requestBody = "foo=bar&baz=&favorite+flavor=flies&resume=when+i+was+young%0D%0Ai+went+to+school&foo=bar2"
-    let request = Request("POST", "/submit", requestBody, headers: [])
+    let request = Request("POST", "/submit", requestBody)
     let parsed = request.formURLEncodedBody
     // Simple
-    XCTAssertEqual(parsed[0].key, "foo")
+    XCTAssertEqual(parsed[0].name, "foo")
     XCTAssertEqual(parsed[0].value, "bar")
     // Missing value
-    XCTAssertEqual(parsed[1].key, "baz")
+    XCTAssertEqual(parsed[1].name, "baz")
     XCTAssertEqual(parsed[1].value, "")
     // Spaces
-    XCTAssertEqual(parsed[2].key, "favorite flavor")
+    XCTAssertEqual(parsed[2].name, "favorite flavor")
     XCTAssertEqual(parsed[2].value, "flies")
     // Percent encoded new lines
-    XCTAssertEqual(parsed[3].key, "resume")
+    XCTAssertEqual(parsed[3].name, "resume")
     XCTAssertEqual(parsed[3].value, "when i was young\r\ni went to school")
     // Simple
-    XCTAssertEqual(parsed[4].key, "foo")
+    XCTAssertEqual(parsed[4].name, "foo")
     XCTAssertEqual(parsed[4].value, "bar2")
 
     let dict = request.postParams
@@ -195,7 +177,7 @@ final class TitanAPITests: XCTestCase {
 
   func testCanAccessQueryString() {
     let path = "/users?verified=true&q=thomas%20catterall"
-    let request: RequestType = Request("GET", path, "", headers: [])
+    let request: RequestType = Request("GET", path)
     let parsedQuery = request.query
     guard parsedQuery.count == 2 else {
       XCTFail()
