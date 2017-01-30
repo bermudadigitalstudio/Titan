@@ -14,4 +14,4 @@ dependencies:
 
 test:
   override:
-    - docker run --name titan_test titan
+    - docker run titan
