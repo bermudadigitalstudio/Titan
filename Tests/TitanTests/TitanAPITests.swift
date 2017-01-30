@@ -189,13 +189,7 @@ final class TitanAPITests: XCTestCase {
         XCTAssertEqual(parsedQuery[1].key, "q")
         XCTAssertEqual(parsedQuery[1].value, "thomas catterall")
     }
-
-    static var allTests: [(String, (TitanAPITests) -> () throws -> Void)] {
-        return [
-            ("testTitanGet", testTitanGet),
-        ]
-    }
-
+    
     func testTypesafePathParams() {
         titanInstance.get("/foo/*/baz") { req, id, res in
             return (req, Response(200, id))
@@ -203,6 +197,24 @@ final class TitanAPITests: XCTestCase {
         let resp = titanInstance.app(request: Request("GET", "/foo/567/baz"))
         XCTAssertEqual(resp.body, "567")
     }
+
+    static var allTests: [(String, (TitanAPITests) -> () throws -> Void)] {
+        return [
+            ("testFunctionalMutableParams", testFunctionalMutableParams),
+            ("testTitanGet", testTitanGet),
+            ("testTitanEcho", testTitanEcho),
+            ("testMultipleRoutes", testMultipleRoutes),
+            ("testTitanSugar", testTitanSugar),
+            ("testFunctionFunction", testFunctionFunction),
+            ("testDifferentMethods", testDifferentMethods),
+            ("testErrorsAreCaught", testErrorsAreCaught),
+            ("testSamePathDifferentiationByMethod", testSamePathDifferentiationByMethod),
+            ("testCanAccessFormURLEncodedBody", testCanAccessFormURLEncodedBody),
+            ("testCanAccessQueryString", testCanAccessQueryString),
+            ("testTypesafePathParams", testTypesafePathParams),
+        ]
+    }
+
 }
 
 extension String: Error {}
