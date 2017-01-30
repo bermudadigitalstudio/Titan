@@ -10,8 +10,8 @@ machine:
 dependencies:
   override:
     - docker --version
-    - docker build -t titan .
+    - docker build -t app .
 
 test:
   override:
-    - docker run titan
+    - docker run app
