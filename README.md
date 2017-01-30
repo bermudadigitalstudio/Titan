@@ -1,6 +1,8 @@
 # Titan
 
-A microframework for writing Swift web apps and container-based web services.
+Titan is an extensible, powerful & easy-to-use microframework for server-side Swift 3. Write and run **production web apps & services** under Linux or inside a Docker container in a very convenient and flexible way.
+
+[![Language Swift 3](https://img.shields.io/badge/Language-Swift%203-orange.svg)](https://swift.org) ![Platforms](https://img.shields.io/badge/Platforms-Docker%20%7C%20Linux%20%7C%20macOS-blue.svg) [![CircleCI](https://circleci.com/gh/bermudadigitalstudio/Titan/tree/master.svg?style=svg)](https://circleci.com/gh/bermudadigitalstudio/Titan)
 
 ## Motivation
 
