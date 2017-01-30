@@ -175,21 +175,23 @@ final class TitanAPITests: XCTestCase {
         XCTAssertEqual(dict["foo"], "bar2") // check repeats, last value wins
     }
 
+    /*
+     // COMMENTED DUE TO INTERNAL CRASH UNDER LINUX
     func testCanAccessQueryString() {
         let path = "/users?verified=true&q=thomas%20catterall"
         let request: RequestType = Request("GET", path)
         // FIX: the following line causes a crash when run under Linux!!!
-        /* let parsedQuery = request.query
-         guard parsedQuery.count == 2 else {
-         XCTFail()
-         return
-         }
-         XCTAssertEqual(parsedQuery[0].key, "verified")
-         XCTAssertEqual(parsedQuery[0].value, "true")
+        let parsedQuery = request.query
+        guard parsedQuery.count == 2 else {
+        XCTFail()
+        return
+        }
+        XCTAssertEqual(parsedQuery[0].key, "verified")
+        XCTAssertEqual(parsedQuery[0].value, "true")
 
-         XCTAssertEqual(parsedQuery[1].key, "q")
-         XCTAssertEqual(parsedQuery[1].value, "thomas catterall") */
-    }
+        XCTAssertEqual(parsedQuery[1].key, "q")
+        XCTAssertEqual(parsedQuery[1].value, "thomas catterall")
+    }*/
 
     func testTypesafePathParams() {
         titanInstance.get("/foo/*/baz") { req, id, res in
