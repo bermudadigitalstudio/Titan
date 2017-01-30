@@ -24,7 +24,7 @@ final class TitanAPITests: XCTestCase {
         }
         let response = app.app(request: Request("GET", "/init"))
         XCTAssertEqual(response.code, 500)
-        XCTAssertEqual(response.body, "Hello World")
+        XCTAssertEqual(response.body, "Hello Worldxxxxx")
     }
 
     func testTitanGet() {
