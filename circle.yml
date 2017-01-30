@@ -1,0 +1,17 @@
+# CircleCI & Docker
+#
+# learn more at https://karthikv.net/articles/circleci-docker-flow/
+# and https://circleci.com/docs/docker/
+
+machine:
+  services:
+    - docker
+
+dependencies:
+  override:
+    - docker --version
+    - docker build -t titan .
+
+test:
+  override:
+    - docker run --rm --name titan_test titan
