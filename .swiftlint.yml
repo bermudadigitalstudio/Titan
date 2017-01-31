@@ -6,4 +6,6 @@ excluded:
   - .build
 opt_in_rules:
   - empty_count
+disabled_rules:
+  - syntactic_sugar
 reporter: "emoji"
