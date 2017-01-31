@@ -117,7 +117,7 @@ final class TitanAPITests: XCTestCase {
             let desc = String(describing: err)
             return Response(500, desc)
         }
-        t.addFunction(errorHandler: errorHandler) { (req, res) throws -> (RequestType, ResponseType) in
+        t.addFunction(errorHandler: errorHandler) { (_, _) throws -> (RequestType, ResponseType) in
             throw "Oh no"
         }
         XCTAssertEqual(t.app(request: Request("", "")).body, "Oh no")
@@ -143,6 +143,8 @@ final class TitanAPITests: XCTestCase {
     func testCanAccessJSONBody() {
         let jsonBody = "{\"data\": [1, 2, 3]}"
         let req: RequestType = Request("POST", "/ingest", jsonBody)
+        // Dictionary<String, [Int]>
+        // [String, [Int]]
         guard let json = req.json as? Dictionary<String, Array<Int>> else {
             XCTFail("Received: \(req.json)")
             return
@@ -194,7 +196,7 @@ final class TitanAPITests: XCTestCase {
     }*/
 
     func testTypesafePathParams() {
-        titanInstance.get("/foo/*/baz") { req, id, res in
+        titanInstance.get("/foo/*/baz") { req, id, _ in
             return (req, Response(200, id))
         }
         let resp = titanInstance.app(request: Request("GET", "/foo/567/baz"))
@@ -213,7 +215,7 @@ final class TitanAPITests: XCTestCase {
             ("testErrorsAreCaught", testErrorsAreCaught),
             ("testSamePathDifferentiationByMethod", testSamePathDifferentiationByMethod),
             ("testCanAccessFormURLEncodedBody", testCanAccessFormURLEncodedBody),
-            ("testTypesafePathParams", testTypesafePathParams),
+            ("testTypesafePathParams", testTypesafePathParams)
             // ("testCanAccessQueryString", testCanAccessQueryString),  // temporary deactivated due to crash
         ]
     }
