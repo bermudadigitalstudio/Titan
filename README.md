@@ -87,7 +87,7 @@ func send404IfNoMatch(req: RequestType, res: ResponseType) -> (RequestType, Resp
 }
 
 /// use the 404 middleware on all routes and request methods
-app.addFunction("*", send404IfNoMatch)
+app.addFunction(send404IfNoMatch)
 
 // start the Kitura webserver on port 8000
 TitanKituraAdapter.serve(app.app, on: 8000)
