@@ -203,6 +203,10 @@ final class TitanAPITests: XCTestCase {
         XCTAssertEqual(resp.body, "567")
     }
 
+    func test404() {
+      titanInstance.addFunction(defaultTo404)
+    }
+
     static var allTests: [(String, (TitanAPITests) -> () throws -> Void)] {
         return [
             ("testFunctionalMutableParams", testFunctionalMutableParams),
@@ -215,7 +219,8 @@ final class TitanAPITests: XCTestCase {
             ("testErrorsAreCaught", testErrorsAreCaught),
             ("testSamePathDifferentiationByMethod", testSamePathDifferentiationByMethod),
             ("testCanAccessFormURLEncodedBody", testCanAccessFormURLEncodedBody),
-            ("testTypesafePathParams", testTypesafePathParams)
+            ("testTypesafePathParams", testTypesafePathParams),
+            ("test404", test404)
             // ("testCanAccessQueryString", testCanAccessQueryString),  // temporary deactivated due to crash
         ]
     }

@@ -1,0 +1,54 @@
+{
+  "autoPin": true,
+  "pins": [
+    {
+      "package": "Titan404",
+      "reason": null,
+      "repositoryURL": "https://github.com/bermudadigitalstudio/Titan404.git",
+      "version": "1.0.0"
+    },
+    {
+      "package": "TitanCORS",
+      "reason": null,
+      "repositoryURL": "https://github.com/bermudadigitalstudio/TitanCORS.git",
+      "version": "0.1.1"
+    },
+    {
+      "package": "TitanCore",
+      "reason": null,
+      "repositoryURL": "https://github.com/bermudadigitalstudio/TitanCore.git",
+      "version": "0.3.0"
+    },
+    {
+      "package": "TitanErrorHandling",
+      "reason": null,
+      "repositoryURL": "https://github.com/bermudadigitalstudio/TitanErrorHandling.git",
+      "version": "0.1.1"
+    },
+    {
+      "package": "TitanFormURLEncodedBodyParser",
+      "reason": null,
+      "repositoryURL": "https://github.com/bermudadigitalstudio/TitanFormURLEncodedBodyParser.git",
+      "version": "0.2.0"
+    },
+    {
+      "package": "TitanJSONRequestBody",
+      "reason": null,
+      "repositoryURL": "https://github.com/bermudadigitalstudio/TitanJSONRequestBody.git",
+      "version": "0.1.1"
+    },
+    {
+      "package": "TitanQueryString",
+      "reason": null,
+      "repositoryURL": "https://github.com/bermudadigitalstudio/TitanQueryString.git",
+      "version": "0.1.2"
+    },
+    {
+      "package": "TitanRouter",
+      "reason": null,
+      "repositoryURL": "https://github.com/bermudadigitalstudio/TitanRouter.git",
+      "version": "0.3.1"
+    }
+  ],
+  "version": 1
+}
