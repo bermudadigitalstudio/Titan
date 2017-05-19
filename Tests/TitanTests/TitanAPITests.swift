@@ -207,6 +207,48 @@ final class TitanAPITests: XCTestCase {
       titanInstance.addFunction(defaultTo404)
     }
 
+    func testPredicates() {
+        titanInstance.addFunction(defaultTo404)
+        titanInstance.predicate({ (req, res) -> Bool in
+            return req.headers.contains(where: { (header) -> Bool in
+                return header.name == "Authentication" && header.value == "password"
+            })
+        }, true: { authenticated in
+            authenticated.get("/password") { req, res in
+                return (req, Response(200, "Super secret password!", []))
+            }
+        }, false: { unauthenticated in
+            unauthenticated.addFunction { req, res in
+                return (req, Response(499, "WHAT WHAT", []))
+            }
+        })
+        let unauthenticatedResponse = titanInstance.app(request: Request("GET", "/password", "", []))
+        XCTAssertEqual(unauthenticatedResponse.code, 499)
+        XCTAssertEqual(unauthenticatedResponse.body, "WHAT WHAT")
+        let authenticatedResponse = titanInstance.app(request: Request("GET", "/password", "", [("Authentication", "password")]))
+        XCTAssertEqual(authenticatedResponse.code, 200)
+        XCTAssertEqual(authenticatedResponse.body, "Super secret password!")
+    }
+
+    func testAuthentication() {
+        func myAuthorizationRoutine(_ request: RequestType) -> Bool {
+            return request.headers.contains(where: { (header) -> Bool in
+                return header.name == "Authentication" && header.value == "other password"
+            })
+        }
+        titanInstance.authenticated(myAuthorizationRoutine) { (authenticated) in
+            authenticated.get("/password") { req, res in
+                return (req, Response(200, "Super secret password!", []))
+            }
+        }
+        let unauthenticatedResponse = titanInstance.app(request: Request("GET", "/password", "", []))
+        XCTAssertEqual(unauthenticatedResponse.code, 401)
+
+        let authenticatedResponse = titanInstance.app(request: Request("GET", "/password", "", [("Authentication", "other password")]))
+        XCTAssertEqual(authenticatedResponse.code, 200)
+        XCTAssertEqual(authenticatedResponse.body, "Super secret password!")
+    }
+
     static var allTests: [(String, (TitanAPITests) -> () throws -> Void)] {
         return [
             ("testFunctionalMutableParams", testFunctionalMutableParams),
