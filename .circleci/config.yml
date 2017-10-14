@@ -1,0 +1,10 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: swift:4
+    steps:
+      - checkout
+      - run:
+          name: Run Tests
+          command: swift test          

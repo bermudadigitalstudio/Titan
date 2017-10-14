@@ -1,11 +1,25 @@
 included:
   - Sources
   - Tests
+
 excluded:
   - Packages
   - .build
+
 opt_in_rules:
   - empty_count
+
 disabled_rules:
   - syntactic_sugar
+
+line_length: 150
+
+identifier_name:
+  min_length:
+    error: 2 # only error
+  excluded: # excluded via string array
+    - id
+    - url 
+    - db   
+
 reporter: "emoji"

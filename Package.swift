@@ -1,15 +1,39 @@
+// swift-tools-version:4.0
+
 import PackageDescription
 
 let package = Package(
-  name: "Titan",
-  dependencies: [
-    .Package(url: "https://github.com/bermudadigitalstudio/TitanCore.git", majorVersion: 0, minor: 3),
-    .Package(url: "https://github.com/bermudadigitalstudio/TitanRouter.git", majorVersion: 0, minor: 3),
-    .Package(url: "https://github.com/bermudadigitalstudio/TitanErrorHandling.git", majorVersion: 0, minor: 1),
-    .Package(url: "https://github.com/bermudadigitalstudio/TitanJSONRequestBody.git", majorVersion: 0, minor: 1),
-    .Package(url: "https://github.com/bermudadigitalstudio/TitanFormURLEncodedBodyParser.git", majorVersion: 0, minor: 2),
-    .Package(url: "https://github.com/bermudadigitalstudio/TitanQueryString.git", majorVersion: 0, minor: 1),
-    .Package(url: "https://github.com/bermudadigitalstudio/TitanCORS.git", majorVersion: 0, minor: 1),
-    .Package(url: "https://github.com/bermudadigitalstudio/Titan404.git", majorVersion: 1),
-  ]
+    name: "Titan",
+    products: [
+        .library(name: "Titan", targets: ["Titan"]),
+        .library(name: "TitanRouter", targets: ["TitanRouter"]),
+        .library(name: "TitanErrorHandling", targets: ["TitanErrorHandling"]),
+        .library(name: "Titan404", targets: ["Titan404"]),
+        .library(name: "TitanCORS", targets: ["TitanCORS"]),
+        .library(name: "TitanFormURLEncodedBodyParser", targets: ["TitanFormURLEncodedBodyParser"]),
+        .library(name: "TitanJSON", targets: ["TitanJSON"]),
+
+        .library(name: "TitanQueryString", targets: ["TitanQueryString"])
+    ],
+    dependencies: [
+        .package(url: "https://github.com/bermudadigitalstudio/TitanCore.git",  .branch("swift4"))
+    ],
+     targets:[
+        .target(name:"Titan", dependencies: ["TitanCore","TitanRouter","TitanErrorHandling","Titan404","TitanCORS","TitanFormURLEncodedBodyParser","TitanJSON","TitanQueryString"]),
+        .target(name:"TitanRouter", dependencies: ["TitanCore"]),
+        .target(name:"TitanErrorHandling", dependencies: ["TitanCore"]),
+        .target(name:"Titan404", dependencies: ["TitanCore"]),
+        .target(name:"TitanCORS", dependencies: ["TitanCore"]),
+        .target(name:"TitanFormURLEncodedBodyParser", dependencies: ["TitanCore"]),
+        .target(name:"TitanJSON", dependencies: ["TitanCore"]),
+        .target(name:"TitanQueryString", dependencies: ["TitanCore"]),        
+        .testTarget(name: "TitanTests", dependencies: ["Titan"]),
+        .testTarget(name: "TitanRouterTests", dependencies: ["TitanRouter"]),
+        .testTarget(name: "Titan404Tests", dependencies: ["Titan404"]),
+        .testTarget(name: "TitanCORSTests", dependencies: ["TitanCORS"]),
+        .testTarget(name: "TitanFormURLEncodedBodyParserTests", dependencies: ["TitanFormURLEncodedBodyParser"]),
+        .testTarget(name: "TitanErrorHandlingTests", dependencies: ["TitanErrorHandling"]),
+        .testTarget(name: "TitanJSONTests", dependencies: ["TitanJSON"]),
+        .testTarget(name: "TitanQueryStringTests", dependencies: ["TitanQueryString"])
+    ]
 )
