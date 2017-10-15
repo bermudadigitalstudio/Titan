@@ -12,8 +12,8 @@ let package = Package(
         .library(name: "TitanCORS", targets: ["TitanCORS"]),
         .library(name: "TitanFormURLEncodedBodyParser", targets: ["TitanFormURLEncodedBodyParser"]),
         .library(name: "TitanJSON", targets: ["TitanJSON"]),
-
-        .library(name: "TitanQueryString", targets: ["TitanQueryString"])
+        .library(name: "TitanQueryString", targets: ["TitanQueryString"]),
+        .library(name: "TitanHealthz", targets:["TitanHealthz"])
     ],
     dependencies: [
         .package(url: "https://github.com/bermudadigitalstudio/TitanCore.git",  .branch("swift4"))
@@ -26,7 +26,8 @@ let package = Package(
         .target(name:"TitanCORS", dependencies: ["TitanCore"]),
         .target(name:"TitanFormURLEncodedBodyParser", dependencies: ["TitanCore"]),
         .target(name:"TitanJSON", dependencies: ["TitanCore"]),
-        .target(name:"TitanQueryString", dependencies: ["TitanCore"]),        
+        .target(name:"TitanQueryString", dependencies: ["TitanCore"]),
+        .target(name:"TitanHealthz", dependencies: ["TitanCore"]),
         .testTarget(name: "TitanTests", dependencies: ["Titan"]),
         .testTarget(name: "TitanRouterTests", dependencies: ["TitanRouter"]),
         .testTarget(name: "Titan404Tests", dependencies: ["Titan404"]),
@@ -34,6 +35,7 @@ let package = Package(
         .testTarget(name: "TitanFormURLEncodedBodyParserTests", dependencies: ["TitanFormURLEncodedBodyParser"]),
         .testTarget(name: "TitanErrorHandlingTests", dependencies: ["TitanErrorHandling"]),
         .testTarget(name: "TitanJSONTests", dependencies: ["TitanJSON"]),
-        .testTarget(name: "TitanQueryStringTests", dependencies: ["TitanQueryString"])
+        .testTarget(name: "TitanQueryStringTests", dependencies: ["TitanQueryString"]),
+        .testTarget(name: "TitanHealthzTests", dependencies: ["TitanHealthz"])
     ]
 )
