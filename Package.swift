@@ -5,6 +5,7 @@ import PackageDescription
 let package = Package(
     name: "Titan",
     products: [
+        .library(name: "TitanCore", targets: ["TitanCore"]),
         .library(name: "Titan", targets: ["Titan"]),
         .library(name: "TitanRouter", targets: ["TitanRouter"]),
         .library(name: "TitanErrorHandling", targets: ["TitanErrorHandling"]),
@@ -15,11 +16,17 @@ let package = Package(
         .library(name: "TitanQueryString", targets: ["TitanQueryString"]),
         .library(name: "TitanHealthz", targets:["TitanHealthz"])
     ],
-    dependencies: [
-        .package(url: "https://github.com/bermudadigitalstudio/TitanCore.git",  .branch("swift4"))
-    ],
-     targets:[
-        .target(name:"Titan", dependencies: ["TitanCore","TitanRouter","TitanErrorHandling","Titan404","TitanCORS","TitanFormURLEncodedBodyParser","TitanJSON","TitanQueryString"]),
+    targets: [
+        .target(name: "TitanCore"),
+        .target(name:"Titan", dependencies: [
+            "TitanCore",
+            "TitanRouter",
+            "TitanErrorHandling",
+            "Titan404",
+            "TitanCORS",
+            "TitanFormURLEncodedBodyParser",
+            "TitanJSON",
+            "TitanQueryString"]),
         .target(name:"TitanRouter", dependencies: ["TitanCore"]),
         .target(name:"TitanErrorHandling", dependencies: ["TitanCore"]),
         .target(name:"Titan404", dependencies: ["TitanCore"]),
@@ -29,6 +36,7 @@ let package = Package(
         .target(name:"TitanQueryString", dependencies: ["TitanCore"]),
         .target(name:"TitanHealthz", dependencies: ["TitanCore"]),
         .testTarget(name: "TitanTests", dependencies: ["Titan"]),
+        .testTarget(name: "TitanCoreTests", dependencies: ["TitanCore"]),
         .testTarget(name: "TitanRouterTests", dependencies: ["TitanRouter"]),
         .testTarget(name: "Titan404Tests", dependencies: ["Titan404"]),
         .testTarget(name: "TitanCORSTests", dependencies: ["TitanCORS"]),
