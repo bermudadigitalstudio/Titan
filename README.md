@@ -3,7 +3,7 @@
 Titan is an extensible, powerful & easy-to-use microframework for <b>server-side Swift</b>.<br/>
 Write and run **production web apps & services** under Linux or Docker in a convenient way.
 
-[![Language Swift 3](https://img.shields.io/badge/Language-Swift%203-orange.svg)](https://swift.org) ![Platforms](https://img.shields.io/badge/Platforms-Docker%20%7C%20Linux%20%7C%20macOS-blue.svg) [![CircleCI](https://circleci.com/gh/bermudadigitalstudio/Titan/tree/master.svg?style=shield)](https://circleci.com/gh/bermudadigitalstudio/Titan)
+[![Language Swift 4](https://img.shields.io/badge/Language-Swift%204-orange.svg)](https://swift.org) ![Platforms](https://img.shields.io/badge/Platforms-Docker%20%7C%20Linux%20%7C%20macOS-blue.svg) [![CircleCI](https://circleci.com/gh/bermudadigitalstudio/Titan/tree/master.svg?style=shield)](https://circleci.com/gh/bermudadigitalstudio/Titan)
 
 ## Features
 
@@ -12,7 +12,7 @@ Write and run **production web apps & services** under Linux or Docker in a conv
 1. functional design which makes it easy to write own middleware
 1. use different webservers like Kitura or Nest
 1. incredibly fast due to its light-weight design
-1. built for latest Swift 3.x, Docker & Linux
+1. built for latest Swift 4, Docker & Linux
 1. conceptually similar to the powerful & modular frameworks Express.js or Flask
 
 ## Example
@@ -27,13 +27,25 @@ The following example has the following features:
 **Package.swift**:
 
 ```swift
+// swift-tools-version:4.0
 import PackageDescription
 
 let package = Package(
     name: "mywebapp",
+    products: [
+        .executable(name: "mywebapp", targets: ["mywebapp"]),
+    ],
     dependencies: [
-        .Package(url: "https://github.com/bermudadigitalstudio/Titan.git", majorVersion: 0, minor: 7),
-        .Package(url: "https://github.com/bermudadigitalstudio/TitanKituraAdapter.git", majorVersion: 0, minor: 4)
+        .package(url: "https://github.com/bermudadigitalstudio/TitanKituraAdapter.git", .branch("swift4")),
+        .package(url: "https://github.com/bermudadigitalstudio/Titan", .branch("swift4"))
+    ],
+    targets: [
+        .target(
+            name: "mywebapp",
+            dependencies: [
+                "TitanKituraAdapter",
+                "Titan"
+            ]),
     ]
 )
 ```
