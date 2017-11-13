@@ -11,7 +11,7 @@ extension ResponseType {
     public var bodyString: String? {
         return String(data: self.body, encoding: .utf8)
     }
-    
+
     public func copy() -> Response {
         return Response(response: self)
     }

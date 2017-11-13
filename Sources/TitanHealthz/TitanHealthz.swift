@@ -21,8 +21,8 @@ public func healthzWithCheck(check: @escaping () throws -> String?) -> Function 
         do {
             let result = try check() ?? "Ok"
             let ok = try Response(code: 200,
-                              body: "Host: \(hostname)\nTime: \(Date())\n\nStatus: \(result)",
-                              headers: [])
+                                  body: "Host: \(hostname)\nTime: \(Date())\n\nStatus: \(result)",
+                headers: [])
             return (req, ok)
         } catch {
             let body = "Host: \(hostname)\nTime: \(Date())\n\nStatus: \(error)".data(using: .utf8) ?? Data()

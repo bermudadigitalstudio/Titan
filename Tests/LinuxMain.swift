@@ -15,4 +15,4 @@ XCTMain([
     testCase(TitanJSONTests.allTests),
     testCase(TitanQueryStringTests.allTests),
     testCase(TitanRouterTests.allTests)
-])
+    ])
