@@ -60,9 +60,13 @@ import TitanKituraAdapter
 
 let app = Titan()
 
+/// The Response is set to 404 by default.
+/// if no subsequent routing function is called, a 404 will be returned
+app.addFunction(DefaultTo404)
+
 /// Hello World, req is sent to next matching route 
 app.get("/") { req, _ in
-    return (req, Response(200, "Hello World"))
+    return (req, Response(200, "Hello World")) // here we "overwrite" the 404 that was returned in the previous func.
 }
 
 /// 2 parameters in URL
@@ -87,19 +91,6 @@ app.get("*") { req, res in
     return (req, newRes)  // will return "Hello World and hello from the middleware!"
 }
 
-/// a quick in-line middleware function to optionally set 404 response code
-/// can be used by other routes / functions
-func send404IfNoMatch(req: RequestType, res: ResponseType) -> (RequestType, ResponseType) {
-	var res = res.copy()
-	if res.code < 200 {
-		res.code = 404
-		res.body = "Page Not Found"
-	}
-	return (req, res)
-}
-
-/// use the 404 middleware on all routes and request methods
-app.addFunction(send404IfNoMatch)
 
 // start the Kitura webserver on port 8000
 TitanKituraAdapter.serve(app.app, on: 8000)
