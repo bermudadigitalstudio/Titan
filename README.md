@@ -3,6 +3,10 @@
 Titan is an extensible, powerful & easy-to-use microframework for <b>server-side Swift</b>.<br/>
 Write and run **production web apps & services** under Linux or Docker in a convenient way.
 
+## Language Support
+
+Swift 3 is no longer supported, but exists under the 0.7.x tags.
+
 [![Language Swift 4](https://img.shields.io/badge/Language-Swift%204-orange.svg)](https://swift.org) ![Platforms](https://img.shields.io/badge/Platforms-Docker%20%7C%20Linux%20%7C%20macOS-blue.svg) [![CircleCI](https://circleci.com/gh/bermudadigitalstudio/Titan/tree/master.svg?style=shield)](https://circleci.com/gh/bermudadigitalstudio/Titan)
 
 ## Features
@@ -10,7 +14,7 @@ Write and run **production web apps & services** under Linux or Docker in a conv
 1. very modular with a light-weight core for routing & JSON
 1. add features with plug & play middleware packages
 1. functional design which makes it easy to write own middleware
-1. use different webservers like Kitura or Nest
+1. use different webservers like Kitura or Swift-Server/HTTP
 1. incredibly fast due to its light-weight design
 1. built for latest Swift 4, Docker & Linux
 1. conceptually similar to the powerful & modular frameworks Express.js or Flask
@@ -36,8 +40,8 @@ let package = Package(
         .executable(name: "mywebapp", targets: ["mywebapp"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/bermudadigitalstudio/TitanKituraAdapter.git", .branch("swift4")),
-        .package(url: "https://github.com/bermudadigitalstudio/Titan", .branch("swift4"))
+        .package(url: "https://github.com/bermudadigitalstudio/TitanKituraAdapter.git", from: "0.8.0"),
+        .package(url: "https://github.com/bermudadigitalstudio/Titan", from: "0.8.0")
     ],
     targets: [
         .target(
