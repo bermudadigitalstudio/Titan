@@ -1,5 +1,5 @@
 import XCTest
-//@testable import TitanTests
+@testable import TitanTests
 @testable import TitanCORSTests
 @testable import TitanErrorHandlingTests
 @testable import TitanFormURLEncodedBodyParserTests
@@ -8,7 +8,7 @@ import XCTest
 @testable import TitanRouterTests
 
 XCTMain([
-   // testCase(TitanAPITests.allTests),
+    testCase(TitanAPITests.allTests),
     testCase(CORSTests.allTests),
     testCase(TitanErrorHandlingTests.allTests),
     testCase(TitanFormURLEncodedBodyParserTests.allTests),
