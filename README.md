@@ -3,7 +3,7 @@
 Titan is an extensible, powerful & easy-to-use microframework for <b>server-side Swift</b>.<br/>
 Write and run **production web apps & services** under Linux or Docker in a convenient way.
 
-[![Language Swift 3](https://img.shields.io/badge/Language-Swift%203-orange.svg)](https://swift.org) ![Platforms](https://img.shields.io/badge/Platforms-Docker%20%7C%20Linux%20%7C%20macOS-blue.svg) [![CircleCI](https://circleci.com/gh/bermudadigitalstudio/Titan/tree/master.svg?style=shield)](https://circleci.com/gh/bermudadigitalstudio/Titan)
+[![Language Swift 4](https://img.shields.io/badge/Language-Swift%204-orange.svg)](https://swift.org) ![Platforms](https://img.shields.io/badge/Platforms-Docker%20%7C%20Linux%20%7C%20macOS-blue.svg) [![CircleCI](https://circleci.com/gh/bermudadigitalstudio/Titan/tree/master.svg?style=shield)](https://circleci.com/gh/bermudadigitalstudio/Titan)
 
 ## Features
 
@@ -12,7 +12,7 @@ Write and run **production web apps & services** under Linux or Docker in a conv
 1. functional design which makes it easy to write own middleware
 1. use different webservers like Kitura or Nest
 1. incredibly fast due to its light-weight design
-1. built for latest Swift 3.x, Docker & Linux
+1. built for latest Swift 4, Docker & Linux
 1. conceptually similar to the powerful & modular frameworks Express.js or Flask
 
 ## Example
@@ -27,13 +27,25 @@ The following example has the following features:
 **Package.swift**:
 
 ```swift
+// swift-tools-version:4.0
 import PackageDescription
 
 let package = Package(
     name: "mywebapp",
+    products: [
+        .executable(name: "mywebapp", targets: ["mywebapp"]),
+    ],
     dependencies: [
-        .Package(url: "https://github.com/bermudadigitalstudio/Titan.git", majorVersion: 0, minor: 7),
-        .Package(url: "https://github.com/bermudadigitalstudio/TitanKituraAdapter.git", majorVersion: 0, minor: 4)
+        .package(url: "https://github.com/bermudadigitalstudio/TitanKituraAdapter.git", .branch("swift4")),
+        .package(url: "https://github.com/bermudadigitalstudio/Titan", .branch("swift4"))
+    ],
+    targets: [
+        .target(
+            name: "mywebapp",
+            dependencies: [
+                "TitanKituraAdapter",
+                "Titan"
+            ]),
     ]
 )
 ```
@@ -48,9 +60,13 @@ import TitanKituraAdapter
 
 let app = Titan()
 
+/// The Response is set to 404 by default.
+/// if no subsequent routing function is called, a 404 will be returned
+app.addFunction(DefaultTo404)
+
 /// Hello World, req is sent to next matching route 
 app.get("/") { req, _ in
-    return (req, Response(200, "Hello World"))
+    return (req, Response(200, "Hello World")) // here we "overwrite" the 404 that was returned in the previous func.
 }
 
 /// 2 parameters in URL
@@ -75,19 +91,6 @@ app.get("*") { req, res in
     return (req, newRes)  // will return "Hello World and hello from the middleware!"
 }
 
-/// a quick in-line middleware function to optionally set 404 response code
-/// can be used by other routes / functions
-func send404IfNoMatch(req: RequestType, res: ResponseType) -> (RequestType, ResponseType) {
-	var res = res.copy()
-	if res.code < 200 {
-		res.code = 404
-		res.body = "Page Not Found"
-	}
-	return (req, res)
-}
-
-/// use the 404 middleware on all routes and request methods
-app.addFunction(send404IfNoMatch)
 
 // start the Kitura webserver on port 8000
 TitanKituraAdapter.serve(app.app, on: 8000)

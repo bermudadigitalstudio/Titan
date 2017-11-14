@@ -2,34 +2,28 @@
 
 Titan is a constellation of microframeworks, and an umbrella framework that has what we consider to be "the bare essentials".
 
-## [Titan](https://github.com/bermudadigitalstudio/Titan) (this repo)
+## [Titan](../Sources/Titan)
 Just add a server adapter and you have a very slim server framework.
 
-### [Titan Core](https://github.com/bermudadigitalstudio/TitanCore)
+### [Titan Core](../Sources/TitanCore)
 Declares the Titan class, Request/ResponseType protocols, and Request/Response structs. The Titan class exposes two methods, `addFunction` and `app`.
 
-### [Titan Router](https://github.com/bermudadigitalstudio/TitanRouter) (incomplete)
+### [Titan Router](../Sources/TitanRouter) 
 Extends the Titan class, providing a `route` method which ensures that the Function is only executed when it matches.
 
-### [Titan Router + Sugar](https://github.com/bermudadigitalstudio/TitanRouterMethodSugar)
-Provides convenience methods to the router, e.g. `get`, `post` etc.
-
-### [Titan Error Handling](https://github.com/bermudadigitalstudio/TitanErrorHandling)
+### [Titan Error Handling](../Sources/TitanErrorHandling)
 Extends the Titan class to take a `ThrowingFunction`.
 
-### [Titan Error + Routing Sugar](https://github.com/bermudadigitalstudio/TitanErrorHandling-RoutingSugar) (incomplete)
-Provides throwing function overloads to the router sugar.
+### [Titan JSON](../Sources/TitanJSON)
+Provides quick access to decoded JSON in the request body, and to quickly put Encodable objects into the response body.
 
-### [Titan JSON Request Body](https://github.com/bermudadigitalstudio/TitanJSONRequestBody)
-Provides quick access to decoded JSON in the request body.
-
-### [Titan Query String](https://github.com/bermudadigitalstudio/TitanQueryString)
+### [Titan Query String](../Sources/TitanQueryString)
 Access the query string of the request.
 
-### [Titan Form URL Encoded Body Parser](https://github.com/bermudadigitalstudio/TitanFormURLEncodedBodyParser)
+### [Titan Form URL Encoded Body Parser](../Sources/TitanFormURLEncodedBodyParser)
 Decode `application/x-www-form-urlencoded` data in a POST body.
 
-### [Titan 404](https://github.com/bermudadigitalstudio/Titan404) (incomplete)
+### [Titan 404](../Sources/Titan404) 
 A simple function that writes a cute 404 to the Response. Put it at the top of your Function stack to get a simple Not Found behaviour in case it... isn't found.
 
 ## [Titan On Steroids](https://github.com/bermudadigitalstudio/TitanOnSteroids) (incomplete)

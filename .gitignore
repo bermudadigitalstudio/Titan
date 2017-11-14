@@ -3,3 +3,4 @@
 Packages
 *.xcodeproj
 *.sublime*
+Package.resolved
