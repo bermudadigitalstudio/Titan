@@ -228,6 +228,8 @@ final class TitanAPITests: XCTestCase {
         let authenticatedResponse = titanInstance.app(request: Request("GET", "/password", "", [("Authentication", "password")]))
         XCTAssertEqual(authenticatedResponse.code, 200)
         XCTAssertEqual(authenticatedResponse.bodyString, "Super secret password!")
+        let authenticated404 = titanInstance.app(request: Request("HEAD", "/password", "", [("Authentication", "password")]))
+        XCTAssertEqual(authenticated404.code, 404)
     }
 
     func testAuthentication() {
