@@ -22,24 +22,6 @@ final class TitanRouterTests: XCTestCase {
         app = Titan()
     }
 
-    static var allTests: [(String, (TitanRouterTests) -> () throws -> Void)] {
-        return [
-            ("testFunctionalMutableParams", testFunctionalMutableParams),
-            ("testBasicGet", testBasicGet),
-            ("testTitanEcho", testTitanEcho),
-            ("testMultipleRoutes", testMultipleRoutes),
-            ("testTitanSugar", testTitanSugar),
-            ("testMiddlewareFunction", testMiddlewareFunction),
-            ("testDifferentMethods", testDifferentMethods),
-            ("testSamePathDifferentiationByMethod", testSamePathDifferentiationByMethod),
-            ("testMatchingWildcardComponents", testMatchingWildcardComponents),
-            ("testTypesafePathParams", testTypesafePathParams),
-            ("testTypesafeMultipleParams", testTypesafeMultipleParams),
-            ("testMismatchingLongPaths", testMismatchingLongPaths),
-            ("testMatchingWithAQuery", testMatchingWithAQuery)
-        ]
-    }
-
     func testFunctionalMutableParams() {
         let app = Titan()
         app.get("/init") { (req, res) -> (RequestType, ResponseType) in

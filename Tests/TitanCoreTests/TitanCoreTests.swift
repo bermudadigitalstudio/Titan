@@ -136,14 +136,4 @@ final class FunctionTests: XCTestCase {
         XCTAssertEqual(response.headers.first!.name, "content-type")
         XCTAssertEqual(response.headers.first!.value, "text/plain")
     }
-
-    static var allTests: [(String, (FunctionTests) -> () throws -> Void)] {
-        return [
-            ("testCanAddFunction", testCanAddFunction),
-            ("testFunctionsAreInvokedInOrder", testFunctionsAreInvokedInOrder),
-            ("testFunctionInputIsOutputOfPrecedingFunction", testFunctionInputIsOutputOfPrecedingFunction),
-            ("testResponseComesFromLastResponseReturned", testResponseComesFromLastResponseReturned),
-            ("testFirstFunctionRegisteredReceivesRequest", testFirstFunctionRegisteredReceivesRequest)
-        ]
-    }
 }

@@ -40,14 +40,6 @@ final class CORSTests: XCTestCase {
                                                          body: "WOWOIE", headers: []))
         XCTAssertEqual(res.retrieveHeaderByName("access-control-allow-origin").value, "*")
     }
-
-    static var allTests: [(String, (CORSTests) -> () throws -> Void)] {
-        return [
-            ("testTitanCanAllowAllOrigins", testTitanCanAllowAllOrigins),
-            ("testTitanCanRespondToPreflight", testTitanCanRespondToPreflight),
-            ("testCanAddCorsFunctionToTitan", testCanAddCorsFunctionToTitan)
-        ]
-    }
 }
 
 extension ResponseType {

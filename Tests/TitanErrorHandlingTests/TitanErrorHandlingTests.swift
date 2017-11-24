@@ -15,12 +15,6 @@ class TitanErrorHandlingTests: XCTestCase {
         }
         XCTAssertEqual(t.app(request: Request(method: "", path: "", body: Data(), headers: [])).bodyString, "Oh no")
     }
-
-    static var allTests: [(String, (TitanErrorHandlingTests) -> () throws -> Void)] {
-        return [
-            ("testErrorsAreCaught", testErrorsAreCaught)
-        ]
-    }
 }
 
 extension String: Error {
