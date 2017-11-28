@@ -1,6 +1,7 @@
 import TitanCORS
 import TitanCore
 import XCTest
+let nullResponse = Response(code: -1, body: Data(), headers: [])
 
 final class CORSTests: XCTestCase {
     var titanInstance: Titan!
@@ -25,7 +26,7 @@ final class CORSTests: XCTestCase {
                                                          headers: [
                                                             ("Access-Control-Request-Method", "POST"),
                                                             ("Access-Control-Request-Headers", "X-Custom-Header")
-            ]))
+            ]), response: nullResponse).1
         XCTAssertEqual(res.code, 200)
         XCTAssertEqual(res.bodyString, "")
 
@@ -37,7 +38,7 @@ final class CORSTests: XCTestCase {
         titanInstance.addFunction(allowAllOrigins)
         let res = titanInstance.app(request: try Request(method: "ANYMETHOD",
                                                          path: "NOT EVEN A REAL PATH",
-                                                         body: "WOWOIE", headers: []))
+                                                         body: "WOWOIE", headers: []), response: nullResponse).1
         XCTAssertEqual(res.retrieveHeaderByName("access-control-allow-origin").value, "*")
     }
 }

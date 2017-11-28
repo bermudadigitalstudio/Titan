@@ -1,6 +1,7 @@
 import XCTest
 import TitanErrorHandling
 import TitanCore
+let nullResponse = Response(code: -1, body: Data(), headers: [])
 
 class TitanErrorHandlingTests: XCTestCase {
     func testErrorsAreCaught() {
@@ -13,7 +14,7 @@ class TitanErrorHandlingTests: XCTestCase {
         t.addFunction(errorHandler: errorHandler) { (_, _) throws -> (RequestType, ResponseType) in
             throw "Oh no"
         }
-        XCTAssertEqual(t.app(request: Request(method: "", path: "", body: Data(), headers: [])).bodyString, "Oh no")
+        XCTAssertEqual(t.app(request: Request(method: "", path: "", body: Data(), headers: []), response: nullResponse).1.bodyString, "Oh no")
     }
 }
 
