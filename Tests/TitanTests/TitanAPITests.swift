@@ -179,23 +179,23 @@ final class TitanAPITests: XCTestCase {
         XCTAssertEqual(dict["foo"], "bar2") // check repeats, last value wins
     }
 
-    /*
+    
      // COMMENTED DUE TO INTERNAL CRASH UNDER LINUX
      func testCanAccessQueryString() {
-     let path = "/users?verified=true&q=thomas%20catterall"
-     let request: RequestType = Request("GET", path)
-     // FIX: the following line causes a crash when run under Linux!!!
-     let parsedQuery = request.query
-     guard parsedQuery.count == 2 else {
-     XCTFail()
-     return
-     }
-     XCTAssertEqual(parsedQuery[0].key, "verified")
-     XCTAssertEqual(parsedQuery[0].value, "true")
+         let path = "/users?verified=true&q=thomas%20catterall"
+         let request: RequestType = Request("GET", path)
+         // FIX: the following line causes a crash when run under Linux!!!
+         let parsedQuery = request.queryPairs
+         guard parsedQuery.count == 2 else {
+             XCTFail()
+             return
+         }
+         XCTAssertEqual(parsedQuery[0].key, "verified")
+         XCTAssertEqual(parsedQuery[0].value, "true")
 
-     XCTAssertEqual(parsedQuery[1].key, "q")
-     XCTAssertEqual(parsedQuery[1].value, "thomas catterall")
-     }*/
+         XCTAssertEqual(parsedQuery[1].key, "q")
+         XCTAssertEqual(parsedQuery[1].value, "thomas catterall")
+     }
 
     func testTypesafePathParams() {
         titanInstance.get("/foo/*/baz") { req, id, _ in
@@ -233,6 +233,10 @@ final class TitanAPITests: XCTestCase {
         let authenticated404 = titanInstance.app(request: Request("HEAD", "/password", "", [("Authentication", "password")]), response: nullResponse).1
         XCTAssertEqual(authenticated404.code, 404)
     }
+    
+    func testGrouping() {
+        titanInstance.
+    }
 
     func testAuthentication() {
         func myAuthorizationRoutine(_ request: RequestType) -> Bool {
@@ -251,24 +255,6 @@ final class TitanAPITests: XCTestCase {
         let authenticatedResponse = titanInstance.app(request: Request("GET", "/password", "", [("Authentication", "other password")]), response: nullResponse).1
         XCTAssertEqual(authenticatedResponse.code, 200)
         XCTAssertEqual(authenticatedResponse.bodyString, "Super secret password!")
-    }
-
-    static var allTests: [(String, (TitanAPITests) -> () throws -> Void)] {
-        return [
-            ("testFunctionalMutableParams", testFunctionalMutableParams),
-            ("testTitanGet", testTitanGet),
-            ("testTitanEcho", testTitanEcho),
-            ("testMultipleRoutes", testMultipleRoutes),
-            ("testTitanSugar", testTitanSugar),
-            ("testFunctionFunction", testFunctionFunction),
-            ("testDifferentMethods", testDifferentMethods),
-            ("testErrorsAreCaught", testErrorsAreCaught),
-            ("testSamePathDifferentiationByMethod", testSamePathDifferentiationByMethod),
-            ("testCanAccessFormURLEncodedBody", testCanAccessFormURLEncodedBody),
-            ("testTypesafePathParams", testTypesafePathParams),
-            ("test404", test404)
-            // ("testCanAccessQueryString", testCanAccessQueryString),  // temporary deactivated due to crash
-        ]
     }
 }
 

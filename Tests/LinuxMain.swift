@@ -46,6 +46,7 @@ extension TitanAPITests {
     ("testSamePathDifferentiationByMethod", testSamePathDifferentiationByMethod),
     ("testCanAccessJSONBody", testCanAccessJSONBody),
     ("testCanAccessFormURLEncodedBody", testCanAccessFormURLEncodedBody),
+    ("testCanAccessQueryString", testCanAccessQueryString),
     ("testTypesafePathParams", testTypesafePathParams),
     ("test404", test404),
     ("testPredicates", testPredicates),
