@@ -234,10 +234,6 @@ final class TitanAPITests: XCTestCase {
         XCTAssertEqual(authenticated404.code, 404)
     }
     
-    func testGrouping() {
-        titanInstance.
-    }
-
     func testAuthentication() {
         func myAuthorizationRoutine(_ request: RequestType) -> Bool {
             return request.headers.contains(where: { (header) -> Bool in
