@@ -1,6 +1,7 @@
 import Foundation
 import TitanCore
 
+public let resp404 = try! Response(code: 404, body: "Not found", headers: [("Content-Type", "text/plain")])
 /*
  Returns a 404 response.
 
@@ -10,8 +11,5 @@ import TitanCore
  effectively overwrite it.
  */
 public let defaultTo404: Function = { (request, response) -> (RequestType, ResponseType) in
-    do {
-        return (request, try Response(code: 404, body: "Not found", headers: [("Content-Type", "text/plain")]))
-    } catch {}
-    return (request, Response(code: 404, body: Data(), headers: []))
+    return (request, resp404)
 }

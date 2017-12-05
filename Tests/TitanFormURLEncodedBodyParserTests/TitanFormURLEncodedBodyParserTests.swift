@@ -32,10 +32,4 @@ class TitanFormURLEncodedBodyParserTests: XCTestCase {
         XCTAssertEqual(dict["resume"], "when i was young\r\ni went to school")
         XCTAssertEqual(dict["foo"], "bar2") // check repeats, last value wins
     }
-
-    static var allTests: [(String, (TitanFormURLEncodedBodyParserTests) -> () throws -> Void)] {
-        return [
-            ("testExample", testExample)
-        ]
-    }
 }
