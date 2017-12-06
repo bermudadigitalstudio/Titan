@@ -18,8 +18,9 @@ public extension RequestType {
             // Separate the query pair into an array, e.g. "foo=bar" -> ["foo", "bar"]
             let comps = pair.split(separator: "=").map { chars -> String in
                 return String(chars).removingPercentEncoding ?? ""
-                }.map {
-                    return $0.replacingOccurrences(of: "+", with: " ")
+            }.map {
+                // Percent encoding mandates that "%20" = <space>" – however, many applications use "+" to mean space as well, so decode those.
+                return $0.replacingOccurrences(of: "+", with: " ")
             }
             switch comps.count {
             case 1:
@@ -39,5 +40,5 @@ public extension RequestType {
         }
         return query
     }
-
 }
+
