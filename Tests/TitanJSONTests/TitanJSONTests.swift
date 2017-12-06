@@ -28,14 +28,6 @@ class TitanJSONTests: XCTestCase {
         XCTAssertEqual(response.bodyString, "{\"hello\":\"world\"}")
     }
 
-    static var allTests: [(String, (TitanJSONTests) -> () throws -> Void)] {
-        return [
-            ("testJSONTRequest", testJSONTRequest),
-            ("testJSONResponse", testJSONResponse),
-            ("testJSONCodableResponse", testJSONCodableResponse)
-        ]
-    }
-
     struct Greeting: Codable {
         let hello: String
     }

@@ -1,6 +1,5 @@
 .DS_Store
 .build
+.git
 Packages
 *.xcodeproj
-*.sublime*
-Package.resolved

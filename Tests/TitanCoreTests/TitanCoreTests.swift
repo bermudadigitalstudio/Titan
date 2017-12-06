@@ -1,6 +1,8 @@
 import XCTest
 @testable import TitanCore
 
+let nullResponse = Response(code: -1, body: Data(), headers: [])
+
 final class FunctionTests: XCTestCase {
 
     func testCanAddFunction() {
@@ -43,7 +45,7 @@ final class FunctionTests: XCTestCase {
             return (request, response)
         }
 
-        _ = t.app(request: Request(method: "", path: "", body: Data(), headers: []))
+        _ = t.app(request: Request(method: "", path: "", body: Data(), headers: []), response: nullResponse)
         XCTAssertEqual(accumulator.count, 4)
         XCTAssertEqual(accumulator[3], 3)
     }
@@ -59,7 +61,7 @@ final class FunctionTests: XCTestCase {
         _ = t.app(request: Request(method: "METHOD",
                                    path: "/PATH",
                                    body: "body".data(using: .utf8)!,
-                                   headers: [("some-header", "some-value")]))
+                                   headers: [("some-header", "some-value")]), response: nullResponse)
         XCTAssertEqual(request.bodyString, "body")
         XCTAssertEqual(request.method, "METHOD")
         XCTAssertEqual(request.path, "/PATH")
@@ -91,7 +93,7 @@ final class FunctionTests: XCTestCase {
             return (req, Response(code: 500, body: Data(), headers: []))
         }
 
-        let response = t.app(request: Request(method: "", path: "", body: Data(), headers: []))
+        let response = t.app(request: Request(method: "", path: "", body: Data(), headers: []), response: nullResponse).1
         XCTAssertEqual(response.bodyString, "response body")
         XCTAssertEqual(response.code, 700)
         XCTAssertEqual(response.headers.first!.name, "content-type")
@@ -123,7 +125,7 @@ final class FunctionTests: XCTestCase {
             return (req, res)
         }
 
-        _ = t.app(request: Request(method: "", path: "", body: Data(), headers: []))
+        _ = t.app(request: Request(method: "", path: "", body: Data(), headers: []), response: nullResponse)
 
         XCTAssertEqual(request.bodyString, "body")
         XCTAssertEqual(request.method, "METHOD")
@@ -135,15 +137,5 @@ final class FunctionTests: XCTestCase {
         XCTAssertEqual(response.code, 700)
         XCTAssertEqual(response.headers.first!.name, "content-type")
         XCTAssertEqual(response.headers.first!.value, "text/plain")
-    }
-
-    static var allTests: [(String, (FunctionTests) -> () throws -> Void)] {
-        return [
-            ("testCanAddFunction", testCanAddFunction),
-            ("testFunctionsAreInvokedInOrder", testFunctionsAreInvokedInOrder),
-            ("testFunctionInputIsOutputOfPrecedingFunction", testFunctionInputIsOutputOfPrecedingFunction),
-            ("testResponseComesFromLastResponseReturned", testResponseComesFromLastResponseReturned),
-            ("testFirstFunctionRegisteredReceivesRequest", testFirstFunctionRegisteredReceivesRequest)
-        ]
     }
 }

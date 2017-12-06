@@ -2,6 +2,8 @@ import XCTest
 import Titan
 import Foundation
 
+let nullResponse = Response(-1, Data(), [])
+
 final class TitanAPITests: XCTestCase {
     var titanInstance: Titan!
     override func setUp() {
@@ -22,7 +24,7 @@ final class TitanAPITests: XCTestCase {
             XCTAssertEqual(req.path, "/rewritten")
             return (req, res)
         }
-        let response = app.app(request: Request("GET", "/init"))
+        let response = app.app(request: Request("GET", "/init"), response: nullResponse).1
         XCTAssertEqual(response.code, 500)
         XCTAssertEqual(response.bodyString, "Hello World")
     }
@@ -31,14 +33,14 @@ final class TitanAPITests: XCTestCase {
         titanInstance.get("/username") { req, _ in
             return (req, Response(200, "swizzlr", []))
         }
-        XCTAssertEqual(titanInstance.app(request: Request("GET", "/username")).bodyString, "swizzlr")
+        XCTAssertEqual(titanInstance.app(request: Request("GET", "/username"), response: nullResponse).1.bodyString, "swizzlr")
     }
 
     func testTitanEcho() {
         titanInstance.get("/echoMyBody") { req, _ in
             return (req, Response(200, req.body, []))
         }
-        XCTAssertEqual(titanInstance.app(request: Request("GET", "/echoMyBody", "hello, this is my body")).bodyString,
+        XCTAssertEqual(titanInstance.app(request: Request("GET", "/echoMyBody", "hello, this is my body"), response: nullResponse).1.bodyString,
                        "hello, this is my body")
     }
 
@@ -50,9 +52,9 @@ final class TitanAPITests: XCTestCase {
         titanInstance.get("/echoMyBody") { req, _ in
             return (req, Response(200, req.body))
         }
-        XCTAssertEqual(titanInstance.app(request: Request("GET", "/echoMyBody", "hello, this is my body")).bodyString,
+        XCTAssertEqual(titanInstance.app(request: Request("GET", "/echoMyBody", "hello, this is my body"), response: nullResponse).1.bodyString,
                        "hello, this is my body")
-        XCTAssertEqual(titanInstance.app(request: Request("GET", "/username")).bodyString, "swizzlr")
+        XCTAssertEqual(titanInstance.app(request: Request("GET", "/username"), response: nullResponse).1.bodyString, "swizzlr")
     }
 
     func testTitanSugar() {
@@ -77,7 +79,7 @@ final class TitanAPITests: XCTestCase {
             end = Date()
             return (req, res)
         }
-        _ = titanInstance.app(request: Request("GET", "/username"))
+        _ = titanInstance.app(request: Request("GET", "/username"), response: nullResponse).1
         XCTAssertLessThan(start, end)
     }
 
@@ -120,7 +122,7 @@ final class TitanAPITests: XCTestCase {
         t.addFunction(errorHandler: errorHandler) { (_, _) throws -> (RequestType, ResponseType) in
             throw "Oh no"
         }
-        XCTAssertEqual(t.app(request: Request("", "")).bodyString, "Oh no")
+        XCTAssertEqual(t.app(request: Request("", ""), response: nullResponse).1.bodyString, "Oh no")
     }
 
     func testSamePathDifferentiationByMethod() {
@@ -135,9 +137,9 @@ final class TitanAPITests: XCTestCase {
             return (req, Response(201, ""))
         }
 
-        let resp = titanInstance.app(request: Request("POST", "/username", "Lisa"))
+        let resp = titanInstance.app(request: Request("POST", "/username", "Lisa"), response: nullResponse).1
         XCTAssertEqual(resp.code, 201)
-        XCTAssertEqual(titanInstance.app(request: Request("GET", "/username")).bodyString, "Lisa")
+        XCTAssertEqual(titanInstance.app(request: Request("GET", "/username"), response: nullResponse).1.bodyString, "Lisa")
     }
 
     func testCanAccessJSONBody() {
@@ -177,29 +179,29 @@ final class TitanAPITests: XCTestCase {
         XCTAssertEqual(dict["foo"], "bar2") // check repeats, last value wins
     }
 
-    /*
+    
      // COMMENTED DUE TO INTERNAL CRASH UNDER LINUX
      func testCanAccessQueryString() {
-     let path = "/users?verified=true&q=thomas%20catterall"
-     let request: RequestType = Request("GET", path)
-     // FIX: the following line causes a crash when run under Linux!!!
-     let parsedQuery = request.query
-     guard parsedQuery.count == 2 else {
-     XCTFail()
-     return
-     }
-     XCTAssertEqual(parsedQuery[0].key, "verified")
-     XCTAssertEqual(parsedQuery[0].value, "true")
+         let path = "/users?verified=true&q=thomas%20catterall"
+         let request: RequestType = Request("GET", path)
+         // FIX: the following line causes a crash when run under Linux!!!
+         let parsedQuery = request.queryPairs
+         guard parsedQuery.count == 2 else {
+             XCTFail()
+             return
+         }
+         XCTAssertEqual(parsedQuery[0].key, "verified")
+         XCTAssertEqual(parsedQuery[0].value, "true")
 
-     XCTAssertEqual(parsedQuery[1].key, "q")
-     XCTAssertEqual(parsedQuery[1].value, "thomas catterall")
-     }*/
+         XCTAssertEqual(parsedQuery[1].key, "q")
+         XCTAssertEqual(parsedQuery[1].value, "thomas catterall")
+     }
 
     func testTypesafePathParams() {
         titanInstance.get("/foo/*/baz") { req, id, _ in
             return (req, Response(200, id))
         }
-        let resp = titanInstance.app(request: Request("GET", "/foo/567/baz"))
+        let resp = titanInstance.app(request: Request("GET", "/foo/567/baz"), response: nullResponse).1
         XCTAssertEqual(resp.bodyString, "567")
     }
 
@@ -222,14 +224,16 @@ final class TitanAPITests: XCTestCase {
                 return (req, Response(499, "WHAT WHAT", []))
             }
         })
-        let unauthenticatedResponse = titanInstance.app(request: Request("GET", "/password", "", []))
+        let unauthenticatedResponse = titanInstance.app(request: Request("GET", "/password", "", []), response: nullResponse).1
         XCTAssertEqual(unauthenticatedResponse.code, 499)
         XCTAssertEqual(unauthenticatedResponse.bodyString, "WHAT WHAT")
-        let authenticatedResponse = titanInstance.app(request: Request("GET", "/password", "", [("Authentication", "password")]))
+        let authenticatedResponse = titanInstance.app(request: Request("GET", "/password", "", [("Authentication", "password")]), response: nullResponse).1
         XCTAssertEqual(authenticatedResponse.code, 200)
         XCTAssertEqual(authenticatedResponse.bodyString, "Super secret password!")
+        let authenticated404 = titanInstance.app(request: Request("HEAD", "/password", "", [("Authentication", "password")]), response: nullResponse).1
+        XCTAssertEqual(authenticated404.code, 404)
     }
-
+    
     func testAuthentication() {
         func myAuthorizationRoutine(_ request: RequestType) -> Bool {
             return request.headers.contains(where: { (header) -> Bool in
@@ -241,30 +245,12 @@ final class TitanAPITests: XCTestCase {
                 return (req, Response(200, "Super secret password!", []))
             }
         }
-        let unauthenticatedResponse = titanInstance.app(request: Request("GET", "/password", "", []))
+        let unauthenticatedResponse = titanInstance.app(request: Request("GET", "/password", "", []), response: nullResponse).1
         XCTAssertEqual(unauthenticatedResponse.code, 401)
 
-        let authenticatedResponse = titanInstance.app(request: Request("GET", "/password", "", [("Authentication", "other password")]))
+        let authenticatedResponse = titanInstance.app(request: Request("GET", "/password", "", [("Authentication", "other password")]), response: nullResponse).1
         XCTAssertEqual(authenticatedResponse.code, 200)
         XCTAssertEqual(authenticatedResponse.bodyString, "Super secret password!")
-    }
-
-    static var allTests: [(String, (TitanAPITests) -> () throws -> Void)] {
-        return [
-            ("testFunctionalMutableParams", testFunctionalMutableParams),
-            ("testTitanGet", testTitanGet),
-            ("testTitanEcho", testTitanEcho),
-            ("testMultipleRoutes", testMultipleRoutes),
-            ("testTitanSugar", testTitanSugar),
-            ("testFunctionFunction", testFunctionFunction),
-            ("testDifferentMethods", testDifferentMethods),
-            ("testErrorsAreCaught", testErrorsAreCaught),
-            ("testSamePathDifferentiationByMethod", testSamePathDifferentiationByMethod),
-            ("testCanAccessFormURLEncodedBody", testCanAccessFormURLEncodedBody),
-            ("testTypesafePathParams", testTypesafePathParams),
-            ("test404", test404)
-            // ("testCanAccessQueryString", testCanAccessQueryString),  // temporary deactivated due to crash
-        ]
     }
 }
 
