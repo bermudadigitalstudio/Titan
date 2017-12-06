@@ -16,18 +16,18 @@ public extension RequestType {
         // Decode `foo=bar` -> `(key: "foo", value: "bar")`, percent decoding any values along the way
         return pairs.map { pair -> (key: String, value: String) in
             // Separate the query pair into an array, e.g. "foo=bar" -> ["foo", "bar"]
-            let comps = pair.split(separator: "=").map { chars -> String in
-                return String(chars).removingPercentEncoding ?? ""
-            }.map {
-                // Percent encoding mandates that "%20" = <space>" – however, many applications use "+" to mean space as well, so decode those.
+            let comps = pair.split(separator: "=").map {
+                // Percent encoding mandates that "%20" = <space>" – however, many applications use "+" to mean space as well, so decode those (before we decode any percent-encoded plus signs!)
                 return $0.replacingOccurrences(of: "+", with: " ")
+            }.map { chars -> String in
+                return String(chars).removingPercentEncoding ?? ""
             }
             switch comps.count {
-            case 1:
+            case 1: // "?foo="
                 return (key: String(comps[0]), value: "")
-            case 2:
+            case 2: // "?foo=bar"
                 return (key: String(comps[0]), value: String(comps[1]))
-            default:
+            default: // "?"
                 return (key: "", value: "")
             }
         }
