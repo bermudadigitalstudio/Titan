@@ -21,9 +21,9 @@ extension Titan {
         }
         self.addFunction { (req, res) -> (RequestType, ResponseType) in
             if predicate(req, res) {
-                return trueTitan.app(request: req, response: res)
+                return (req, trueTitan.app(request: req))
             } else {
-                return falseTitan?.app(request: req, response: res) ?? (req, res)
+                return (req, falseTitan?.app(request: req) ?? res)
             }
         }
     }

@@ -1,7 +1,6 @@
 import XCTest
 import TitanRouter
 import TitanCore
-let nullResponse = Response(-1, Data(), [])
 
 extension Response {
     init(_ string: String) {
@@ -23,6 +22,24 @@ final class TitanRouterTests: XCTestCase {
         app = Titan()
     }
 
+    static var allTests: [(String, (TitanRouterTests) -> () throws -> Void)] {
+        return [
+            ("testFunctionalMutableParams", testFunctionalMutableParams),
+            ("testBasicGet", testBasicGet),
+            ("testTitanEcho", testTitanEcho),
+            ("testMultipleRoutes", testMultipleRoutes),
+            ("testTitanSugar", testTitanSugar),
+            ("testMiddlewareFunction", testMiddlewareFunction),
+            ("testDifferentMethods", testDifferentMethods),
+            ("testSamePathDifferentiationByMethod", testSamePathDifferentiationByMethod),
+            ("testMatchingWildcardComponents", testMatchingWildcardComponents),
+            ("testTypesafePathParams", testTypesafePathParams),
+            ("testTypesafeMultipleParams", testTypesafeMultipleParams),
+            ("testMismatchingLongPaths", testMismatchingLongPaths),
+            ("testMatchingWithAQuery", testMatchingWithAQuery)
+        ]
+    }
+
     func testFunctionalMutableParams() {
         let app = Titan()
         app.get("/init") { (req, res) -> (RequestType, ResponseType) in
@@ -37,7 +54,7 @@ final class TitanRouterTests: XCTestCase {
             XCTAssertEqual(req.path, "/rewritten")
             return (req, res)
         }
-        let response = app.app(request: Request("GET", "/init", "", []), response: nullResponse).1
+        let response = app.app(request: Request("GET", "/init", "", []))
         XCTAssertEqual(response.code, 500)
         XCTAssertEqual(response.bodyString, "Hello World")
     }
@@ -46,14 +63,14 @@ final class TitanRouterTests: XCTestCase {
         app.get("/username") { req, _ in
             return (req, Response("swizzlr"))
         }
-        XCTAssertEqual(app.app(request: Request("GET", "/username"), response: nullResponse).1.bodyString, "swizzlr")
+        XCTAssertEqual(app.app(request: Request("GET", "/username")).bodyString, "swizzlr")
     }
 
     func testTitanEcho() {
         app.get("/echoMyBody") { req, _ in
             return (req, Response(req.body))
         }
-        XCTAssertEqual(app.app(request: Request("GET", "/echoMyBody", "hello, this is my body"), response: nullResponse).1.bodyString, "hello, this is my body")
+        XCTAssertEqual(app.app(request: Request("GET", "/echoMyBody", "hello, this is my body")).bodyString, "hello, this is my body")
     }
 
     func testMultipleRoutes() {
@@ -64,9 +81,9 @@ final class TitanRouterTests: XCTestCase {
         app.get("/echoMyBody") { (req, _) -> (RequestType, ResponseType) in
             return (req, Response(req.body))
         }
-        XCTAssertEqual(String(data: app.app(request: Request("GET", "/echoMyBody", "hello, this is my body"), response: nullResponse).1.body, encoding: .utf8),
+        XCTAssertEqual(String(data: app.app(request: Request("GET", "/echoMyBody", "hello, this is my body")).body, encoding: .utf8),
                        "hello, this is my body")
-        XCTAssertEqual(app.app(request: Request("GET", "/username"), response: nullResponse).1.bodyString, "swizzlr")
+        XCTAssertEqual(app.app(request: Request("GET", "/username")).bodyString, "swizzlr")
     }
 
     func testTitanSugar() {
@@ -91,7 +108,7 @@ final class TitanRouterTests: XCTestCase {
             end = Date()
             return (req, res)
         }
-        _ = app.app(request: Request("GET", "/username"), response: nullResponse).1
+        _ = app.app(request: Request("GET", "/username"))
         XCTAssertLessThan(start, end)
     }
 
@@ -137,16 +154,16 @@ final class TitanRouterTests: XCTestCase {
             return (req, created)
         }
 
-        let resp = app.app(request: Request("POST", "/username", "Lisa"), response: nullResponse).1
+        let resp = app.app(request: Request("POST", "/username", "Lisa"))
         XCTAssertEqual(resp.code, 201)
-        XCTAssertEqual(app.app(request: Request("GET", "/username"), response: nullResponse).1.bodyString, "Lisa")
+        XCTAssertEqual(app.app(request: Request("GET", "/username")).bodyString, "Lisa")
     }
 
     func testMatchingWildcardComponents() throws {
         app.get("/foo/*/baz/*/bar") { req, _ in
             return (req, Response(200))
         }
-        let resp = app.app(request: Request("GET", "/foo/123456/baz/7890/bar"), response: nullResponse).1
+        let resp = app.app(request: Request("GET", "/foo/123456/baz/7890/bar"))
         XCTAssertEqual(resp.code, 200)
     }
 
@@ -155,7 +172,7 @@ final class TitanRouterTests: XCTestCase {
             return (req, Response(id))
         }
 
-        let resp = app.app(request: Request("GET", "/foo/567/baz"), response: nullResponse).1
+        let resp = app.app(request: Request("GET", "/foo/567/baz"))
         XCTAssertEqual(resp.bodyString, "567")
     }
 
@@ -164,7 +181,7 @@ final class TitanRouterTests: XCTestCase {
             return (req, Response("foo=\(foo), bar=\(bar), baz=\(baz), qux=\(qux), yex=\(yex)"))
         }
 
-        let resp = app.app(request: Request("GET", "/foo/hello/bar/world/baz/my/qux/name/yex/is"), response: nullResponse).1
+        let resp = app.app(request: Request("GET", "/foo/hello/bar/world/baz/my/qux/name/yex/is"))
         XCTAssertEqual(resp.bodyString, "foo=hello, bar=world, baz=my, qux=name, yex=is")
     }
 
@@ -173,7 +190,7 @@ final class TitanRouterTests: XCTestCase {
             return (req, Response(200, "Got foo"))
         }
 
-        let resp = app.app(request: Request("GET", "/foo/bar"), response: nullResponse).1
+        let resp = app.app(request: Request("GET", "/foo/bar"))
         XCTAssertNotEqual(resp.bodyString, "Got foo")
     }
 
@@ -182,7 +199,7 @@ final class TitanRouterTests: XCTestCase {
 
             return (req, Response(200))
         }
-        let resp = app.app(request: Request("GET", "/test/hello?query=thing&q=2"), response: nullResponse).1
+        let resp = app.app(request: Request("GET", "/test/hello?query=thing&q=2"))
         XCTAssertEqual(resp.code, 200)
     }
 }
