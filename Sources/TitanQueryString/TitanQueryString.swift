@@ -3,6 +3,7 @@ import TitanCore
 
 public extension RequestType {
     /// The pairs of keys and values in the query string of the `RequestType`s path.
+    /// Complexity: 0(n) on all invocations.
     public var queryPairs: [(key: String, value: String)] {
         // Ensure there is a query string, otherwise return
         guard let indexOfQuery = self.path.index(of: "?") else {
@@ -33,6 +34,8 @@ public extension RequestType {
         }
     }
 
+    /// Access the query string as a dictionary, with case sensitive keys.
+    /// Complexity: 0(n) on all invocations.
     public var query: [String: String] {
         var query: [String: String] = [:]
         for (name, value) in self.queryPairs {
