@@ -17,19 +17,15 @@ public final class Titan {
     }
 
     /// Titan handler which should be given to a server
-    public func app(request: RequestType, response: ResponseType) -> (RequestType, ResponseType) {
+    public func app(request: RequestType) -> ResponseType {
         typealias Result = (RequestType, ResponseType)
 
-        let initial: Result = (request, response)
-        return functionStack.reduce(initial) { (res, next) -> Result in
+        let initialReq = request
+        let initialRes = Response(code: -1, body: Data(), headers: [])
+        let initial: Result = (initialReq, initialRes)
+        let res = functionStack.reduce(initial) { (res, next) -> Result in
             return next(res.0, res.1)
         }
-    }
-    // Older versions of Titan provided no interface to the initial response object or the final request object. 
-    // This deficiency has been remedied by the new version of 'app', above. 
-    @available(*, deprecated, message: "Use the overload of app that takes and returns the tuple.")
-    public func app(request: RequestType) -> ResponseType {
-        let initialResponse = Response(code: -1, body: Data(), headers: [])
-        return self.app(request: request, response: initialResponse).1
+        return res.1
     }
 }

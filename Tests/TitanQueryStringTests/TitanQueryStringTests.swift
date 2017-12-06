@@ -30,4 +30,11 @@ final class TitanQueryStringTests: XCTestCase {
         // Check last value wins
         XCTAssertEqual(query["verified"], "false")
     }
+
+    static var allTests: [(String, (TitanQueryStringTests) -> () throws -> Void)] {
+        return [
+            ("testQueryPairs", testQueryPairs),
+            ("testQuery", testQuery)
+        ]
+    }
 }

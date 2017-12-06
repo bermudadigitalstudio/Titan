@@ -102,17 +102,6 @@ TitanKituraAdapter.serve(app.app, on: 8000)
 
 You can now run the webserver and open [http://localhost:8000](http://localhost:8000) or [http://localhost:8000/item/foo/subitem/bar](http://localhost:8000/item/apple/subitem/banana) or send JSON via POST to [http://localhost:8000/data](http://localhost:8000/data)
 
-## Concepts
-
-- Titan isn't a web server: it's a framework for building lightweight apps using existing Swift servers.
-- A Titan app is very simple: it is an array of functions that each get called. The output of one function is the input to the next.
-- The first function receives the HTTP request and a dummy response.
-- The last returned response is sent to the client.
-- How you use Titan is up to you: you can modify the request before you pass it on further. You can compress or rewrite responses before they are sent to the client.
-- Titan allows you to easily write integration tests without needing a full HTTP client.
-- Titan allows you to write _unit tests_ by decomposing your request handling code into `Function`s and testing that directly.
-- Titan is not suitable for large or monolithic applications. Ideally, your entire Titan app should be readable in one page.
-
 ## Tests
 
 Execute `Scripts/test.sh` to run all unit-tests inside a Docker container.
