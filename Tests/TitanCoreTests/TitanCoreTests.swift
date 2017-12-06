@@ -62,7 +62,7 @@ final class FunctionTests: XCTestCase {
                                    path: "/PATH",
                                    body: "body".data(using: .utf8)!,
                                    headers: [("some-header", "some-value")]), response: nullResponse)
-        XCTAssertEqual(request.bodyString, "body")
+        XCTAssertEqual(request.body, "body")
         XCTAssertEqual(request.method, "METHOD")
         XCTAssertEqual(request.path, "/PATH")
         XCTAssertEqual(request.headers.first!.name, "some-header")
@@ -94,7 +94,7 @@ final class FunctionTests: XCTestCase {
         }
 
         let response = t.app(request: Request(method: "", path: "", body: Data(), headers: []), response: nullResponse).1
-        XCTAssertEqual(response.bodyString, "response body")
+        XCTAssertEqual(response.body, "response body")
         XCTAssertEqual(response.code, 700)
         XCTAssertEqual(response.headers.first!.name, "content-type")
         XCTAssertEqual(response.headers.first!.value, "text/plain")
@@ -127,7 +127,7 @@ final class FunctionTests: XCTestCase {
 
         _ = t.app(request: Request(method: "", path: "", body: Data(), headers: []), response: nullResponse)
 
-        XCTAssertEqual(request.bodyString, "body")
+        XCTAssertEqual(request.body, "body")
         XCTAssertEqual(request.method, "METHOD")
         XCTAssertEqual(request.path, "/PATH")
         XCTAssertEqual(request.headers.first!.name, "some-header")
@@ -137,5 +137,17 @@ final class FunctionTests: XCTestCase {
         XCTAssertEqual(response.code, 700)
         XCTAssertEqual(response.headers.first!.name, "content-type")
         XCTAssertEqual(response.headers.first!.value, "text/plain")
+    }
+    
+    func testErrorDescriptions() {
+        let errors = [TitanError.dataConversion]
+        for e in errors {
+            switch e {
+            case .dataConversion:
+                XCTAssertNotNil(e.errorDescription)
+                XCTAssertNotNil(e.recoverySuggestion)
+                XCTAssertNotNil(e.failureReason)
+            }
+        }
     }
 }

@@ -18,14 +18,14 @@ class TitanJSONTests: XCTestCase {
         let response = Response(code: 200, json: ["hello": "world"])
         XCTAssertEqual(response.code, 200)
         XCTAssertEqual(response.headers.first?.value, "application/json")
-        XCTAssertEqual(response.bodyString, "{\"hello\":\"world\"}")
+        XCTAssertEqual(response.body, "{\"hello\":\"world\"}")
     }
 
     func testJSONCodableResponse() {
         let response = Response(code: 200, object: Greeting(hello: "world"))
         XCTAssertEqual(response.code, 200)
         XCTAssertEqual(response.headers.first?.value, "application/json")
-        XCTAssertEqual(response.bodyString, "{\"hello\":\"world\"}")
+        XCTAssertEqual(response.body, "{\"hello\":\"world\"}")
     }
 
     struct Greeting: Codable {

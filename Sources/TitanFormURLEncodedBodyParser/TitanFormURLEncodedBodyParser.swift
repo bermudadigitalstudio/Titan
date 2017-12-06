@@ -4,7 +4,7 @@ import TitanCore
 public extension RequestType {
 
     public var formURLEncodedBody: [(name: String, value: String)] {
-        guard let bodyString = self.bodyString else {
+        guard let bodyString: String = self.body else {
             return []
         }
 
@@ -13,7 +13,7 @@ public extension RequestType {
 
     public var postParams: [String: String] {
         var ret = [String: String]()
-        guard let bodyString = self.bodyString else {
+        guard let bodyString: String = self.body else {
             return ret
         }
         let keys = parse(body: bodyString)

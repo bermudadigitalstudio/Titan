@@ -28,7 +28,7 @@ final class CORSTests: XCTestCase {
                                                             ("Access-Control-Request-Headers", "X-Custom-Header")
             ]), response: nullResponse).1
         XCTAssertEqual(res.code, 200)
-        XCTAssertEqual(res.bodyString, "")
+        XCTAssertEqual(res.body, "")
 
         XCTAssertEqual(res.retrieveHeaderByName("access-control-allow-methods").value.lowercased(), "post")
         XCTAssertEqual(res.retrieveHeaderByName("access-control-allow-headers").value.lowercased(), "x-custom-header")

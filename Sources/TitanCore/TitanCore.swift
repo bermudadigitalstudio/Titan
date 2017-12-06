@@ -27,9 +27,8 @@ public final class Titan {
     }
     // Older versions of Titan provided no interface to the initial response object or the final request object. 
     // This deficiency has been remedied by the new version of 'app', above. 
-    @available(*, deprecated, message: "Use the overload of app that takes and returns the tuple.")
+    @available(*, unavailable, renamed: "app(request:response:)")
     public func app(request: RequestType) -> ResponseType {
-        let initialResponse = Response(code: -1, body: Data(), headers: [])
-        return self.app(request: request, response: initialResponse).1
+        fatalError()
     }
 }
