@@ -46,6 +46,16 @@ extension Request {
     public init(request: RequestType) {
         self.init(method: request.method, path: request.path, body: request.body, headers: request.headers)
     }
+    
+    /// A lowercased dictionary of headers
+    /// O(n) complexity (so cache the result!)
+    var headerDict: [String:String] {
+        var ret = [String:String]()
+        for (k, v) in headers {
+            ret[k.lowercased()] = v
+        }
+        return ret
+    }
 }
 
 extension RequestType {
