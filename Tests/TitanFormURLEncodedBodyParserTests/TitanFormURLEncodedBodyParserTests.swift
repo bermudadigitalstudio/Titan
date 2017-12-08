@@ -4,7 +4,7 @@ import TitanCore
 
 class TitanFormURLEncodedBodyParserTests: XCTestCase {
     func testExample() throws {
-        let requestBody = "foo=bar&baz=&favorite+flavor=flies&resume=when+i+was+young%0D%0Ai+went+to+school&foo=bar2&foo2=bar="
+        let requestBody = "foo=bar&baz=&favorite+flavor=flies&resume=when+i+was+young%0D%0Ai+went+to+school&foo=bar2&foo2=bar=&what%20do+you+think=i+dont%20know"
 
         let request = try Request(method: "POST", path: "/submit", body: requestBody, headers: [])
         let parsed = request.formURLEncodedBody
@@ -27,6 +27,10 @@ class TitanFormURLEncodedBodyParserTests: XCTestCase {
         //  Equal sign in value
         XCTAssertEqual(parsed[5].name, "foo2")
         XCTAssertEqual(parsed[5].value, "bar=")
+        
+        // Percent encoded key
+        XCTAssertEqual(parsed[6].name, "what do you think")
+        XCTAssertEqual(parsed[6].value, "i dont know")
 
         let dict = request.postParams
         XCTAssertEqual(dict["resume"], "when i was young\r\ni went to school")

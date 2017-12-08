@@ -35,13 +35,16 @@ func toFunction(_ handler: @escaping (RequestType, String, String, String, Strin
     }
 }
 
+/// Extract the parameters from a path given a template.
+/// It is a programmer error to pass a path template containing a different number of components to the path itself, and may result in undefined behavior.
 /// Where the `path` is /users/567/email
 /// Where the `template` is /users/*/email
 /// return [567]
-
 func extractParameters(from path: String, with template: String) -> [String] {
+    // Split the path and the template into its individual parts
     let pathComps = path.splitOnSlashes()
     let templateComps = template.splitOnSlashes()
+    // Zip them together
     let z = zip(pathComps, templateComps)
     var ret: [String] = []
     for (pathComp, templateComp) in z {
@@ -51,16 +54,4 @@ func extractParameters(from path: String, with template: String) -> [String] {
         ret.append(pathComp)
     }
     return ret
-}
-
-extension String {
-    var wildcards: Int {
-        return self.reduce(0) { (count, char) in
-            if char == "*" {
-                return count + 1
-            } else {
-                return count
-            }
-        }
-    }
 }

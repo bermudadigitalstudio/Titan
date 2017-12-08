@@ -36,23 +36,22 @@ func parse(body: String) -> [(name: String, value: String)] {
     let pairs = body.components(separatedBy: "&") // Separate the tuples
 
     for element in pairs {
+        // Find the equals sign
         guard let range = element.range(of: "=") else {
             return retValue
         }
-
+        // split out the key and the value
         let rawKey = element[..<range.lowerBound]
         let rawValue = element[range.upperBound...]
 
         // Remove + character
         let sanitizedKey = String(rawKey).replacingOccurrences(of: "+", with: " ")
-        let sanitizedPlus = String(rawValue).replacingOccurrences(of: "+", with: " ")
-
-        // Remove percent encoding characters
-        if let sanitizedValue = sanitizedPlus.removingPercentEncoding {
-            retValue.append((sanitizedKey, sanitizedValue))
-        } else {
-            retValue.append((sanitizedKey, sanitizedPlus))
-        }
+        let sanitizedValue = String(rawValue).replacingOccurrences(of: "+", with: " ")
+        
+        let key = sanitizedKey.removingPercentEncoding ?? sanitizedKey
+        let value = sanitizedValue.removingPercentEncoding ?? sanitizedValue
+        
+        retValue.append((key, value))
     }
     return retValue
 }
