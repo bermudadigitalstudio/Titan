@@ -9,6 +9,7 @@ public final class Titan {
 
     public init() {}
 
+    // A chain of Functions that are executed in order. The output of one is the input of the next; the final output is sent to the client.
     private var functionStack = [Function]()
 
     /// add a function to Titan’s request / response processing flow
@@ -21,6 +22,7 @@ public final class Titan {
         typealias Result = (RequestType, ResponseType)
 
         let initial: Result = (request, response)
+        // Apply the function one at a time to the request and the response, returning the result to the next function.
         return functionStack.reduce(initial) { (res, next) -> Result in
             return next(res.0, res.1)
         }
