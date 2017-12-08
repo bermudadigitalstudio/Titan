@@ -150,4 +150,14 @@ final class FunctionTests: XCTestCase {
             }
         }
     }
+    
+    func testHeaderDict() {
+        let r = Request(method: "METHOD",
+                        path: "/PATH",
+                        body: "response body".data(using: .utf8)!,
+                        headers: [("some-header", "some-value"), ("some-OTHER-header", "some-OTHER-value")])
+        XCTAssertEqual(r.headerDict["some-other-header"], "some-OTHER-value")
+        XCTAssertEqual(r.headerDict["some-header"], "some-value")
+        XCTAssertEqual(r.headerDict["SOME-HEADER"], nil)
+    }
 }
