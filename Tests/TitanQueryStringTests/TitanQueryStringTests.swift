@@ -4,10 +4,10 @@ import TitanCore
 
 final class TitanQueryStringTests: XCTestCase {
     func testQueryPairs() throws {
-        let path = "/users?verified=true&q=thomas%20catterall&this_has_space=what+are+thingies"
+        let path = "/users?verified=true&q=thomas%20catterall&this_has_space=what+are+thingies&this_has_plus=2%2B2%3D4"
         let request: RequestType = try Request(method: "GET", path: path, body: "", headers: [])
         let parsedQuery = request.queryPairs
-        guard parsedQuery.count == 3 else {
+        guard parsedQuery.count == 4 else {
             XCTFail()
             return
         }
@@ -19,6 +19,9 @@ final class TitanQueryStringTests: XCTestCase {
 
         XCTAssertEqual(parsedQuery[2].key, "this_has_space")
         XCTAssertEqual(parsedQuery[2].value, "what are thingies")
+        
+        XCTAssertEqual(parsedQuery[3].key, "this_has_plus")
+        XCTAssertEqual(parsedQuery[3].value, "2+2=4")
     }
     func testQuery() throws {
         let path = "/users?verified=true&q=thomas%20catterall&verified=false&this_has_space=what+are+thingies"

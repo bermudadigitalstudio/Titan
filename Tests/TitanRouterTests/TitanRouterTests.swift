@@ -39,21 +39,32 @@ final class TitanRouterTests: XCTestCase {
         }
         let response = app.app(request: Request("GET", "/init", "", []), response: nullResponse).1
         XCTAssertEqual(response.code, 500)
-        XCTAssertEqual(response.bodyString, "Hello World")
+        XCTAssertEqual(response.body, "Hello World")
+    }
+    
+    func testAllMethods() {
+        app.allMethods("/user/*") { (req, res) -> (RequestType, ResponseType) in
+            // maybe do some tracing code here
+            
+            return (req, Response("Heyo"))
+        }
+        let response = app.app(request: Request("ANYMETHOD", "/user/whatever", "", []), response: nullResponse).1
+        XCTAssertEqual(response.code, 200)
+        XCTAssertEqual(response.body, "Heyo")
     }
 
     func testBasicGet() {
         app.get("/username") { req, _ in
             return (req, Response("swizzlr"))
         }
-        XCTAssertEqual(app.app(request: Request("GET", "/username"), response: nullResponse).1.bodyString, "swizzlr")
+        XCTAssertEqual(app.app(request: Request("GET", "/username"), response: nullResponse).1.body, "swizzlr")
     }
 
     func testTitanEcho() {
         app.get("/echoMyBody") { req, _ in
             return (req, Response(req.body))
         }
-        XCTAssertEqual(app.app(request: Request("GET", "/echoMyBody", "hello, this is my body"), response: nullResponse).1.bodyString, "hello, this is my body")
+        XCTAssertEqual(app.app(request: Request("GET", "/echoMyBody", "hello, this is my body"), response: nullResponse).1.body, "hello, this is my body")
     }
 
     func testMultipleRoutes() {
@@ -66,7 +77,7 @@ final class TitanRouterTests: XCTestCase {
         }
         XCTAssertEqual(String(data: app.app(request: Request("GET", "/echoMyBody", "hello, this is my body"), response: nullResponse).1.body, encoding: .utf8),
                        "hello, this is my body")
-        XCTAssertEqual(app.app(request: Request("GET", "/username"), response: nullResponse).1.bodyString, "swizzlr")
+        XCTAssertEqual(app.app(request: Request("GET", "/username"), response: nullResponse).1.body, "swizzlr")
     }
 
     func testTitanSugar() {
@@ -128,18 +139,18 @@ final class TitanRouterTests: XCTestCase {
 
     func testSamePathDifferentiationByMethod() throws {
         var username = ""
-        let created = Response(201, "")
+        let created = try Response(201, "")
         app.get("/username") { req, _ in
             return (req, Response(username))
         }
         app.post("/username") { (req: RequestType, _) in
-            username = req.bodyString!
+            username = req.body!
             return (req, created)
         }
 
         let resp = app.app(request: Request("POST", "/username", "Lisa"), response: nullResponse).1
         XCTAssertEqual(resp.code, 201)
-        XCTAssertEqual(app.app(request: Request("GET", "/username"), response: nullResponse).1.bodyString, "Lisa")
+        XCTAssertEqual(app.app(request: Request("GET", "/username"), response: nullResponse).1.body, "Lisa")
     }
 
     func testMatchingWildcardComponents() throws {
@@ -156,25 +167,43 @@ final class TitanRouterTests: XCTestCase {
         }
 
         let resp = app.app(request: Request("GET", "/foo/567/baz"), response: nullResponse).1
-        XCTAssertEqual(resp.bodyString, "567")
+        XCTAssertEqual(resp.body, "567")
     }
 
     func testTypesafeMultipleParams() {
+        app.get("/foo/*/bar/*") { req, foo, bar, _ in
+            return (req, Response("foo=\(foo), bar=\(bar)"))
+        }
+        let resp2 = app.app(request: Request("GET", "/foo/hello/bar/world"), response: nullResponse).1
+        XCTAssertEqual(resp2.body, "foo=hello, bar=world")
+        
+        app.get("/foo/*/bar/*/baz/*") { req, foo, bar, baz, _ in
+            return (req, Response("foo=\(foo), bar=\(bar), baz=\(baz)"))
+        }
+        let resp3 = app.app(request: Request("GET", "/foo/hello/bar/world/baz/my"), response: nullResponse).1
+        XCTAssertEqual(resp3.body, "foo=hello, bar=world, baz=my")
+        
+        app.get("/foo/*/bar/*/baz/*/qux/*") { req, foo, bar, baz, qux, _ in
+            return (req, Response("foo=\(foo), bar=\(bar), baz=\(baz), qux=\(qux)"))
+        }
+        let resp4 = app.app(request: Request("GET", "/foo/hello/bar/world/baz/my/qux/name"), response: nullResponse).1
+        XCTAssertEqual(resp4.body, "foo=hello, bar=world, baz=my, qux=name")
+        
         app.get("/foo/*/bar/*/baz/*/qux/*/yex/*") { req, foo, bar, baz, qux, yex, _ in
             return (req, Response("foo=\(foo), bar=\(bar), baz=\(baz), qux=\(qux), yex=\(yex)"))
         }
 
-        let resp = app.app(request: Request("GET", "/foo/hello/bar/world/baz/my/qux/name/yex/is"), response: nullResponse).1
-        XCTAssertEqual(resp.bodyString, "foo=hello, bar=world, baz=my, qux=name, yex=is")
+        let resp5 = app.app(request: Request("GET", "/foo/hello/bar/world/baz/my/qux/name/yex/is"), response: nullResponse).1
+        XCTAssertEqual(resp5.body, "foo=hello, bar=world, baz=my, qux=name, yex=is")
     }
 
     func testMismatchingLongPaths() {
         app.get("/foo/*/thing") { req, _ in
-            return (req, Response(200, "Got foo"))
+            return (req, try! Response(200, "Got foo"))
         }
 
         let resp = app.app(request: Request("GET", "/foo/bar"), response: nullResponse).1
-        XCTAssertNotEqual(resp.bodyString, "Got foo")
+        XCTAssertNotEqual(resp.body, "Got foo")
     }
 
     func testMatchingWithAQuery() {

@@ -26,6 +26,7 @@ extension FunctionTests {
     ("testFirstFunctionRegisteredReceivesRequest", testFirstFunctionRegisteredReceivesRequest),
     ("testResponseComesFromLastResponseReturned", testResponseComesFromLastResponseReturned),
     ("testFunctionInputIsOutputOfPrecedingFunction", testFunctionInputIsOutputOfPrecedingFunction),
+    ("testErrorDescriptions", testErrorDescriptions),
   ]
 }
 extension Titan404Tests {
@@ -66,6 +67,7 @@ extension TitanFormURLEncodedBodyParserTests {
 extension TitanHealthzTests {
   static var allTests = [
     ("testBasicHealthCheck", testBasicHealthCheck),
+    ("testHealthCheckDoesntMatchOtherRoutes", testHealthCheckDoesntMatchOtherRoutes),
     ("testThrowingHealthCheck", testThrowingHealthCheck),
     ("testNonThrowingHealthCheckWithDiagnostic", testNonThrowingHealthCheckWithDiagnostic),
   ]

@@ -47,8 +47,7 @@ private func matchRoute(path: String, route: String) -> Bool {
     }
     let zipped = zip(splitPath, splitRoute) // produce [(foo, foo), (bar, *), (baz, baz)]
     for (pathSegment, routeSegment) in zipped {
-
-        // In other words, check they're identical except when the route segment is a wildcard
+        // If the route segment does not equal the path segment, and the route segment is not a wildcard, then it does not match
         if (routeSegment != pathSegment) && (routeSegment != "*") {
             return false
         } else {
@@ -59,12 +58,23 @@ private func matchRoute(path: String, route: String) -> Bool {
 }
 
 extension String {
+    /// Separate a string into an array of strings, separated by "/" characters
     func splitOnSlashes() -> [String] {
         return self.split(separator: "/").map { String($0) }
     }
-}
+    
+    /// Return the number of "*" characters in `Self`
+    var wildcards: Int {
+        return self.reduce(0) { (count, char) in
+            if char == "*" {
+                return count + 1
+            } else {
+                return count
+            }
+        }
+    }
 
-extension String {
+    /// Return `Self` without the query string.
     func prefixUpToQuery() -> String {
         return self.index(of: "?")
             .map { self.prefix(upTo: $0) }
