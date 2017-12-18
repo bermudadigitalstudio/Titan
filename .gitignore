@@ -3,3 +3,4 @@
 .git
 Packages
 *.xcodeproj
+Package.resolved
