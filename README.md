@@ -106,7 +106,6 @@ You can now run the webserver and open [http://localhost:8000](http://localhost:
 
 ## Concepts
 
-- Titan isn't a web server: it's a framework for building lightweight apps using existing Swift servers.
 - A Titan app is very simple: it is an array of functions that each get called. The output of one function is the input to the next.
 - The first function receives the HTTP request and a dummy response.
 - The last returned response is sent to the client.
