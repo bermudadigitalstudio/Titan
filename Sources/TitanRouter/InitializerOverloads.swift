@@ -15,7 +15,7 @@ import Foundation
 import TitanCore
 
 extension Request {
-    public init(_ method: String = "GET", _ path: String = "/", _ body: String = "", _ headers: HTTPHeaders = HTTPHeaders()) {
+    public init(_ method: HTTPMethod = .get, _ path: String = "/", _ body: String = "", _ headers: HTTPHeaders = HTTPHeaders()) {
         self.init(method: method, path: path, body: body.data(using: .utf8) ?? Data(), headers: headers)
     }
 }

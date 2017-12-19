@@ -72,7 +72,7 @@ extension Titan {
         self.head(path: path, handler: handler)
     }
 
-    public func route(_ method: String?, _ path: String, _ handler: @escaping Function) {
+    public func route(_ method: HTTPMethod?, _ path: String, _ handler: @escaping Function) {
         self.route(method: method, path: path, handler: handler)
     }
 

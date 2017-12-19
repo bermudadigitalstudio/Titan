@@ -30,7 +30,7 @@ public func healthzWithCheck(check: @escaping () throws -> String?) -> Function 
     return { req, res in
 
         guard req.path.lowercased() == "/healthz",
-            req.method.lowercased() == "get" else {
+            req.method == .get else {
                 return (req, res)
         }
 
