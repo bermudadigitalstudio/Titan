@@ -209,7 +209,7 @@ final class TitanRouterTests: XCTestCase {
     }
 
     func testTypesafeMultipleParams() {
-        app.get("/foo/{foo}/bar/{bar}") { req, foo, params in
+        app.get("/foo/{foo}/bar/{bar}") { req, _, params in
             let foo = params["foo"] ?? ""
             let bar = params["bar"] ?? ""
             return (req, Response("foo=\(foo), bar=\(bar)"))
