@@ -27,6 +27,7 @@ public protocol RequestType {
 
 /// A reified `RequestType`
 public struct Request: RequestType {
+
     public var method: String
     public var path: String
     public var body: Data
@@ -38,7 +39,6 @@ public struct Request: RequestType {
         self.method = method
         self.path = path
         guard let data = body.data(using: .utf8) else {
-            // This is almost certainly impossible.
             throw TitanError.dataConversion
         }
         self.body = data

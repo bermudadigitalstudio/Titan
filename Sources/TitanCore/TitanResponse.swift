@@ -30,18 +30,18 @@ public struct Response: ResponseType {
     public var body: Data
 
     /// Create a Response
-    public init(code: Int, body: Data, headers: HTTPHeaders) {
+    public init(code: Int, body: Data?, headers: HTTPHeaders = HTTPHeaders()) {
         self.code = code
-        self.body = body
+        self.body = body ?? Data()
         self.headers = headers
     }
 
     /// Create a Response
     /// Throws an error if the body parameter cannot be converted to Data
     public init(code: Int, body: String, headers: HTTPHeaders) throws {
+
         self.code = code
         guard let data = body.data(using: .utf8) else {
-            // I don't see how this could ever happen.
             throw TitanError.dataConversion
         }
         self.body = data

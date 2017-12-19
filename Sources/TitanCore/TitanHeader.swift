@@ -20,7 +20,7 @@ public typealias Header = (name: String, value: String)
 ///
 /// Little known fact: HTTP headers need not be unique!
 public struct HTTPHeaders {
-    public private(set) var headers: [Header]
+    private var headers: [Header]
 
     public init() {
         self.headers = [Header]()
@@ -52,6 +52,9 @@ public struct HTTPHeaders {
         })
     }
 
+    public var count: Int {
+        return self.headers.count
+    }
 }
 
 extension HTTPHeaders: Sequence {

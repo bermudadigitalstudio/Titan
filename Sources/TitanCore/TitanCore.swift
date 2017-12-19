@@ -42,10 +42,4 @@ public final class Titan {
         }
     }
 
-    // Older versions of Titan provided no interface to the initial response object or the final request object. 
-    // This deficiency has been remedied by the new version of 'app', above. 
-    @available(*, unavailable, renamed: "app(request:response:)")
-    public func app(request: RequestType) -> ResponseType {
-        fatalError()
-    }
 }

@@ -36,14 +36,14 @@ class TitanJSONTests: XCTestCase {
     func testJSONResponse() throws {
         let response = try Response(code: 200, json: ["hello": "world"])
         XCTAssertEqual(response.code, 200)
-        XCTAssertEqual(response.headers.headers.first?.value, "application/json")
+        XCTAssertEqual(response.headers["content-type"], "application/json")
         XCTAssertEqual(response.body, "{\"hello\":\"world\"}")
     }
 
     func testJSONCodableResponse() throws {
         let response = try Response(code: 200, object: Greeting(hello: "world"))
         XCTAssertEqual(response.code, 200)
-        XCTAssertEqual(response.headers.headers.first?.value, "application/json")
+        XCTAssertEqual(response.headers["content-type"], "application/json")
         XCTAssertEqual(response.body, "{\"hello\":\"world\"}")
     }
 

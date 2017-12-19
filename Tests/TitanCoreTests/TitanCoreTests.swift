@@ -199,15 +199,16 @@ final class TitanCoreTests: XCTestCase {
         let anotherHeaders = HTTPHeaders(dictionaryLiteral: ("Content-Length", "10"))
         XCTAssertEqual(anotherHeaders["Content-Length"], "10")
 
-        XCTAssertEqual(headers.headers.count, 1)
+        XCTAssertEqual(headers.count, 1)
         // swiftlint:disable shorthand_operator
         headers = headers + anotherHeaders
         // swiftlint:enable shorthand_operator
         XCTAssertEqual(headers["Content-Length"], "10")
-        XCTAssertEqual(headers.headers.count, 2)
+        XCTAssertEqual(headers.count, 2)
 
-        let copyHeaders = HTTPHeaders(headers: headers.headers)
-        XCTAssertEqual(copyHeaders.headers.count, 2)
+        let heads = [("Content-Length", "10"), ("Accept", "text")]
+        let copyHeaders = HTTPHeaders(headers: heads)
+        XCTAssertEqual(copyHeaders.count, 2)
         XCTAssertEqual(copyHeaders["Content-Length"], "10")
         XCTAssertEqual(copyHeaders["Accept"], "text")
     }
