@@ -49,7 +49,7 @@ extension Titan {
                 do {
                     return (req,
                             try Response(code: 401, body: "Not Authorized",
-                                         headers: HTTPHeaders(dictionaryLiteral:("Content-Type", "text/plain"))))
+                                         headers: HTTPHeaders(dictionaryLiteral: ("Content-Type", "text/plain"))))
                 } catch {
                     self.log?.error(error.localizedDescription)
                 }

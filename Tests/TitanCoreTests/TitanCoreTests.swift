@@ -83,7 +83,7 @@ final class TitanCoreTests: XCTestCase {
         }
 
         _ = t.app(request: Request(method: "METHOD", path: "/PATH", body: "body".data(using: .utf8)!,
-                                   headers:  HTTPHeaders(dictionaryLiteral: ("some-header", "some-value"))), response: nullResponse)
+                                   headers: HTTPHeaders(dictionaryLiteral: ("some-header", "some-value"))), response: nullResponse)
         XCTAssertEqual(request.body, "body")
         XCTAssertEqual(request.method, "METHOD")
         XCTAssertEqual(request.path, "/PATH")
@@ -130,7 +130,7 @@ final class TitanCoreTests: XCTestCase {
                                 headers: HTTPHeaders(dictionaryLiteral: ("some-header", "some-value"))),
                         try Response(code: 700,
                                      body: "response body",
-                                     headers: HTTPHeaders(dictionaryLiteral:("content-type", "text/plain"))))
+                                     headers: HTTPHeaders(dictionaryLiteral: ("content-type", "text/plain"))))
             } catch {
             }
             return (Request(method: "METHOD",
@@ -200,7 +200,9 @@ final class TitanCoreTests: XCTestCase {
         XCTAssertEqual(anotherHeaders["Content-Length"], "10")
 
         XCTAssertEqual(headers.headers.count, 1)
+        // swiftlint:disable shorthand_operator
         headers = headers + anotherHeaders
+        // swiftlint:enable shorthand_operator
         XCTAssertEqual(headers["Content-Length"], "10")
         XCTAssertEqual(headers.headers.count, 2)
 

@@ -27,7 +27,7 @@ final class TitanQueryStringTests: XCTestCase {
         let request: RequestType = try Request(method: "GET", path: path, body: "", headers: HTTPHeaders())
         let parsedQuery = request.queryPairs
         guard parsedQuery.count == 4 else {
-            XCTFail()
+            XCTFail("Expected 4 params")
             return
         }
         XCTAssertEqual(parsedQuery[0].key, "verified")

@@ -44,143 +44,31 @@ extension Titan {
         self.head(path: path, handler: handler)
     }
 
-    public func get(_ path: String, _ handler: @escaping (RequestType, String, ResponseType) -> (RequestType, ResponseType)) {
-        self.get(path: path, handler: handler)
+    public func get(_ path: String, handler: @escaping (RequestType, ResponseType, [String: String]) -> (RequestType, ResponseType)) {
+        self.get(path: path, handler: toFunction(handler, with: path))
     }
 
-    public func get(_ path: String, _ handler: @escaping (RequestType, String, String, ResponseType) -> (RequestType, ResponseType)) {
-        self.get(path: path, handler: handler)
-    }
-
-    public func get(_ path: String, _ handler: @escaping (RequestType, String, String, String, ResponseType) -> (RequestType, ResponseType)) {
-        self.get(path: path, handler: handler)
-    }
-
-    public func get(_ path: String, _ handler: @escaping (RequestType, String, String, String, String, ResponseType) -> (RequestType, ResponseType)) {
-        self.get(path: path, handler: handler)
-    }
-
-    public func get(_ path: String, _ handler: @escaping (RequestType, String, String, String, String, String, ResponseType) -> (RequestType, ResponseType)) {
-        self.get(path: path, handler: handler)
-    }
-
-    public func post(_ path: String, _ handler: @escaping (RequestType, String, ResponseType) -> (RequestType, ResponseType)) {
+    public func post(_ path: String, _ handler: @escaping (RequestType, ResponseType, [String: String]) -> (RequestType, ResponseType)) {
         self.post(path: path, handler: handler)
     }
 
-    public func post(_ path: String, _ handler: @escaping (RequestType, String, String, ResponseType) -> (RequestType, ResponseType)) {
-        self.post(path: path, handler: handler)
-    }
-
-    public func post(_ path: String, _ handler: @escaping (RequestType, String, String, String, ResponseType) -> (RequestType, ResponseType)) {
-        self.post(path: path, handler: handler)
-    }
-
-    public func post(_ path: String, _ handler: @escaping (RequestType, String, String, String, String, ResponseType) -> (RequestType, ResponseType)) {
-        self.post(path: path, handler: handler)
-    }
-
-    public func post(_ path: String, _ handler: @escaping (RequestType, String, String, String, String, String, ResponseType) -> (RequestType, ResponseType)) {
-        self.post(path: path, handler: handler)
-    }
-
-    public func put(_ path: String, _ handler: @escaping (RequestType, String, ResponseType) -> (RequestType, ResponseType)) {
+    public func put(_ path: String, _ handler: @escaping (RequestType, ResponseType, [String: String]) -> (RequestType, ResponseType)) {
         self.put(path: path, handler: handler)
     }
 
-    public func put(_ path: String, _ handler: @escaping (RequestType, String, String, ResponseType) -> (RequestType, ResponseType)) {
-        self.put(path: path, handler: handler)
-    }
-
-    public func put(_ path: String, _ handler: @escaping (RequestType, String, String, String, ResponseType) -> (RequestType, ResponseType)) {
-        self.put(path: path, handler: handler)
-    }
-
-    public func put(_ path: String, _ handler: @escaping (RequestType, String, String, String, String, ResponseType) -> (RequestType, ResponseType)) {
-        self.put(path: path, handler: handler)
-    }
-
-    public func put(_ path: String, _ handler: @escaping (RequestType, String, String, String, String, String, ResponseType) -> (RequestType, ResponseType)) {
-        self.put(path: path, handler: handler)
-    }
-
-    public func patch(_ path: String, _ handler: @escaping (RequestType, String, ResponseType) -> (RequestType, ResponseType)) {
+    public func patch(_ path: String, _ handler: @escaping (RequestType, ResponseType, [String: String]) -> (RequestType, ResponseType)) {
         self.patch(path: path, handler: handler)
     }
 
-    public func patch(_ path: String, _ handler: @escaping (RequestType, String, String, ResponseType) -> (RequestType, ResponseType)) {
-        self.patch(path: path, handler: handler)
-    }
-
-    public func patch(_ path: String, _ handler: @escaping (RequestType, String, String, String, ResponseType) -> (RequestType, ResponseType)) {
-        self.patch(path: path, handler: handler)
-    }
-
-    public func patch(_ path: String, _ handler: @escaping (RequestType, String, String, String, String, ResponseType) -> (RequestType, ResponseType)) {
-        self.patch(path: path, handler: handler)
-    }
-
-    public func patch(_ path: String, _ handler: @escaping (RequestType, String, String, String, String, String, ResponseType) -> (RequestType, ResponseType)) {
-        self.patch(path: path, handler: handler)
-    }
-
-    public func delete(_ path: String, _ handler: @escaping (RequestType, String, ResponseType) -> (RequestType, ResponseType)) {
+    public func delete(_ path: String, _ handler: @escaping (RequestType, ResponseType, [String: String]) -> (RequestType, ResponseType)) {
         self.delete(path: path, handler: handler)
     }
 
-    public func delete(_ path: String, _ handler: @escaping (RequestType, String, String, ResponseType) -> (RequestType, ResponseType)) {
-        self.delete(path: path, handler: handler)
-    }
-
-    public func delete(_ path: String, _ handler: @escaping (RequestType, String, String, String, ResponseType) -> (RequestType, ResponseType)) {
-        self.delete(path: path, handler: handler)
-    }
-
-    public func delete(_ path: String, _ handler: @escaping (RequestType, String, String, String, String, ResponseType) -> (RequestType, ResponseType)) {
-        self.delete(path: path, handler: handler)
-    }
-
-    public func delete(_ path: String, _ handler: @escaping (RequestType, String, String, String, String, String, ResponseType) -> (RequestType, ResponseType)) {
-        self.delete(path: path, handler: handler)
-    }
-
-    public func options(_ path: String, _ handler: @escaping (RequestType, String, ResponseType) -> (RequestType, ResponseType)) {
+    public func options(_ path: String, _ handler: @escaping (RequestType, ResponseType, [String: String]) -> (RequestType, ResponseType)) {
         self.options(path: path, handler: handler)
     }
 
-    public func options(_ path: String, _ handler: @escaping (RequestType, String, String, ResponseType) -> (RequestType, ResponseType)) {
-        self.options(path: path, handler: handler)
-    }
-
-    public func options(_ path: String, _ handler: @escaping (RequestType, String, String, String, ResponseType) -> (RequestType, ResponseType)) {
-        self.options(path: path, handler: handler)
-    }
-
-    public func options(_ path: String, _ handler: @escaping (RequestType, String, String, String, String, ResponseType) -> (RequestType, ResponseType)) {
-        self.options(path: path, handler: handler)
-    }
-
-    public func options(_ path: String, _ handler: @escaping (RequestType, String, String, String, String, String, ResponseType) -> (RequestType, ResponseType)) {
-        self.options(path: path, handler: handler)
-    }
-
-    public func head(_ path: String, _ handler: @escaping (RequestType, String, ResponseType) -> (RequestType, ResponseType)) {
-        self.head(path: path, handler: handler)
-    }
-
-    public func head(_ path: String, _ handler: @escaping (RequestType, String, String, ResponseType) -> (RequestType, ResponseType)) {
-        self.head(path: path, handler: handler)
-    }
-
-    public func head(_ path: String, _ handler: @escaping (RequestType, String, String, String, ResponseType) -> (RequestType, ResponseType)) {
-        self.head(path: path, handler: handler)
-    }
-
-    public func head(_ path: String, _ handler: @escaping (RequestType, String, String, String, String, ResponseType) -> (RequestType, ResponseType)) {
-        self.head(path: path, handler: handler)
-    }
-
-    public func head(_ path: String, _ handler: @escaping (RequestType, String, String, String, String, String, ResponseType) -> (RequestType, ResponseType)) {
+    public func head(_ path: String, _ handler: @escaping (RequestType, ResponseType, [String: String]) -> (RequestType, ResponseType)) {
         self.head(path: path, handler: handler)
     }
 

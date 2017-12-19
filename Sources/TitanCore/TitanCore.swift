@@ -41,7 +41,7 @@ public final class Titan {
             return next(res.0, res.1)
         }
     }
-    
+
     // Older versions of Titan provided no interface to the initial response object or the final request object. 
     // This deficiency has been remedied by the new version of 'app', above. 
     @available(*, unavailable, renamed: "app(request:response:)")

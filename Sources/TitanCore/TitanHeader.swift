@@ -79,7 +79,7 @@ extension HTTPHeaders: ExpressibleByDictionaryLiteral {
 }
 
 /// Joins two headers, overwriting the `key` and `value` in the `lhs` with `rhs`.
-public func +(lhs: HTTPHeaders, rhs: HTTPHeaders) -> HTTPHeaders {
+public func + (lhs: HTTPHeaders, rhs: HTTPHeaders) -> HTTPHeaders {
     var lhs = lhs
 
     for (key, value) in rhs {

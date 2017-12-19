@@ -35,7 +35,8 @@ public extension RequestType {
                 // Workaround for https://bugs.swift.org/browse/SR-5727 by converting to a String directly
                 .map(String.init)
                 .map {
-                    // Percent encoding mandates that "%20" = <space>" – however, many applications use "+" to mean space as well, so decode those (before we decode any percent-encoded plus signs!)
+                    // Percent encoding mandates that "%20" = <space>"
+                    // however, many applications use "+" to mean space as well, so decode those (before we decode any percent-encoded plus signs!)
                     return $0.replacingOccurrences(of: "+", with: " ")
                 }.map {
                     return $0.removingPercentEncoding ?? ""

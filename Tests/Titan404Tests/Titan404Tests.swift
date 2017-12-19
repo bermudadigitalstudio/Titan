@@ -17,7 +17,6 @@ import Titan404
 
 let nullResponse = Response(code: -1, body: Data(), headers: HTTPHeaders())
 
-
 class Titan404Tests: XCTestCase {
 
     static var allTests = [
@@ -27,7 +26,6 @@ class Titan404Tests: XCTestCase {
     func test404() {
         let titanInstance = Titan()
         titanInstance.addFunction(defaultTo404)
-
 
         let response = titanInstance.app(request: Request(method: "GET", path: "/notfound", body: Data(), headers: HTTPHeaders()),
                                          response: nullResponse)

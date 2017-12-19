@@ -25,7 +25,7 @@ import TitanCore
 public let defaultTo404: Function = { (request, response) -> (RequestType, ResponseType) in
 
     do {
-        return (request,try Response(code: 404, body: "Not found", headers: HTTPHeaders(dictionaryLiteral: ("Content-Type", "text/plain"))))
+        return (request, try Response(code: 404, body: "Not found", headers: HTTPHeaders(dictionaryLiteral: ("Content-Type", "text/plain"))))
     } catch {
         return (request, Response(code: 404, body: Data(), headers: HTTPHeaders()))
     }

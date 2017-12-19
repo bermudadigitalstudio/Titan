@@ -74,8 +74,10 @@ app.get("/") { req, _ in
 }
 
 /// 2 parameters in URL
-app.delete("/item/*/subitem/*") { req, param1, param2, _ in
-	let text = "I will delete \(param2) in \(param1)"
+app.delete("/item/{item_id}/subitem/{sub_item_id}") { req, res, paramaters in
+    let itemId = params["item_id"] ?? ""
+    let subId = params["sub_item_id"] ?? ""
+	let text = "I will delete \(subId) in \(itemId)"
     return(req, Response(200, text))
 }
 

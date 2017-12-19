@@ -18,6 +18,7 @@ import Foundation
 let nullResponse = Response(-1, Data(), HTTPHeaders())
 
 final class TitanAPITests: XCTestCase {
+
     static var allTests = [
         ("testFunctionalMutableParams", testFunctionalMutableParams),
         ("testTitanGet", testTitanGet),
@@ -35,7 +36,7 @@ final class TitanAPITests: XCTestCase {
         ("test404", test404),
         ("testPredicates", testPredicates),
         ("testAuthentication", testAuthentication)
-        ]
+    ]
 
     var titanInstance: Titan!
     override func setUp() {
@@ -63,7 +64,11 @@ final class TitanAPITests: XCTestCase {
 
     func testTitanGet() {
         titanInstance.get("/username") { req, _ in
-            return (req, try! Response(200, "swizzlr", HTTPHeaders()))
+            do {
+                return (req, try Response(200, "swizzlr", HTTPHeaders()))
+            } catch {
+                return (req, Response(code: 500, body: Data(), headers: HTTPHeaders()))
+            }
         }
         XCTAssertEqual(titanInstance.app(request: Request("GET", "/username"), response: nullResponse).1.body, "swizzlr")
     }
@@ -78,7 +83,11 @@ final class TitanAPITests: XCTestCase {
 
     func testMultipleRoutes() {
         titanInstance.get("/username") { req, _ in
-            return (req, try! Response(200, "swizzlr", HTTPHeaders()))
+            do {
+                return (req, try Response(200, "swizzlr", HTTPHeaders()))
+            } catch {
+                return (req, Response(code: 500, body: Data(), headers: HTTPHeaders()))
+            }
         }
 
         titanInstance.get("/echoMyBody") { req, _ in
@@ -105,7 +114,11 @@ final class TitanAPITests: XCTestCase {
             return (req, res)
         }
         titanInstance.get("/username") { req, _ in
-            return (req, try! Response(200, "swizzlr"))
+            do {
+                return (req, try Response(200, "swizzlr"))
+            } catch {
+                return (req, Response(code: 500, body: Data(), headers: HTTPHeaders()))
+            }
         }
         titanInstance.addFunction("*") { (req: RequestType, res: ResponseType) -> (RequestType, ResponseType) in
             end = Date()
@@ -117,31 +130,59 @@ final class TitanAPITests: XCTestCase {
 
     func testDifferentMethods() {
         titanInstance.get("/getSomething") { req, _ in
-            return (req, try! Response(200, "swizzlrGotSomething!"))
+            do {
+                return (req, try Response(200, "swizzlrGotSomething!"))
+            } catch {
+                return (req, Response(code: 500, body: Data(), headers: HTTPHeaders()))
+            }
         }
 
         titanInstance.post("/postSomething") { req, _ in
-            return (req, try! Response(200, "something posted"))
+            do {
+                return (req, try Response(200, "something posted"))
+            } catch {
+                return (req, Response(code: 500, body: Data(), headers: HTTPHeaders()))
+            }
         }
 
         titanInstance.put("/putSomething") { req, _ in
-            return (req, try! Response(200, "i can confirm that stupid stuff is now on the server"))
+            do {
+                return (req, try Response(200, "i can confirm that stupid stuff is now on the server"))
+            } catch {
+                return (req, Response(code: 500, body: Data(), headers: HTTPHeaders()))
+            }
         }
 
         titanInstance.patch("/patchSomething") { req, _ in
-            return (req, try! Response(200, "i guess we don't have a flat tire anymore?"))
+            do {
+                return (req, try Response(200, "i guess we don't have a flat tire anymore?"))
+            } catch {
+                return (req, Response(code: 500, body: Data(), headers: HTTPHeaders()))
+            }
         }
 
         titanInstance.delete("/deleteSomething") { req, _ in
-            return (req, try! Response(200, "error: could not find the USA or its principles"))
+            do {
+                return (req, try Response(200, "error: could not find the USA or its principles"))
+            } catch {
+                return (req, Response(code: 500, body: Data(), headers: HTTPHeaders()))
+            }
         }
 
         titanInstance.options("/optionSomething") { req, _ in
-            return (req, try! Response(200, "I sold movie rights!"))
+            do {
+                return (req, try Response(200, "I sold movie rights!"))
+            } catch {
+                return (req, Response(code: 500, body: Data(), headers: HTTPHeaders()))
+            }
         }
 
         titanInstance.head("/headSomething") { req, _ in
-            return (req, try! Response(200, "OWN GOAL!!"))
+            do {
+                return (req, try Response(200, "OWN GOAL!!"))
+            } catch {
+                return (req, Response(code: 500, body: Data(), headers: HTTPHeaders()))
+            }
         }
     }
 
@@ -149,7 +190,11 @@ final class TitanAPITests: XCTestCase {
         let t = Titan()
         let errorHandler: (Error) -> ResponseType = { (err: Error) in
             let desc = String(describing: err)
-            return try! Response(500, desc)
+            do {
+                return try Response(500, desc)
+            } catch {
+                return Response(code: 500, body: Data(), headers: HTTPHeaders())
+            }
         }
         t.addFunction(errorHandler: errorHandler) { (_, _) throws -> (RequestType, ResponseType) in
             throw "Oh no"
@@ -161,13 +206,21 @@ final class TitanAPITests: XCTestCase {
         var username = ""
 
         titanInstance.get("/username") { req, _ in
-            return (req, try! Response(200, username))
+            do {
+                return (req, try Response(200, username))
+            } catch {
+                return (req, Response(code: 500, body: Data(), headers: HTTPHeaders()))
+            }
         }
 
         titanInstance.post("/username") { (req: RequestType, _) in
             let s: String = req.body!
             username = s
-            return (req, try! Response(201, ""))
+            do {
+                return (req, try Response(201, ""))
+            } catch {
+                return (req, Response(code: 500, body: Data(), headers: HTTPHeaders()))
+            }
         }
 
         let resp = titanInstance.app(request: Request("POST", "/username", "Lisa"), response: nullResponse).1
@@ -217,7 +270,7 @@ final class TitanAPITests: XCTestCase {
         let request: RequestType = Request("GET", path)
         let parsedQuery = request.queryPairs
         guard parsedQuery.count == 2 else {
-            XCTFail()
+            XCTFail("query params expected 2")
             return
         }
         XCTAssertEqual(parsedQuery[0].key, "verified")
@@ -228,8 +281,13 @@ final class TitanAPITests: XCTestCase {
     }
 
     func testTypesafePathParams() {
-        titanInstance.get("/foo/*/baz") { req, id, _ in
-            return (req, try! Response(200, id))
+        titanInstance.get("/foo/{id}/baz") { req, _, params in
+            let id = params["id"] ?? ""
+            do {
+                return (req, try Response(200, id))
+            } catch {
+                return (req, Response(code: 500, body: Data(), headers: HTTPHeaders()))
+            }
         }
         let resp = titanInstance.app(request: Request("GET", "/foo/567/baz"), response: nullResponse).1
         XCTAssertEqual(resp.body, "567")
@@ -247,20 +305,34 @@ final class TitanAPITests: XCTestCase {
             })
         }, true: { authenticated in
             authenticated.get("/password") { req, _ in
-                return (req, try! Response(200, "Super secret password!", HTTPHeaders()))
+                do {
+                    return (req, try Response(200, "Super secret password!", HTTPHeaders()))
+                } catch {
+                    return (req, Response(code: 500, body: Data(), headers: HTTPHeaders()))
+                }
             }
         }, false: { unauthenticated in
             unauthenticated.addFunction { req, _ in
-                return (req, try! Response(499, "WHAT WHAT", HTTPHeaders()))
+                do {
+                    return (req, try Response(499, "WHAT WHAT", HTTPHeaders()))
+                } catch {
+                    return (req, Response(code: 500, body: Data(), headers: HTTPHeaders()))
+                }
             }
         })
         let unauthenticatedResponse = titanInstance.app(request: Request("GET", "/password", "", HTTPHeaders()), response: nullResponse).1
         XCTAssertEqual(unauthenticatedResponse.code, 499)
         XCTAssertEqual(unauthenticatedResponse.body, "WHAT WHAT")
-        let authenticatedResponse = titanInstance.app(request: Request("GET", "/password", "", HTTPHeaders(dictionaryLiteral:("Authentication", "password"))), response: nullResponse).1
+        let authenticatedResponse = titanInstance.app(request: Request("GET", "/password", "",
+                                                                       HTTPHeaders(dictionaryLiteral: ("Authentication", "password"))),
+                                                      response: nullResponse).1
+
         XCTAssertEqual(authenticatedResponse.code, 200)
         XCTAssertEqual(authenticatedResponse.body, "Super secret password!")
-        let authenticated404 = titanInstance.app(request: Request("HEAD", "/password", "", HTTPHeaders(dictionaryLiteral:("Authentication", "password"))), response: nullResponse).1
+        let authenticated404 = titanInstance.app(request: Request("HEAD", "/password", "",
+                                                                  HTTPHeaders(dictionaryLiteral: ("Authentication", "password"))),
+                                                 response: nullResponse).1
+
         XCTAssertEqual(authenticated404.code, 404)
     }
 
@@ -272,13 +344,19 @@ final class TitanAPITests: XCTestCase {
         }
         titanInstance.authenticated(myAuthorizationRoutine) { (authenticated) in
             authenticated.get("/password") { req, _ in
-                return (req, try! Response(200, "Super secret password!", HTTPHeaders()))
+                do {
+                    return (req, try Response(200, "Super secret password!", HTTPHeaders()))
+                } catch {
+                    return (req, Response(code: 500, body: Data(), headers: HTTPHeaders()))
+                }
             }
         }
         let unauthenticatedResponse = titanInstance.app(request: Request("GET", "/password", "", HTTPHeaders()), response: nullResponse).1
         XCTAssertEqual(unauthenticatedResponse.code, 401)
 
-        let authenticatedResponse = titanInstance.app(request: Request("GET", "/password", "", HTTPHeaders(dictionaryLiteral:("Authentication", "other password"))), response: nullResponse).1
+        let authenticatedResponse = titanInstance.app(request: Request("GET", "/password", "",
+                                                                       HTTPHeaders(dictionaryLiteral: ("Authentication", "other password"))),
+                                                      response: nullResponse).1
         XCTAssertEqual(authenticatedResponse.code, 200)
         XCTAssertEqual(authenticatedResponse.body, "Super secret password!")
     }
