@@ -120,7 +120,7 @@ Execute `Scripts/test.sh` to run all unit-tests inside a Docker container.
 
 ## Contributing
 
-Titan is maintained by Thomas Catterall ([@swizzlr](https://github.com/swizzlr)), Johannes Erhardt ([@johanneserhardt](https://github.com/johanneserhardt)) and Sebastian Kreutzberger ([@skreutzberger](https://github.com/skreutzberger)).
+Titan is maintained by Thomas Catterall ([@swizzlr](https://github.com/swizzlr)), Johannes Erhardt ([@johanneserhardt](https://github.com/johanneserhardt)) and Sebastian Kreutzberger ([@skreutzberger](https://github.com/skreutzberger)), Laurent Gaches ([@lgaches](https://github.com/lgaches)).
 
 Contributions are more than welcomed. You can either work on existing Github issues or discuss with us your ideas in a new Github issue. Thanks 🙌
 
