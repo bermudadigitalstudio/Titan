@@ -14,6 +14,7 @@
 import XCTest
 import TitanRouter
 import TitanCore
+
 let nullResponse = Response(-1, Data(), HTTPHeaders())
 
 extension Response {

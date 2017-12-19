@@ -212,11 +212,9 @@ final class TitanAPITests: XCTestCase {
         XCTAssertEqual(dict["foo"], "bar2") // check repeats, last value wins
     }
 
-    // COMMENTED DUE TO INTERNAL CRASH UNDER LINUX
     func testCanAccessQueryString() {
         let path = "/users?verified=true&q=thomas%20catterall"
         let request: RequestType = Request("GET", path)
-        // FIX: the following line causes a crash when run under Linux!!!
         let parsedQuery = request.queryPairs
         guard parsedQuery.count == 2 else {
             XCTFail()

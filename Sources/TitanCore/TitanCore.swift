@@ -17,7 +17,11 @@ public typealias Function = (RequestType, ResponseType) -> (RequestType, Respons
 
 public final class Titan {
 
-    public init() {}
+    public let log: TitanLogger?
+
+    public init(_ logger: TitanLogger? = nil) {
+        self.log = logger
+    }
 
     // A chain of Functions that are executed in order. The output of one is the input of the next; the final output is sent to the client.
     private var functionStack = [Function]()
@@ -37,6 +41,7 @@ public final class Titan {
             return next(res.0, res.1)
         }
     }
+    
     // Older versions of Titan provided no interface to the initial response object or the final request object. 
     // This deficiency has been remedied by the new version of 'app', above. 
     @available(*, unavailable, renamed: "app(request:response:)")

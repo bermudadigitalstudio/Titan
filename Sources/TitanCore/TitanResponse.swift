@@ -30,6 +30,13 @@ public struct Response: ResponseType {
     public var body: Data
 
     /// Create a Response
+    public init(code: Int, body: Data, headers: HTTPHeaders) {
+        self.code = code
+        self.body = body
+        self.headers = headers
+    }
+
+    /// Create a Response
     /// Throws an error if the body parameter cannot be converted to Data
     public init(code: Int, body: String, headers: HTTPHeaders) throws {
         self.code = code
@@ -38,13 +45,6 @@ public struct Response: ResponseType {
             throw TitanError.dataConversion
         }
         self.body = data
-        self.headers = headers
-    }
-
-    /// Create a Response
-    public init(code: Int, body: Data, headers: HTTPHeaders) {
-        self.code = code
-        self.body = body
         self.headers = headers
     }
 }

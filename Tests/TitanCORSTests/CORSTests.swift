@@ -49,8 +49,8 @@ final class CORSTests: XCTestCase {
         XCTAssertEqual(res.code, 200)
         XCTAssertEqual(res.body, "")
 
-        XCTAssertEqual(res.retrieveHeaderByName("access-control-allow-methods").value.lowercased(), "post")
-        XCTAssertEqual(res.retrieveHeaderByName("access-control-allow-headers").value.lowercased(), "x-custom-header")
+        XCTAssertEqual(res.headers["access-control-allow-methods"]?.lowercased(), "post")
+        XCTAssertEqual(res.headers["access-control-allow-headers"]?.lowercased(), "x-custom-header")
     }
 
     func testTitanCanAllowAllOrigins() throws {
@@ -58,18 +58,7 @@ final class CORSTests: XCTestCase {
         let res = titanInstance.app(request: try Request(method: "ANYMETHOD",
                                                          path: "NOT EVEN A REAL PATH",
                                                          body: "WOWOIE", headers: HTTPHeaders()), response: nullResponse).1
-        XCTAssertEqual(res.retrieveHeaderByName("access-control-allow-origin").value, "*")
+        XCTAssertEqual(res.headers["access-control-allow-origin"], "*")
     }
 }
 
-extension ResponseType {
-    func retrieveHeaderByName(_ name: String) -> Header {
-        guard let header = self.headers.first(where: { (hname, _) -> Bool in
-            return hname.lowercased() == name.lowercased()
-        }) else {
-            XCTFail("Header \(name) not found")
-            fatalError()
-        }
-        return header
-    }
-}

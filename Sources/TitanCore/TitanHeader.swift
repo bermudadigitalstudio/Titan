@@ -26,6 +26,7 @@ public struct HTTPHeaders {
         self.headers = [Header]()
     }
 
+    // Create an HTTPHeaders from an `Header` array.
     public init(headers: [Header]) {
         self.headers = headers
     }
