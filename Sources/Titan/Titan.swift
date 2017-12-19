@@ -34,8 +34,10 @@ extension Titan {
         }, true: authenticatedBuilder, false: { (unauthenticated) in
             unauthenticated.addFunction({ (req, _) -> (RequestType, ResponseType) in
                 do {
-                    return (req, try Response(code: 401, body: "Not Authorized", headers: [("Content-Type", "text/plain")]))
-                } catch {}
+                    return (req, try Response(code: 401, body: "Not Authorized", headers: HTTPHeaders(dictionaryLiteral:("Content-Type", "text/plain"))))
+                } catch {
+                    //TODO: Logs!!! at least
+                }
                 return (req, Response(401))
             })
         })

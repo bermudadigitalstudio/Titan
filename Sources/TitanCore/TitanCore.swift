@@ -1,8 +1,5 @@
 import Foundation
 
-/// Little known fact: HTTP headers need not be unique!
-public typealias Header = (name: String, value: String)
-
 public typealias Function = (RequestType, ResponseType) -> (RequestType, ResponseType)
 
 public final class Titan {

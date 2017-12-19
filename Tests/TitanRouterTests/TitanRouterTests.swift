@@ -1,23 +1,40 @@
 import XCTest
 import TitanRouter
 import TitanCore
-let nullResponse = Response(-1, Data(), [])
+let nullResponse = Response(-1, Data(), HTTPHeaders())
 
 extension Response {
     init(_ string: String) {
         self.body = string.data(using: .utf8) ?? Data()
         self.code = 200
-        self.headers = []
+        self.headers = HTTPHeaders()
     }
 
     init(_ data: Data) {
         self.body = data
         self.code = 200
-        self.headers = []
+        self.headers =  HTTPHeaders()
     }
 }
 
 final class TitanRouterTests: XCTestCase {
+
+    static var allTests = [
+        ("testFunctionalMutableParams", testFunctionalMutableParams),
+        ("testBasicGet", testBasicGet),
+        ("testTitanEcho", testTitanEcho),
+        ("testMultipleRoutes", testMultipleRoutes),
+        ("testTitanSugar", testTitanSugar),
+        ("testMiddlewareFunction", testMiddlewareFunction),
+        ("testDifferentMethods", testDifferentMethods),
+        ("testSamePathDifferentiationByMethod", testSamePathDifferentiationByMethod),
+        ("testMatchingWildcardComponents", testMatchingWildcardComponents),
+        ("testTypesafePathParams", testTypesafePathParams),
+        ("testTypesafeMultipleParams", testTypesafeMultipleParams),
+        ("testMismatchingLongPaths", testMismatchingLongPaths),
+        ("testMatchingWithAQuery", testMatchingWithAQuery)
+        ]
+
     var app: Titan!
     override func setUp() {
         app = Titan()
@@ -37,18 +54,18 @@ final class TitanRouterTests: XCTestCase {
             XCTAssertEqual(req.path, "/rewritten")
             return (req, res)
         }
-        let response = app.app(request: Request("GET", "/init", "", []), response: nullResponse).1
+        let response = app.app(request: Request("GET", "/init", "", HTTPHeaders()), response: nullResponse).1
         XCTAssertEqual(response.code, 500)
         XCTAssertEqual(response.body, "Hello World")
     }
-    
+
     func testAllMethods() {
         app.allMethods("/user/*") { (req, res) -> (RequestType, ResponseType) in
             // maybe do some tracing code here
-            
+
             return (req, Response("Heyo"))
         }
-        let response = app.app(request: Request("ANYMETHOD", "/user/whatever", "", []), response: nullResponse).1
+        let response = app.app(request: Request("ANYMETHOD", "/user/whatever", "", HTTPHeaders()), response: nullResponse).1
         XCTAssertEqual(response.code, 200)
         XCTAssertEqual(response.body, "Heyo")
     }
@@ -176,19 +193,19 @@ final class TitanRouterTests: XCTestCase {
         }
         let resp2 = app.app(request: Request("GET", "/foo/hello/bar/world"), response: nullResponse).1
         XCTAssertEqual(resp2.body, "foo=hello, bar=world")
-        
+
         app.get("/foo/*/bar/*/baz/*") { req, foo, bar, baz, _ in
             return (req, Response("foo=\(foo), bar=\(bar), baz=\(baz)"))
         }
         let resp3 = app.app(request: Request("GET", "/foo/hello/bar/world/baz/my"), response: nullResponse).1
         XCTAssertEqual(resp3.body, "foo=hello, bar=world, baz=my")
-        
+
         app.get("/foo/*/bar/*/baz/*/qux/*") { req, foo, bar, baz, qux, _ in
             return (req, Response("foo=\(foo), bar=\(bar), baz=\(baz), qux=\(qux)"))
         }
         let resp4 = app.app(request: Request("GET", "/foo/hello/bar/world/baz/my/qux/name"), response: nullResponse).1
         XCTAssertEqual(resp4.body, "foo=hello, bar=world, baz=my, qux=name")
-        
+
         app.get("/foo/*/bar/*/baz/*/qux/*/yex/*") { req, foo, bar, baz, qux, yex, _ in
             return (req, Response("foo=\(foo), bar=\(bar), baz=\(baz), qux=\(qux), yex=\(yex)"))
         }

@@ -1,23 +1,34 @@
 import XCTest
 @testable import TitanCore
 
-let nullResponse = Response(code: -1, body: Data(), headers: [])
+let nullResponse = Response(code: -1, body: Data(), headers: HTTPHeaders())
 
-final class FunctionTests: XCTestCase {
+final class TitanCoreTests: XCTestCase {
+
+    static var allTests = [
+        ("testCanAddFunction", testCanAddFunction),
+        ("testFunctionsAreInvokedInOrder", testFunctionsAreInvokedInOrder),
+        ("testFirstFunctionRegisteredReceivesRequest", testFirstFunctionRegisteredReceivesRequest),
+        ("testResponseComesFromLastResponseReturned", testResponseComesFromLastResponseReturned),
+        ("testFunctionInputIsOutputOfPrecedingFunction", testFunctionInputIsOutputOfPrecedingFunction),
+        ("testErrorDescriptions", testErrorDescriptions),
+        ("testHeaderSubscript", testHeaderSubscript),
+        ("testHeaders", testHeaders)
+    ]
 
     func testCanAddFunction() {
         Titan().addFunction({ (req: RequestType, res: ResponseType) -> (RequestType, ResponseType) in
             print(req)
             print(res)
             var newReq = req.copy()
-            newReq.headers.append(("hello", "world"))
+            newReq.headers["hello"] = "world"
 
             do {
-                return (newReq, try Response(code: -1, body: "", headers: []))
+                return (newReq, try Response(code: -1, body: "", headers: HTTPHeaders()))
             } catch {
             }
 
-            return (newReq, Response(code: 500, body: Data(), headers: []) )
+            return (newReq, Response(code: 500, body: Data(), headers: HTTPHeaders()) )
         })
     }
 
@@ -45,7 +56,7 @@ final class FunctionTests: XCTestCase {
             return (request, response)
         }
 
-        _ = t.app(request: Request(method: "", path: "", body: Data(), headers: []), response: nullResponse)
+        _ = t.app(request: Request(method: "", path: "", body: Data(), headers: HTTPHeaders()), response: nullResponse)
         XCTAssertEqual(accumulator.count, 4)
         XCTAssertEqual(accumulator[3], 3)
     }
@@ -58,15 +69,12 @@ final class FunctionTests: XCTestCase {
             return (req, res)
         }
 
-        _ = t.app(request: Request(method: "METHOD",
-                                   path: "/PATH",
-                                   body: "body".data(using: .utf8)!,
-                                   headers: [("some-header", "some-value")]), response: nullResponse)
+        _ = t.app(request: Request(method: "METHOD", path: "/PATH", body: "body".data(using: .utf8)!,
+                                   headers:  HTTPHeaders(dictionaryLiteral: ("some-header", "some-value"))), response: nullResponse)
         XCTAssertEqual(request.body, "body")
         XCTAssertEqual(request.method, "METHOD")
         XCTAssertEqual(request.path, "/PATH")
-        XCTAssertEqual(request.headers.first!.name, "some-header")
-        XCTAssertEqual(request.headers.first!.value, "some-value")
+        XCTAssertEqual(request.headers["some-header"], "some-value")
     }
 
     func testResponseComesFromLastResponseReturned() throws {
@@ -76,28 +84,27 @@ final class FunctionTests: XCTestCase {
             do {
                 return (req, try Response(code: 100,
                                           body: "not this body",
-                                          headers: [("content-type-WRONG", "application/json")]))
+                                          headers: HTTPHeaders(dictionaryLiteral: ("content-type-WRONG", "application/json"))))
             } catch {
             }
-            return (req, Response(code: 500, body: Data(), headers: []))
+            return (req, Response(code: 500, body: Data(), headers: HTTPHeaders()))
         }
 
         t.addFunction { req, _ in
             do {
                 return (req, try Response(code: 700,
                                           body: "response body",
-                                          headers: [("content-type", "text/plain")]))
+                                          headers: HTTPHeaders(dictionaryLiteral: ("content-type", "text/plain"))))
 
             } catch {
             }
-            return (req, Response(code: 500, body: Data(), headers: []))
+            return (req, Response(code: 500, body: Data(), headers: HTTPHeaders()))
         }
 
-        let response = t.app(request: Request(method: "", path: "", body: Data(), headers: []), response: nullResponse).1
+        let response = t.app(request: Request(method: "", path: "", body: Data(), headers: HTTPHeaders()), response: nullResponse).1
         XCTAssertEqual(response.body, "response body")
         XCTAssertEqual(response.code, 700)
-        XCTAssertEqual(response.headers.first!.name, "content-type")
-        XCTAssertEqual(response.headers.first!.value, "text/plain")
+        XCTAssertEqual(response.headers["content-type"], "text/plain")
     }
 
     func testFunctionInputIsOutputOfPrecedingFunction() throws {
@@ -107,38 +114,38 @@ final class FunctionTests: XCTestCase {
                 return (Request(method: "METHOD",
                                 path: "/PATH",
                                 body: "body".data(using: .utf8)!,
-                                headers: [("some-header", "some-value")]),
+                                headers: HTTPHeaders(dictionaryLiteral: ("some-header", "some-value"))),
                         try Response(code: 700,
                                      body: "response body",
-                                     headers: [("content-type", "text/plain")]))
+                                     headers: HTTPHeaders(dictionaryLiteral:("content-type", "text/plain"))))
             } catch {
             }
             return (Request(method: "METHOD",
                             path: "/PATH",
                             body: "response body".data(using: .utf8)!,
-                            headers: [("some-header", "some-value")]), Response(code: 500, body: Data(), headers: []))
+                            headers: HTTPHeaders(dictionaryLiteral: ("some-header", "some-value"))),
+                    Response(code: 500, body: Data(), headers: HTTPHeaders()))
         }
         var request: RequestType!, response: ResponseType!
+
         t.addFunction { req, res in
             request = req
             response = res
             return (req, res)
         }
 
-        _ = t.app(request: Request(method: "", path: "", body: Data(), headers: []), response: nullResponse)
+        _ = t.app(request: Request(method: "", path: "", body: Data(), headers: HTTPHeaders()), response: nullResponse)
 
         XCTAssertEqual(request.body, "body")
         XCTAssertEqual(request.method, "METHOD")
         XCTAssertEqual(request.path, "/PATH")
-        XCTAssertEqual(request.headers.first!.name, "some-header")
-        XCTAssertEqual(request.headers.first!.value, "some-value")
+        XCTAssertEqual(request.headers["some-header"], "some-value")
 
         XCTAssertEqual(response.body, "response body".data(using: .utf8))
         XCTAssertEqual(response.code, 700)
-        XCTAssertEqual(response.headers.first!.name, "content-type")
-        XCTAssertEqual(response.headers.first!.value, "text/plain")
+        XCTAssertEqual(response.headers["content-type"], "text/plain")
     }
-    
+
     func testErrorDescriptions() {
         let errors = [TitanError.dataConversion]
         for e in errors {
@@ -150,14 +157,44 @@ final class FunctionTests: XCTestCase {
             }
         }
     }
-    
-    func testHeaderDict() {
+
+    func testHeaderSubscript() {
         let r = Request(method: "METHOD",
                         path: "/PATH",
                         body: "response body".data(using: .utf8)!,
-                        headers: [("some-header", "some-value"), ("some-OTHER-header", "some-OTHER-value")])
-        XCTAssertEqual(r.headerDict["some-other-header"], "some-OTHER-value")
-        XCTAssertEqual(r.headerDict["some-header"], "some-value")
-        XCTAssertEqual(r.headerDict["SOME-HEADER"], nil)
+                        headers: HTTPHeaders(dictionaryLiteral: ("some-header", "some-value"), ("some-OTHER-header", "some-OTHER-value")))
+        XCTAssertEqual(r.headers["some-other-header"], "some-OTHER-value")
+        XCTAssertEqual(r.headers["some-header"], "some-value")
+        XCTAssertEqual(r.headers["SOME-HEADER"], "some-value")
     }
+
+    func testHeaders() {
+        var headers = HTTPHeaders()
+
+        headers["Hello"] = nil
+        XCTAssertNil(headers["Hello"])
+
+        headers["Accept"] = "text"
+        XCTAssertEqual(headers["Accept"], "text")
+        headers["Link"] = "http://example.com"
+        XCTAssertEqual(headers["link"], "http://example.com")
+        XCTAssertNotNil(headers["link"])
+        headers.removeHeaders(name: "link")
+        XCTAssertNil(headers["link"])
+        XCTAssertNotNil(headers["Accept"])
+
+        let anotherHeaders = HTTPHeaders(dictionaryLiteral: ("Content-Length", "10"))
+        XCTAssertEqual(anotherHeaders["Content-Length"], "10")
+
+        XCTAssertEqual(headers.headers.count, 1)
+        headers = headers + anotherHeaders
+        XCTAssertEqual(headers["Content-Length"], "10")
+        XCTAssertEqual(headers.headers.count, 2)
+
+        let copyHeaders = HTTPHeaders(headers: headers.headers)
+        XCTAssertEqual(copyHeaders.headers.count, 2)
+        XCTAssertEqual(copyHeaders["Content-Length"], "10")
+        XCTAssertEqual(copyHeaders["Accept"], "text")
+    }
+
 }

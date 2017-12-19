@@ -1,7 +1,6 @@
 import Foundation
 import TitanCore
 
-public let resp404 = try! Response(code: 404, body: "Not found", headers: [("Content-Type", "text/plain")])
 /*
  Returns a 404 response.
 
@@ -11,5 +10,10 @@ public let resp404 = try! Response(code: 404, body: "Not found", headers: [("Con
  effectively overwrite it.
  */
 public let defaultTo404: Function = { (request, response) -> (RequestType, ResponseType) in
-    return (request, resp404)
+
+    do {
+        return (request,try Response(code: 404, body: "Not found", headers: HTTPHeaders(dictionaryLiteral: ("Content-Type", "text/plain"))))
+    } catch {
+        return (request, Response(code: 404, body: Data(), headers: HTTPHeaders()))
+    }
 }

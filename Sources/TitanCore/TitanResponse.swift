@@ -5,7 +5,7 @@ public protocol ResponseType {
     /// The HTTP response status code.
     var code: Int { get }
     /// The HTTP response headers.
-    var headers: [Header] { get }
+    var headers: HTTPHeaders { get }
     /// The HTTP response body.
     var body: Data { get }
 }
@@ -13,12 +13,12 @@ public protocol ResponseType {
 /// A reified `ResponseType`
 public struct Response: ResponseType {
     public var code: Int
-    public var headers: [Header]
+    public var headers: HTTPHeaders
     public var body: Data
 
     /// Create a Response
     /// Throws an error if the body parameter cannot be converted to Data
-    public init(code: Int, body: String, headers: [Header]) throws {
+    public init(code: Int, body: String, headers: HTTPHeaders) throws {
         self.code = code
         guard let data = body.data(using: .utf8) else {
             // I don't see how this could ever happen.
@@ -29,7 +29,7 @@ public struct Response: ResponseType {
     }
 
     /// Create a Response
-    public init(code: Int, body: Data, headers: [Header]) {
+    public init(code: Int, body: Data, headers: HTTPHeaders) {
         self.code = code
         self.body = body
         self.headers = headers

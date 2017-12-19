@@ -62,7 +62,7 @@ extension String {
     func splitOnSlashes() -> [String] {
         return self.split(separator: "/").map { String($0) }
     }
-    
+
     /// Return the number of "*" characters in `Self`
     var wildcards: Int {
         return self.reduce(0) { (count, char) in

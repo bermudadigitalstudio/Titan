@@ -25,11 +25,11 @@ public func healthzWithCheck(check: @escaping () throws -> String?) -> Function 
             let result = try check() ?? "Ok"
             let ok = try Response(code: 200,
                                   body: "Host: \(cachedHostname)\nTime: \(Date())\n\nStatus: \(result)",
-                headers: [])
+                headers: HTTPHeaders())
             return (req, ok)
         } catch {
             let body = "Host: \(cachedHostname)\nTime: \(Date())\n\nStatus: \(error)".data(using: .utf8) ?? Data()
-            let notOk = Response(code: 500, body: body, headers: [])
+            let notOk = Response(code: 500, body: body, headers: HTTPHeaders())
             return (req, notOk)
         }
     }

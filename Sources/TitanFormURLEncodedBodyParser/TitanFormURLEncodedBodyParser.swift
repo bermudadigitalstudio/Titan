@@ -47,10 +47,10 @@ func parse(body: String) -> [(name: String, value: String)] {
         // Remove + character
         let sanitizedKey = String(rawKey).replacingOccurrences(of: "+", with: " ")
         let sanitizedValue = String(rawValue).replacingOccurrences(of: "+", with: " ")
-        
+
         let key = sanitizedKey.removingPercentEncoding ?? sanitizedKey
         let value = sanitizedValue.removingPercentEncoding ?? sanitizedValue
-        
+
         retValue.append((key, value))
     }
     return retValue

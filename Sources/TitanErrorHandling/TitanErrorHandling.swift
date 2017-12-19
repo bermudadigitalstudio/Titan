@@ -3,9 +3,9 @@ import TitanCore
 
 public let defaultErrorHandler: (Error) -> (ResponseType) = { err in
     do {
-        return try Response(code: 500, body: String(describing: err), headers: [])
+        return try Response(code: 500, body: String(describing: err), headers: HTTPHeaders())
     } catch {}
-    return Response(code: 500, body: Data(), headers: [])
+    return Response(code: 500, body: Data(), headers: HTTPHeaders())
 }
 
 extension Titan {

@@ -48,4 +48,3 @@ public extension RequestType {
         return query
     }
 }
-

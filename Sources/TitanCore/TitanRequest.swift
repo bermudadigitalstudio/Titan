@@ -9,7 +9,7 @@ public protocol RequestType {
     /// The HTTP request method.
     var method: String { get }
     /// The HTTP request headers.
-    var headers: [Header] { get }
+    var headers: HTTPHeaders { get }
 }
 
 /// A reified `RequestType`
@@ -17,11 +17,11 @@ public struct Request: RequestType {
     public var method: String
     public var path: String
     public var body: Data
-    public var headers: [Header]
+    public var headers: HTTPHeaders
 
     /// Create a Request
     /// Throws an error if the body parameter cannot be converted to Data
-    public init(method: String, path: String, body: String, headers: [Header]) throws {
+    public init(method: String, path: String, body: String, headers: HTTPHeaders) throws {
         self.method = method
         self.path = path
         guard let data = body.data(using: .utf8) else {
@@ -33,7 +33,7 @@ public struct Request: RequestType {
     }
 
     /// Create a Request
-    public init(method: String, path: String, body: Data, headers: [Header]) {
+    public init(method: String, path: String, body: Data, headers: HTTPHeaders) {
         self.method = method
         self.path = path
         self.body = body
@@ -46,16 +46,6 @@ extension Request {
     public init(request: RequestType) {
         self.init(method: request.method, path: request.path, body: request.body, headers: request.headers)
     }
-    
-    /// A lowercased dictionary of headers
-    /// O(n) complexity (so cache the result!)
-    var headerDict: [String:String] {
-        var ret = [String:String]()
-        for (k, v) in headers {
-            ret[k.lowercased()] = v
-        }
-        return ret
-    }
 }
 
 extension RequestType {
@@ -63,7 +53,7 @@ extension RequestType {
     public var body: String? {
         return String(data: self.body, encoding: .utf8)
     }
-    
+
     /// Create a Request as a copy of the RequestType
     public func copy() -> Request {
         return Request(request: self)

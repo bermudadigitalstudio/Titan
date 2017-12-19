@@ -13,14 +13,14 @@ public let allowAllOriginsHeader: Header = ("access-control-allow-origin", "*")
 
 /// If one isn't present, insert a wildcard CORS allowed origin header
 public let allowAllOrigins: Function = { req, res in
-    var respHeaders = res.headers
+    var respHeaders = res.headers.headers
     guard (respHeaders.contains { header in
         return header.name.lowercased() == "access-control-allow-origin"
         } != true) else {
             return (req, res)
     }
     respHeaders.append(allowAllOriginsHeader)
-    return (req, Response(code: res.code, body: res.body, headers: respHeaders))
+    return (req, Response(code: res.code, body: res.body, headers: HTTPHeaders(headers: respHeaders)))
 }
 
 /// Respond to a CORS preflight request, allowing all methods requested in the preflight.
@@ -46,5 +46,5 @@ public let respondToPreflightAllowingAllMethods: Function = { req, res in
     } else {
         headers.append(("access-control-allow-headers", "*"))
     }
-    return (req, Response(code: 200, body: Data(), headers: headers))
+    return (req, Response(code: 200, body: Data(), headers: HTTPHeaders(headers: headers)))
 }

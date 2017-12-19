@@ -1,9 +1,16 @@
 import TitanCORS
 import TitanCore
 import XCTest
-let nullResponse = Response(code: -1, body: Data(), headers: [])
+let nullResponse = Response(code: -1, body: Data(), headers: HTTPHeaders())
 
 final class CORSTests: XCTestCase {
+
+    static var allTests = [
+        ("testCanAddCorsFunctionToTitan", testCanAddCorsFunctionToTitan),
+        ("testTitanCanRespondToPreflight", testTitanCanRespondToPreflight),
+        ("testTitanCanAllowAllOrigins", testTitanCanAllowAllOrigins)
+        ]
+
     var titanInstance: Titan!
     override func setUp() {
         titanInstance = Titan()
@@ -23,10 +30,9 @@ final class CORSTests: XCTestCase {
         let res = titanInstance.app(request: try Request(method: "OPTIONS",
                                                          path: "/onuhoenth",
                                                          body: "",
-                                                         headers: [
+                                                         headers:  HTTPHeaders(dictionaryLiteral:
                                                             ("Access-Control-Request-Method", "POST"),
-                                                            ("Access-Control-Request-Headers", "X-Custom-Header")
-            ]), response: nullResponse).1
+                                                                               ("Access-Control-Request-Headers", "X-Custom-Header"))), response: nullResponse).1
         XCTAssertEqual(res.code, 200)
         XCTAssertEqual(res.body, "")
 
@@ -38,7 +44,7 @@ final class CORSTests: XCTestCase {
         titanInstance.addFunction(allowAllOrigins)
         let res = titanInstance.app(request: try Request(method: "ANYMETHOD",
                                                          path: "NOT EVEN A REAL PATH",
-                                                         body: "WOWOIE", headers: []), response: nullResponse).1
+                                                         body: "WOWOIE", headers: HTTPHeaders()), response: nullResponse).1
         XCTAssertEqual(res.retrieveHeaderByName("access-control-allow-origin").value, "*")
     }
 }
