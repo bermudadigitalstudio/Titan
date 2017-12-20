@@ -32,7 +32,7 @@ class TitanErrorHandlingTests: XCTestCase {
         t.addFunction(errorHandler: errorHandler) { (_, _) throws -> (RequestType, ResponseType) in
             throw "Oh no"
         }
-        XCTAssertEqual(t.app(request: Request(method: "", path: "", body: Data(), headers: HTTPHeaders()), response: nullResponse).1.body, "Oh no")
+        XCTAssertEqual(t.app(request: Request(method: .custom(named: "METHOD"), path: "", body: Data(), headers: HTTPHeaders()), response: nullResponse).1.body, "Oh no")
     }
 }
 

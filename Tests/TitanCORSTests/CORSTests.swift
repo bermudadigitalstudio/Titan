@@ -40,8 +40,8 @@ final class CORSTests: XCTestCase {
     func testTitanCanRespondToPreflight() throws {
         titanInstance.addFunction(respondToPreflightAllowingAllMethods)
 
-        let headers = [("Access-Control-Request-Method", "POST"), ("Access-Control-Request-Headers", "X-Custom-Header")]
-        let res = titanInstance.app(request: try Request(method: "OPTIONS",
+        let headers: [Header] = [("Access-Control-Request-Method", "POST"), ("Access-Control-Request-Headers", "X-Custom-Header")]
+        let res = titanInstance.app(request: try Request(method: .options,
                                                          path: "/onuhoenth",
                                                          body: "",
                                                          headers: HTTPHeaders(headers: headers)),
@@ -55,7 +55,7 @@ final class CORSTests: XCTestCase {
 
     func testTitanCanAllowAllOrigins() throws {
         titanInstance.addFunction(allowAllOrigins)
-        let res = titanInstance.app(request: try Request(method: "ANYMETHOD",
+        let res = titanInstance.app(request: try Request(method: .custom(named: "ANYMETHOD"),
                                                          path: "NOT EVEN A REAL PATH",
                                                          body: "WOWOIE", headers: HTTPHeaders()), response: nullResponse).1
         XCTAssertEqual(res.headers["access-control-allow-origin"], "*")

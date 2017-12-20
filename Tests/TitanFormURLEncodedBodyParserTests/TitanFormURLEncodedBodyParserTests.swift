@@ -26,7 +26,7 @@ class TitanFormURLEncodedBodyParserTests: XCTestCase {
         foo=bar&baz=&favorite+flavor=flies&resume=when+i+was+young%0D%0Ai+went+to+school&foo=bar2&foo2=bar=&what%20do+you+think=i+dont%20know
         """
 
-        let request = try Request(method: "POST", path: "/submit", body: requestBody, headers: HTTPHeaders())
+        let request = try Request(method: .post, path: "/submit", body: requestBody, headers: HTTPHeaders())
         let parsed = request.formURLEncodedBody
         // Simple
         XCTAssertEqual(parsed[0].name, "foo")

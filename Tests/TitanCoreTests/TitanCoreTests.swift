@@ -69,7 +69,7 @@ final class TitanCoreTests: XCTestCase {
             return (request, response)
         }
 
-        _ = t.app(request: Request(method: "", path: "", body: Data(), headers: HTTPHeaders()), response: nullResponse)
+        _ = t.app(request: Request(method: .custom(named: ""), path: "", body: Data(), headers: HTTPHeaders()), response: nullResponse)
         XCTAssertEqual(accumulator.count, 4)
         XCTAssertEqual(accumulator[3], 3)
     }
@@ -82,10 +82,10 @@ final class TitanCoreTests: XCTestCase {
             return (req, res)
         }
 
-        _ = t.app(request: Request(method: "METHOD", path: "/PATH", body: "body".data(using: .utf8)!,
+        _ = t.app(request: Request(method: .custom(named: "METHOD"), path: "/PATH", body: "body".data(using: .utf8)!,
                                    headers: HTTPHeaders(dictionaryLiteral: ("some-header", "some-value"))), response: nullResponse)
         XCTAssertEqual(request.body, "body")
-        XCTAssertEqual(request.method, "METHOD")
+        XCTAssertEqual(request.method, .custom(named: "METHOD"))
         XCTAssertEqual(request.path, "/PATH")
         XCTAssertEqual(request.headers["some-header"], "some-value")
     }
@@ -114,7 +114,7 @@ final class TitanCoreTests: XCTestCase {
             return (req, Response(code: 500, body: Data(), headers: HTTPHeaders()))
         }
 
-        let response = t.app(request: Request(method: "", path: "", body: Data(), headers: HTTPHeaders()), response: nullResponse).1
+        let response = t.app(request: Request(method: .custom(named: "METHOD"), path: "", body: Data(), headers: HTTPHeaders()), response: nullResponse).1
         XCTAssertEqual(response.body, "response body")
         XCTAssertEqual(response.code, 700)
         XCTAssertEqual(response.headers["content-type"], "text/plain")
@@ -124,7 +124,7 @@ final class TitanCoreTests: XCTestCase {
         let t = Titan()
         t.addFunction { _, _  in
             do {
-                return (Request(method: "METHOD",
+                return (Request(method: .custom(named: "METHOD"),
                                 path: "/PATH",
                                 body: "body".data(using: .utf8)!,
                                 headers: HTTPHeaders(dictionaryLiteral: ("some-header", "some-value"))),
@@ -133,7 +133,7 @@ final class TitanCoreTests: XCTestCase {
                                      headers: HTTPHeaders(dictionaryLiteral: ("content-type", "text/plain"))))
             } catch {
             }
-            return (Request(method: "METHOD",
+            return (Request(method: .custom(named: "METHOD"),
                             path: "/PATH",
                             body: "response body".data(using: .utf8)!,
                             headers: HTTPHeaders(dictionaryLiteral: ("some-header", "some-value"))),
@@ -147,10 +147,10 @@ final class TitanCoreTests: XCTestCase {
             return (req, res)
         }
 
-        _ = t.app(request: Request(method: "", path: "", body: Data(), headers: HTTPHeaders()), response: nullResponse)
+        _ = t.app(request: Request(method: .custom(named: "METHOD"), path: "", body: Data(), headers: HTTPHeaders()), response: nullResponse)
 
         XCTAssertEqual(request.body, "body")
-        XCTAssertEqual(request.method, "METHOD")
+        XCTAssertEqual(request.method, .custom(named: "METHOD"))
         XCTAssertEqual(request.path, "/PATH")
         XCTAssertEqual(request.headers["some-header"], "some-value")
 
@@ -172,7 +172,7 @@ final class TitanCoreTests: XCTestCase {
     }
 
     func testHeaderSubscript() {
-        let r = Request(method: "METHOD",
+        let r = Request(method: .custom(named: "METHOD"),
                         path: "/PATH",
                         body: "response body".data(using: .utf8)!,
                         headers: HTTPHeaders(dictionaryLiteral: ("some-header", "some-value"), ("some-OTHER-header", "some-OTHER-value")))

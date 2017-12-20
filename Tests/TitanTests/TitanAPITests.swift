@@ -57,7 +57,7 @@ final class TitanAPITests: XCTestCase {
             XCTAssertEqual(req.path, "/rewritten")
             return (req, res)
         }
-        let response = app.app(request: Request("GET", "/init"), response: nullResponse).1
+        let response = app.app(request: Request(.get, "/init"), response: nullResponse).1
         XCTAssertEqual(response.code, 500)
         XCTAssertEqual(response.body, "Hello World")
     }
@@ -70,14 +70,14 @@ final class TitanAPITests: XCTestCase {
                 return (req, Response(code: 500, body: Data(), headers: HTTPHeaders()))
             }
         }
-        XCTAssertEqual(titanInstance.app(request: Request("GET", "/username"), response: nullResponse).1.body, "swizzlr")
+        XCTAssertEqual(titanInstance.app(request: Request(.get, "/username"), response: nullResponse).1.body, "swizzlr")
     }
 
     func testTitanEcho() {
         titanInstance.get("/echoMyBody") { req, _ in
             return (req, Response(200, req.body, HTTPHeaders()))
         }
-        XCTAssertEqual(titanInstance.app(request: Request("GET", "/echoMyBody", "hello, this is my body"), response: nullResponse).1.body,
+        XCTAssertEqual(titanInstance.app(request: Request(.get, "/echoMyBody", "hello, this is my body"), response: nullResponse).1.body,
                        "hello, this is my body")
     }
 
@@ -93,9 +93,9 @@ final class TitanAPITests: XCTestCase {
         titanInstance.get("/echoMyBody") { req, _ in
             return (req, Response(200, req.body))
         }
-        XCTAssertEqual(titanInstance.app(request: Request("GET", "/echoMyBody", "hello, this is my body"), response: nullResponse).1.body,
+        XCTAssertEqual(titanInstance.app(request: Request(.get, "/echoMyBody", "hello, this is my body"), response: nullResponse).1.body,
                        "hello, this is my body")
-        XCTAssertEqual(titanInstance.app(request: Request("GET", "/username"), response: nullResponse).1.body, "swizzlr")
+        XCTAssertEqual(titanInstance.app(request: Request(.get, "/username"), response: nullResponse).1.body, "swizzlr")
     }
 
     func testTitanSugar() {
@@ -124,7 +124,7 @@ final class TitanAPITests: XCTestCase {
             end = Date()
             return (req, res)
         }
-        _ = titanInstance.app(request: Request("GET", "/username"), response: nullResponse).1
+        _ = titanInstance.app(request: Request(.get, "/username"), response: nullResponse).1
         XCTAssertLessThan(start, end)
     }
 
@@ -199,7 +199,7 @@ final class TitanAPITests: XCTestCase {
         t.addFunction(errorHandler: errorHandler) { (_, _) throws -> (RequestType, ResponseType) in
             throw "Oh no"
         }
-        XCTAssertEqual(t.app(request: Request("", ""), response: nullResponse).1.body, "Oh no")
+        XCTAssertEqual(t.app(request: Request(.custom(named: ""), ""), response: nullResponse).1.body, "Oh no")
     }
 
     func testSamePathDifferentiationByMethod() {
@@ -223,14 +223,14 @@ final class TitanAPITests: XCTestCase {
             }
         }
 
-        let resp = titanInstance.app(request: Request("POST", "/username", "Lisa"), response: nullResponse).1
+        let resp = titanInstance.app(request: Request(.post, "/username", "Lisa"), response: nullResponse).1
         XCTAssertEqual(resp.code, 201)
-        XCTAssertEqual(titanInstance.app(request: Request("GET", "/username"), response: nullResponse).1.body, "Lisa")
+        XCTAssertEqual(titanInstance.app(request: Request(.get, "/username"), response: nullResponse).1.body, "Lisa")
     }
 
     func testCanAccessJSONBody() {
         let jsonBody = "{\"data\": [1, 2, 3]}"
-        let req: RequestType = Request("POST", "/ingest", jsonBody)
+        let req: RequestType = Request(.post, "/ingest", jsonBody)
         // Dictionary<String, [Int]>
         // [String, [Int]]
         guard let json = req.json as? Dictionary<String, Array<Int>> else {
@@ -242,7 +242,7 @@ final class TitanAPITests: XCTestCase {
 
     func testCanAccessFormURLEncodedBody() {
         let requestBody = "foo=bar&baz=&favorite+flavor=flies&resume=when+i+was+young%0D%0Ai+went+to+school&foo=bar2"
-        let request = Request("POST", "/submit", requestBody)
+        let request = Request(.post, "/submit", requestBody)
         let parsed = request.formURLEncodedBody
         // Simple
         XCTAssertEqual(parsed[0].name, "foo")
@@ -267,7 +267,7 @@ final class TitanAPITests: XCTestCase {
 
     func testCanAccessQueryString() {
         let path = "/users?verified=true&q=thomas%20catterall"
-        let request: RequestType = Request("GET", path)
+        let request: RequestType = Request(.get, path)
         let parsedQuery = request.queryPairs
         guard parsedQuery.count == 2 else {
             XCTFail("query params expected 2")
@@ -289,7 +289,7 @@ final class TitanAPITests: XCTestCase {
                 return (req, Response(code: 500, body: Data(), headers: HTTPHeaders()))
             }
         }
-        let resp = titanInstance.app(request: Request("GET", "/foo/567/baz"), response: nullResponse).1
+        let resp = titanInstance.app(request: Request(.get, "/foo/567/baz"), response: nullResponse).1
         XCTAssertEqual(resp.body, "567")
     }
 
@@ -320,16 +320,16 @@ final class TitanAPITests: XCTestCase {
                 }
             }
         })
-        let unauthenticatedResponse = titanInstance.app(request: Request("GET", "/password", "", HTTPHeaders()), response: nullResponse).1
+        let unauthenticatedResponse = titanInstance.app(request: Request(.get, "/password", "", HTTPHeaders()), response: nullResponse).1
         XCTAssertEqual(unauthenticatedResponse.code, 499)
         XCTAssertEqual(unauthenticatedResponse.body, "WHAT WHAT")
-        let authenticatedResponse = titanInstance.app(request: Request("GET", "/password", "",
+        let authenticatedResponse = titanInstance.app(request: Request(.get, "/password", "",
                                                                        HTTPHeaders(dictionaryLiteral: ("Authentication", "password"))),
                                                       response: nullResponse).1
 
         XCTAssertEqual(authenticatedResponse.code, 200)
         XCTAssertEqual(authenticatedResponse.body, "Super secret password!")
-        let authenticated404 = titanInstance.app(request: Request("HEAD", "/password", "",
+        let authenticated404 = titanInstance.app(request: Request(.head, "/password", "",
                                                                   HTTPHeaders(dictionaryLiteral: ("Authentication", "password"))),
                                                  response: nullResponse).1
 
@@ -351,10 +351,10 @@ final class TitanAPITests: XCTestCase {
                 }
             }
         }
-        let unauthenticatedResponse = titanInstance.app(request: Request("GET", "/password", "", HTTPHeaders()), response: nullResponse).1
+        let unauthenticatedResponse = titanInstance.app(request: Request(.get, "/password", "", HTTPHeaders()), response: nullResponse).1
         XCTAssertEqual(unauthenticatedResponse.code, 401)
 
-        let authenticatedResponse = titanInstance.app(request: Request("GET", "/password", "",
+        let authenticatedResponse = titanInstance.app(request: Request(.get, "/password", "",
                                                                        HTTPHeaders(dictionaryLiteral: ("Authentication", "other password"))),
                                                       response: nullResponse).1
         XCTAssertEqual(authenticatedResponse.code, 200)

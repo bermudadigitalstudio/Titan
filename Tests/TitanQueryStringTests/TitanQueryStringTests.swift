@@ -24,7 +24,7 @@ final class TitanQueryStringTests: XCTestCase {
 
     func testQueryPairs() throws {
         let path = "/users?verified=true&q=thomas%20catterall&this_has_space=what+are+thingies&this_has_plus=2%2B2%3D4"
-        let request: RequestType = try Request(method: "GET", path: path, body: "", headers: HTTPHeaders())
+        let request: RequestType = try Request(method: .get, path: path, body: "", headers: HTTPHeaders())
         let parsedQuery = request.queryPairs
         guard parsedQuery.count == 4 else {
             XCTFail("Expected 4 params")
@@ -44,7 +44,7 @@ final class TitanQueryStringTests: XCTestCase {
     }
     func testQuery() throws {
         let path = "/users?verified=true&q=thomas%20catterall&verified=false&this_has_space=what+are+thingies"
-        let request: RequestType = try Request(method: "GET", path: path, body: "", headers: HTTPHeaders())
+        let request: RequestType = try Request(method: .get, path: path, body: "", headers: HTTPHeaders())
         let query = request.query
 
         XCTAssertEqual(query["q"], "thomas catterall")
