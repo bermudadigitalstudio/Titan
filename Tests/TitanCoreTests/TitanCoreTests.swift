@@ -190,7 +190,7 @@ final class TitanCoreTests: XCTestCase {
         headers["Accept"] = "text"
         XCTAssertEqual(headers["Accept"], "text")
         headers["Link"] = "http://example.com"
-        XCTAssertEqual(headers["link"], "http://example.com")
+        XCTAssertEqual(headers["Link"], "http://example.com")
         XCTAssertNotNil(headers["link"])
         headers.removeHeaders(name: "link")
         XCTAssertNil(headers["link"])
