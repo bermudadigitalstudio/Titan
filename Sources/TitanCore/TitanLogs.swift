@@ -11,25 +11,22 @@
 //   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
-import XCTest
-import TitanCore
-import Titan404
+import Foundation
 
-let nullResponse = Response(code: -1, body: Data(), headers: HTTPHeaders())
+public protocol TitanLogger {
 
-class Titan404Tests: XCTestCase {
+    /// log something generally unimportant (lowest priority)
+    func verbose(_ string: String)
 
-    static var allTests = [
-        ("test404", test404)
-        ]
+    /// log something which help during debugging (low priority)
+    func debug(_ string: String)
 
-    func test404() {
-        let titanInstance = Titan()
-        titanInstance.addFunction(defaultTo404)
+    /// log something which you are really interested but which is not an issue or error (normal priority)
+    func info(_ string: String)
 
-        let response = titanInstance.app(request: Request(method: "GET", path: "/notfound", body: Data(), headers: HTTPHeaders()),
-                                         response: nullResponse)
+     /// log something which may cause big trouble soon (high priority)
+    func warning(_ string: String)
 
-        XCTAssertEqual(response.1.code, 404)
-    }
+    /// log something which will keep you awake at night (highest priority)
+    func error(_ string: String)
 }

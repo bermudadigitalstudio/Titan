@@ -1,29 +1,41 @@
+//   Copyright 2017 Enervolution GmbH
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//   https://www.apache.org/licenses/LICENSE-2.0
+//
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
 import Foundation
 
+/// A protocol defining an HTTP request
 public protocol RequestType {
+    /// The HTTP request body.
     var body: Data { get }
+    /// The HTTP request path, including query string and any fragments.
     var path: String { get }
+    /// The HTTP request method.
     var method: String { get }
-    var headers: [Header] { get }
+    /// The HTTP request headers.
+    var headers: HTTPHeaders { get }
 }
 
-extension RequestType {
-    public var bodyString: String? {
-        return String(data: self.body, encoding: .utf8)
-    }
+/// A reified `RequestType`
+public struct Request: RequestType {
 
-    public func copy() -> Request {
-        return Request(request: self)
-    }
-}
-
-public struct Request {
     public var method: String
     public var path: String
     public var body: Data
-    public var headers: [Header]
+    public var headers: HTTPHeaders
 
-    public init(method: String, path: String, body: String, headers: [Header]) throws {
+    /// Create a Request
+    /// Throws an error if the body parameter cannot be converted to Data
+    public init(method: String, path: String, body: String, headers: HTTPHeaders) throws {
         self.method = method
         self.path = path
         guard let data = body.data(using: .utf8) else {
@@ -33,7 +45,8 @@ public struct Request {
         self.headers = headers
     }
 
-    public init(method: String, path: String, body: Data, headers: [Header]) {
+    /// Create a Request
+    public init(method: String, path: String, body: Data, headers: HTTPHeaders) {
         self.method = method
         self.path = path
         self.body = body
@@ -41,10 +54,21 @@ public struct Request {
     }
 }
 
-extension Request: RequestType {}
-
 extension Request {
+    /// Create a Request from a RequestType
     public init(request: RequestType) {
         self.init(method: request.method, path: request.path, body: request.body, headers: request.headers)
+    }
+}
+
+extension RequestType {
+    /// The HTTP request body as a UTF-8 encoded string.
+    public var body: String? {
+        return String(data: self.body, encoding: .utf8)
+    }
+
+    /// Create a Request as a copy of the RequestType
+    public func copy() -> Request {
+        return Request(request: self)
     }
 }

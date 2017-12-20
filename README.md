@@ -74,8 +74,10 @@ app.get("/") { req, _ in
 }
 
 /// 2 parameters in URL
-app.delete("/item/*/subitem/*") { req, param1, param2, _ in
-	let text = "I will delete \(param2) in \(param1)"
+app.delete("/item/{item_id}/subitem/{sub_item_id}") { req, res, paramaters in
+    let itemId = params["item_id"] ?? ""
+    let subId = params["sub_item_id"] ?? ""
+	let text = "I will delete \(subId) in \(itemId)"
     return(req, Response(200, text))
 }
 
@@ -102,13 +104,23 @@ TitanKituraAdapter.serve(app.app, on: 8000)
 
 You can now run the webserver and open [http://localhost:8000](http://localhost:8000) or [http://localhost:8000/item/foo/subitem/bar](http://localhost:8000/item/apple/subitem/banana) or send JSON via POST to [http://localhost:8000/data](http://localhost:8000/data)
 
+## Concepts
+
+- A Titan app is very simple: it is an array of functions that each get called. The output of one function is the input to the next.
+- The first function receives the HTTP request and a dummy response.
+- The last returned response is sent to the client.
+- How you use Titan is up to you: you can modify the request before you pass it on further. You can compress or rewrite responses before they are sent to the client.
+- Titan allows you to easily write integration tests without needing a full HTTP client.
+- Titan allows you to write _unit tests_ by decomposing your request handling code into `Function`s and testing that directly.
+- Titan is not suitable for large or monolithic applications. Ideally, your entire Titan app should be readable in one page.
+
 ## Tests
 
 Execute `Scripts/test.sh` to run all unit-tests inside a Docker container.
 
 ## Contributing
 
-Titan is maintained by Thomas Catterall ([@swizzlr](https://github.com/swizzlr)), Johannes Erhardt ([@johanneserhardt](https://github.com/johanneserhardt)) and Sebastian Kreutzberger ([@skreutzberger](https://github.com/skreutzberger)).
+Titan is maintained by Thomas Catterall ([@swizzlr](https://github.com/swizzlr)), Johannes Erhardt ([@johanneserhardt](https://github.com/johanneserhardt)), Sebastian Kreutzberger ([@skreutzberger](https://github.com/skreutzberger)) and Laurent Gaches ([@lgaches](https://github.com/lgaches)).
 
 Contributions are more than welcomed. You can either work on existing Github issues or discuss with us your ideas in a new Github issue. Thanks 🙌
 

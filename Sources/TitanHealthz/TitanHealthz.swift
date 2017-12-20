@@ -1,3 +1,16 @@
+//   Copyright 2017 Enervolution GmbH
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//   https://www.apache.org/licenses/LICENSE-2.0
+//
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
 import Foundation
 import TitanCore
 
@@ -25,11 +38,11 @@ public func healthzWithCheck(check: @escaping () throws -> String?) -> Function 
             let result = try check() ?? "Ok"
             let ok = try Response(code: 200,
                                   body: "Host: \(cachedHostname)\nTime: \(Date())\n\nStatus: \(result)",
-                headers: [])
+                headers: HTTPHeaders())
             return (req, ok)
         } catch {
             let body = "Host: \(cachedHostname)\nTime: \(Date())\n\nStatus: \(error)".data(using: .utf8) ?? Data()
-            let notOk = Response(code: 500, body: body, headers: [])
+            let notOk = Response(code: 500, body: body, headers: HTTPHeaders())
             return (req, notOk)
         }
     }

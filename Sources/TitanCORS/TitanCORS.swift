@@ -1,3 +1,16 @@
+//   Copyright 2017 Enervolution GmbH
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//   https://www.apache.org/licenses/LICENSE-2.0
+//
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
 import Foundation
 import TitanCore
 
@@ -13,14 +26,11 @@ public let allowAllOriginsHeader: Header = ("access-control-allow-origin", "*")
 
 /// If one isn't present, insert a wildcard CORS allowed origin header
 public let allowAllOrigins: Function = { req, res in
-    var respHeaders = res.headers
-    guard (respHeaders.contains { header in
-        return header.name.lowercased() == "access-control-allow-origin"
-        } != true) else {
-            return (req, res)
-    }
-    respHeaders.append(allowAllOriginsHeader)
-    return (req, Response(code: res.code, body: res.body, headers: respHeaders))
+    var allowAllOriginHeaders = HTTPHeaders(dictionaryLiteral: allowAllOriginsHeader)
+    // swiftlint:disable shorthand_operator
+    allowAllOriginHeaders = allowAllOriginHeaders + res.headers
+    // swiftlint:enable shorthand_operator
+    return (req, Response(code: res.code, body: res.body, headers: allowAllOriginHeaders))
 }
 
 /// Respond to a CORS preflight request, allowing all methods requested in the preflight.
@@ -46,5 +56,5 @@ public let respondToPreflightAllowingAllMethods: Function = { req, res in
     } else {
         headers.append(("access-control-allow-headers", "*"))
     }
-    return (req, Response(code: 200, body: Data(), headers: headers))
+    return (req, Response(code: 200, body: Data(), headers: HTTPHeaders(headers: headers)))
 }

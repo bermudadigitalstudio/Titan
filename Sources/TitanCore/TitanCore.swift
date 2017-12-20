@@ -1,14 +1,29 @@
+//   Copyright 2017 Enervolution GmbH
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//   https://www.apache.org/licenses/LICENSE-2.0
+//
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
 import Foundation
-
-/// Little known fact: HTTP headers need not be unique!
-public typealias Header = (name: String, value: String)
 
 public typealias Function = (RequestType, ResponseType) -> (RequestType, ResponseType)
 
 public final class Titan {
 
-    public init() {}
+    public let log: TitanLogger?
 
+    public init(_ logger: TitanLogger? = nil) {
+        self.log = logger
+    }
+
+    // A chain of Functions that are executed in order. The output of one is the input of the next; the final output is sent to the client.
     private var functionStack = [Function]()
 
     /// add a function to Titan’s request / response processing flow
@@ -17,15 +32,14 @@ public final class Titan {
     }
 
     /// Titan handler which should be given to a server
-    public func app(request: RequestType) -> ResponseType {
+    public func app(request: RequestType, response: ResponseType) -> (RequestType, ResponseType) {
         typealias Result = (RequestType, ResponseType)
 
-        let initialReq = request
-        let initialRes = Response(code: -1, body: Data(), headers: [])
-        let initial: Result = (initialReq, initialRes)
-        let res = functionStack.reduce(initial) { (res, next) -> Result in
+        let initial: Result = (request, response)
+        // Apply the function one at a time to the request and the response, returning the result to the next function.
+        return functionStack.reduce(initial) { (res, next) -> Result in
             return next(res.0, res.1)
         }
-        return res.1
     }
+
 }

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# test Titan inside a disposable Docker container
 
-set -eo pipefail
+set -exo pipefail
 
-docker build -t titan .
-docker run --rm --name titan_test titan
+docker build -t titan-test .
+docker run --rm titan-test \
+  || ( set +x; echo -e "\033[0;31mTests exited with non-zero exit code\033[0m"; tput bel; exit 1 )
