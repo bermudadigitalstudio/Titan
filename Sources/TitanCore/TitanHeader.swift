@@ -41,7 +41,7 @@ public struct HTTPHeaders {
             guard let newValue = newValue else {
                 return
             }
-            self.headers.append((name.lowercased(), newValue))
+            self.headers.append((name, newValue))
         }
     }
 

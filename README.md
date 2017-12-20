@@ -40,8 +40,8 @@ let package = Package(
         .executable(name: "mywebapp", targets: ["mywebapp"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/bermudadigitalstudio/TitanKituraAdapter.git", from: "0.8.0"),
-        .package(url: "https://github.com/bermudadigitalstudio/Titan", from: "0.8.0")
+        .package(url: "https://github.com/bermudadigitalstudio/TitanKituraAdapter.git", .upToNextMinor(from: "0.9.0")),
+        .package(url: "https://github.com/bermudadigitalstudio/Titan", .upToNextMinor(from: "0.9.0"))
     ],
     targets: [
         .target(
