@@ -24,8 +24,8 @@ public indirect enum HTTPMethod: Equatable {
     case trace
     case options
     case custom(named: String)
-    
-    public static func ==(lhs: HTTPMethod, rhs: HTTPMethod) -> Bool {
+
+    public static func == (lhs: HTTPMethod, rhs: HTTPMethod) -> Bool {
         switch (lhs, rhs) {
         case (.get, .get):
             return true
@@ -65,12 +65,12 @@ public protocol RequestType {
 
 /// A reified `RequestType`
 public struct Request: RequestType {
-    
+
     public var method: HTTPMethod
     public var path: String
     public var body: Data
     public var headers: HTTPHeaders
-    
+
     /// Create a Request
     /// Throws an error if the body parameter cannot be converted to Data
     public init(method: HTTPMethod, path: String, body: String, headers: HTTPHeaders) throws {
@@ -82,7 +82,7 @@ public struct Request: RequestType {
         self.body = data
         self.headers = headers
     }
-    
+
     /// Create a Request
     public init(method: HTTPMethod, path: String, body: Data, headers: HTTPHeaders) {
         self.method = method
@@ -104,10 +104,9 @@ extension RequestType {
     public var body: String? {
         return String(data: self.body, encoding: .utf8)
     }
-    
+
     /// Create a Request as a copy of the RequestType
     public func copy() -> Request {
         return Request(request: self)
     }
 }
-

@@ -114,7 +114,8 @@ final class TitanCoreTests: XCTestCase {
             return (req, Response(code: 500, body: Data(), headers: HTTPHeaders()))
         }
 
-        let response = t.app(request: Request(method: .custom(named: "METHOD"), path: "", body: Data(), headers: HTTPHeaders()), response: nullResponse).1
+        let response = t.app(request: Request(method: .custom(named: "METHOD"), path: "", body: Data(), headers: HTTPHeaders()),
+                             response: nullResponse).1
         XCTAssertEqual(response.body, "response body")
         XCTAssertEqual(response.code, 700)
         XCTAssertEqual(response.headers["content-type"], "text/plain")

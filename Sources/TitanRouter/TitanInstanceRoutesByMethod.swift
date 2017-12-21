@@ -43,7 +43,7 @@ extension Titan {
     public func head(path: String, handler: @escaping Function) {
         route(method: .head, path: path, handler: handler)
     }
-    
+
     public func custom(withName name: String, path: String, handler: @escaping Function) {
         route(method: .custom(named: name), path: path, handler: handler)
     }
