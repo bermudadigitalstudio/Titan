@@ -13,6 +13,44 @@
 //   limitations under the License.
 import Foundation
 
+/// An enumeration of available HTTP Request Methods
+public indirect enum HTTPMethod: Equatable {
+    case get
+    case head
+    case put
+    case post
+    case patch
+    case delete
+    case trace
+    case options
+    case custom(named: String)
+    
+    public static func ==(lhs: HTTPMethod, rhs: HTTPMethod) -> Bool {
+        switch (lhs, rhs) {
+        case (.get, .get):
+            return true
+        case (.head, .head):
+            return true
+        case (.put, .put):
+            return true
+        case (.post, .post):
+            return true
+        case (.patch, .patch):
+            return true
+        case (.delete, .delete):
+            return true
+        case (.trace, .trace):
+            return true
+        case (.options, .options):
+            return true
+        case (.custom(let a), .custom(let b)):
+            return a == b
+        default:
+            return false
+        }
+    }
+}
+
 /// A protocol defining an HTTP request
 public protocol RequestType {
     /// The HTTP request body.
@@ -20,22 +58,22 @@ public protocol RequestType {
     /// The HTTP request path, including query string and any fragments.
     var path: String { get }
     /// The HTTP request method.
-    var method: String { get }
+    var method: HTTPMethod { get }
     /// The HTTP request headers.
     var headers: HTTPHeaders { get }
 }
 
 /// A reified `RequestType`
 public struct Request: RequestType {
-
-    public var method: String
+    
+    public var method: HTTPMethod
     public var path: String
     public var body: Data
     public var headers: HTTPHeaders
-
+    
     /// Create a Request
     /// Throws an error if the body parameter cannot be converted to Data
-    public init(method: String, path: String, body: String, headers: HTTPHeaders) throws {
+    public init(method: HTTPMethod, path: String, body: String, headers: HTTPHeaders) throws {
         self.method = method
         self.path = path
         guard let data = body.data(using: .utf8) else {
@@ -44,9 +82,9 @@ public struct Request: RequestType {
         self.body = data
         self.headers = headers
     }
-
+    
     /// Create a Request
-    public init(method: String, path: String, body: Data, headers: HTTPHeaders) {
+    public init(method: HTTPMethod, path: String, body: Data, headers: HTTPHeaders) {
         self.method = method
         self.path = path
         self.body = body
@@ -66,9 +104,10 @@ extension RequestType {
     public var body: String? {
         return String(data: self.body, encoding: .utf8)
     }
-
+    
     /// Create a Request as a copy of the RequestType
     public func copy() -> Request {
         return Request(request: self)
     }
 }
+

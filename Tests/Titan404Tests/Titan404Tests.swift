@@ -27,7 +27,7 @@ class Titan404Tests: XCTestCase {
         let titanInstance = Titan()
         titanInstance.addFunction(defaultTo404)
 
-        let response = titanInstance.app(request: Request(method: "GET", path: "/notfound", body: Data(), headers: HTTPHeaders()),
+        let response = titanInstance.app(request: Request(method: .get, path: "/notfound", body: Data(), headers: HTTPHeaders()),
                                          response: nullResponse)
 
         XCTAssertEqual(response.1.code, 404)

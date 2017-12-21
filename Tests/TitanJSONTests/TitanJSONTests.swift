@@ -25,7 +25,7 @@ class TitanJSONTests: XCTestCase {
 
     func testJSONTRequest() throws {
         let jsonBody = "{\"data\": [1, 2, 3]}"
-        let req: RequestType = try Request(method: "POST", path: "/ingest", body: jsonBody, headers: HTTPHeaders())
+        let req: RequestType = try Request(method: .post, path: "/ingest", body: jsonBody, headers: HTTPHeaders())
         guard let json = req.json as? Dictionary<String, Array<Int>> else {
             XCTFail("Received: \(String(describing: req.json))")
             return

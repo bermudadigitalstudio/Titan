@@ -35,7 +35,7 @@ public let allowAllOrigins: Function = { req, res in
 
 /// Respond to a CORS preflight request, allowing all methods requested in the preflight.
 public let respondToPreflightAllowingAllMethods: Function = { req, res in
-    guard req.method.uppercased() == "OPTIONS" else {
+    guard req.method == .options else {
         return (req, res)
     }
     guard let requestedMethods = (req.headers.first(where: { (name, _) -> Bool in

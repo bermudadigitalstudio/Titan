@@ -18,11 +18,11 @@ extension Titan {
     /// Core routing handler for Titan Routing.
     /// Passing `nil` for the method results in matching all methods for a given path
     /// Path matching is defined in `matchRoute` method, documented in `docs/Routes.md`
-    public func route(method: String? = nil, path: String, handler: @escaping Function) {
+    public func route(method: HTTPMethod? = nil, path: String, handler: @escaping Function) {
 
         let routeFunction: Function = { (req, res) in
 
-            if let m = method, m.uppercased() != req.method.uppercased() {
+            if let m = method, m != req.method {
                 return (req, res)
             }
 
