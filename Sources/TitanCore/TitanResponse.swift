@@ -30,12 +30,12 @@ public struct Response: ResponseType {
     public var body: Data
 
     /// Create a Response
-    public init(code: Int, body: Data, headers: HTTPHeaders = HTTPHeaders()) {
+    public init(code: Int, body: Data?, headers: HTTPHeaders = HTTPHeaders()) {
         self.code = code
-        self.body = body
+        self.body = body ?? Data()
         self.headers = headers
     }
-
+    
     /// Create a Response
     /// Throws an error if the body parameter cannot be converted to Data
     public init(code: Int, body: String, headers: HTTPHeaders) throws {
