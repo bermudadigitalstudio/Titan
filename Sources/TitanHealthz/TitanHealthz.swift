@@ -15,7 +15,7 @@ import Foundation
 import TitanCore
 
 /// A basic healthcheck route that returns 200 and diagnostic info
-public let healthz: Function = healthzWithCheck(check: { return nil })
+public let healthz: TitanFunc = healthzWithCheck(check: { return nil })
 
 // Workaround for https://bugs.swift.org/browse/SR-6391
 let cachedHostname: String = {
@@ -26,7 +26,7 @@ let cachedHostname: String = {
 /// If a string is returned, the string is returned as part of the diagnostic info in the
 /// healthcheck 200 response.
 /// If an error is thrown, the error is coerced to a string and printed inside a 500 response.
-public func healthzWithCheck(check: @escaping () throws -> String?) -> Function {
+public func healthzWithCheck(check: @escaping () throws -> String?) -> TitanFunc {
     return { req, res in
 
         guard req.path.lowercased() == "/healthz",

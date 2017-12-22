@@ -13,8 +13,10 @@
 //   limitations under the License.
 import TitanCore
 
-func toFunction(_ handler: @escaping (RequestType, ResponseType, [String: String]) -> (RequestType, ResponseType),
-                with pathTemplate: String) -> Function {
+public typealias PathParameters = [String: String]
+public typealias TitanPathParametersFunc = (RequestType, ResponseType, PathParameters) -> (RequestType, ResponseType)
+
+func toTitanFunc(_ handler: @escaping TitanPathParametersFunc, with pathTemplate: String) -> TitanFunc {
 
     return { req, res in
         let params = parameters(from: req.path, with: pathTemplate)
@@ -28,7 +30,7 @@ func toFunction(_ handler: @escaping (RequestType, ResponseType, [String: String
 /// Where the `path` is /users/567/email
 /// Where the `template` is /users/{id}/email
 /// return ["id":"567"]
-func parameters(from path: String, with template: String) -> [String: String] {
+func parameters(from path: String, with template: String) -> PathParameters {
     // Split the path and the template into its individual parts
     var params: [String: String] = [:]
     let pathComps = path.splitOnSlashes()

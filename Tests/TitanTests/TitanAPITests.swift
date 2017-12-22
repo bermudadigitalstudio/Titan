@@ -77,7 +77,7 @@ final class TitanAPITests: XCTestCase {
         titanInstance.get("/echoMyBody") { req, _ in
             return (req, Response(200, req.body, HTTPHeaders()))
         }
-        XCTAssertEqual(titanInstance.app(request: Request(.get, "/echoMyBody", "hello, this is my body"), response: nullResponse).1.body,
+        XCTAssertEqual(titanInstance.app(request: Request(.get, "/echoMyBody", "hello, this is my body"), response: nullResponse).response.body,
                        "hello, this is my body")
     }
 
@@ -93,13 +93,13 @@ final class TitanAPITests: XCTestCase {
         titanInstance.get("/echoMyBody") { req, _ in
             return (req, Response(200, req.body))
         }
-        XCTAssertEqual(titanInstance.app(request: Request(.get, "/echoMyBody", "hello, this is my body"), response: nullResponse).1.body,
+        XCTAssertEqual(titanInstance.app(request: Request(.get, "/echoMyBody", "hello, this is my body"), response: nullResponse).response.body,
                        "hello, this is my body")
         XCTAssertEqual(titanInstance.app(request: Request(.get, "/username"), response: nullResponse).1.body, "swizzlr")
     }
 
     func testTitanSugar() {
-        let somePremadeFunction: Function = { req, res in
+        let somePremadeFunction: TitanFunc = { req, res in
             return (req, res)
         }
         titanInstance.get(path: "/username", handler: somePremadeFunction)
@@ -124,7 +124,7 @@ final class TitanAPITests: XCTestCase {
             end = Date()
             return (req, res)
         }
-        _ = titanInstance.app(request: Request(.get, "/username"), response: nullResponse).1
+        _ = titanInstance.app(request: Request(.get, "/username"), response: nullResponse).response
         XCTAssertLessThan(start, end)
     }
 
@@ -225,7 +225,7 @@ final class TitanAPITests: XCTestCase {
 
         let resp = titanInstance.app(request: Request(.post, "/username", "Lisa"), response: nullResponse).1
         XCTAssertEqual(resp.code, 201)
-        XCTAssertEqual(titanInstance.app(request: Request(.get, "/username"), response: nullResponse).1.body, "Lisa")
+        XCTAssertEqual(titanInstance.app(request: Request(.get, "/username"), response: nullResponse).response.body, "Lisa")
     }
 
     func testCanAccessJSONBody() {

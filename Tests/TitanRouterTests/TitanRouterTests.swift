@@ -114,7 +114,7 @@ final class TitanRouterTests: XCTestCase {
     }
 
     func testTitanSugar() {
-        let somePremadeFunction: Function = { req, res in
+        let somePremadeFunction: TitanFunc = { req, res in
             return (req, res)
         }
         app.get(path: "/username", handler: somePremadeFunction)
