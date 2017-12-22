@@ -25,7 +25,7 @@ public func addInsecureCORSSupport(_ titan: Titan) {
 public let allowAllOriginsHeader: Header = ("access-control-allow-origin", "*")
 
 /// If one isn't present, insert a wildcard CORS allowed origin header
-public let allowAllOrigins: Function = { req, res in
+public let allowAllOrigins: TitanFunc = { req, res in
     var allowAllOriginHeaders = HTTPHeaders(dictionaryLiteral: allowAllOriginsHeader)
     // swiftlint:disable shorthand_operator
     allowAllOriginHeaders = allowAllOriginHeaders + res.headers
@@ -34,7 +34,7 @@ public let allowAllOrigins: Function = { req, res in
 }
 
 /// Respond to a CORS preflight request, allowing all methods requested in the preflight.
-public let respondToPreflightAllowingAllMethods: Function = { req, res in
+public let respondToPreflightAllowingAllMethods: TitanFunc = { req, res in
     guard req.method == .options else {
         return (req, res)
     }

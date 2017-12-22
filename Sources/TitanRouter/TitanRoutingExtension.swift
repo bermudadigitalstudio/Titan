@@ -18,9 +18,9 @@ extension Titan {
     /// Core routing handler for Titan Routing.
     /// Passing `nil` for the method results in matching all methods for a given path
     /// Path matching is defined in `matchRoute` method, documented in `docs/Routes.md`
-    public func route(method: HTTPMethod? = nil, path: String, handler: @escaping Function) {
+    public func route(method: HTTPMethod? = nil, path: String, handler: @escaping TitanFunc) {
 
-        let routeFunction: Function = { (req, res) in
+        let routeFunction: TitanFunc = { (req, res) in
 
             if let m = method, m != req.method {
                 return (req, res)
@@ -36,14 +36,26 @@ extension Titan {
         addFunction(routeFunction)
     }
 
-    /// Synonym for `route`
-    public func addFunction(path: String, handler: @escaping Function) {
-        route(path: path, handler: handler)
+    public func route(_ method: HTTPMethod?, _ path: String, _ handler: @escaping TitanFunc) {
+        self.route(method: method, path: path, handler: handler)
     }
 
     /// Synonym for `route`
-    public func allMethods(path: String, handler: @escaping Function) {
+    public func addFunction(path: String, handler: @escaping TitanFunc) {
         route(path: path, handler: handler)
+    }
+
+    public func addFunction(_ path: String, _ handler: @escaping TitanFunc) {
+        self.addFunction(path: path, handler: handler)
+    }
+
+    /// Synonym for `route`
+    public func allMethods(path: String, handler: @escaping TitanFunc) {
+        route(path: path, handler: handler)
+    }
+
+    public func allMethods(_ path: String, _ handler: @escaping TitanFunc) {
+        self.allMethods(path: path, handler: handler)
     }
 
 }

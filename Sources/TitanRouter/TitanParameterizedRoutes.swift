@@ -17,31 +17,73 @@ import TitanCore
 
 extension Titan {
 
-    public func get(path: String, handler: @escaping (RequestType, ResponseType, [String: String]) -> (RequestType, ResponseType)) {
-        self.get(path: path, handler: toFunction(handler, with: path))
+    /// Creates a `TitanPathParametersFunc` at the provided path using the `GET` method.
+    public func get(_ path: String, handler: @escaping TitanPathParametersFunc) {
+        self.get(path: path, handler: toTitanFunc(handler, with: path))
     }
 
-    public func post(path: String, handler: @escaping (RequestType, ResponseType, [String: String]) -> (RequestType, ResponseType)) {
-        self.post(path: path, handler: toFunction(handler, with: path))
+    /// Creates a `TitanPathParametersFunc` at the provided path using the `GET` method.
+    public func get(path: String, handler: @escaping TitanPathParametersFunc) {
+        self.get(path: path, handler: toTitanFunc(handler, with: path))
     }
 
-    public func put(path: String, handler: @escaping (RequestType, ResponseType, [String: String]) -> (RequestType, ResponseType)) {
-        self.put(path: path, handler: toFunction(handler, with: path))
+    /// Creates a `TitanPathParametersFunc` at the provided path using the `POST` method.
+    public func post(path: String, handler: @escaping TitanPathParametersFunc) {
+        self.post(path: path, handler: toTitanFunc(handler, with: path))
     }
 
-    public func patch(path: String, handler: @escaping (RequestType, ResponseType, [String: String]) -> (RequestType, ResponseType)) {
-        self.patch(path: path, handler: toFunction(handler, with: path))
+    /// Creates a `TitanPathParametersFunc` at the provided path using the `POST` method.
+    public func post(_ path: String, _ handler: @escaping TitanPathParametersFunc) {
+        self.post(path: path, handler: handler)
     }
 
-    public func delete(path: String, handler: @escaping (RequestType, ResponseType, [String: String]) -> (RequestType, ResponseType)) {
-        self.delete(path: path, handler: toFunction(handler, with: path))
+    /// Creates a `TitanPathParametersFunc` at the provided path using the `PUT` method.
+    public func put(path: String, handler: @escaping TitanPathParametersFunc) {
+        self.put(path: path, handler: toTitanFunc(handler, with: path))
     }
 
-    public func options(path: String, handler: @escaping (RequestType, ResponseType, [String: String]) -> (RequestType, ResponseType)) {
-        self.delete(path: path, handler: toFunction(handler, with: path))
+    /// Creates a `TitanPathParametersFunc` at the provided path using the `PUT` method.
+    public func put(_ path: String, _ handler: @escaping TitanPathParametersFunc) {
+        self.put(path: path, handler: handler)
     }
 
-    public func head(path: String, handler: @escaping (RequestType, ResponseType, [String: String]) -> (RequestType, ResponseType)) {
-        self.head(path: path, handler: toFunction(handler, with: path))
+    /// Creates a `TitanPathParametersFunc` at the provided path using the `PATCH` method.
+    public func patch(path: String, handler: @escaping TitanPathParametersFunc) {
+        self.patch(path: path, handler: toTitanFunc(handler, with: path))
+    }
+
+    /// Creates a `TitanPathParametersFunc` at the provided path using the `PATCH` method.
+    public func patch(_ path: String, _ handler: @escaping TitanPathParametersFunc) {
+        self.patch(path: path, handler: handler)
+    }
+
+    /// Creates a `TitanPathParametersFunc` at the provided path using the `DELETE` method.
+    public func delete(path: String, handler: @escaping TitanPathParametersFunc) {
+        self.delete(path: path, handler: toTitanFunc(handler, with: path))
+    }
+
+    /// Creates a `TitanPathParametersFunc` at the provided path using the `DELETE` method.
+    public func delete(_ path: String, _ handler: @escaping TitanPathParametersFunc) {
+        self.delete(path: path, handler: handler)
+    }
+
+    /// Creates a `TitanPathParametersFunc` at the provided path using the `OPTIONS` method.
+    public func options(path: String, handler: @escaping TitanPathParametersFunc) {
+        self.delete(path: path, handler: toTitanFunc(handler, with: path))
+    }
+
+    /// Creates a `TitanPathParametersFunc` at the provided path using the `OPTIONS` method.
+    public func options(_ path: String, _ handler: @escaping TitanPathParametersFunc) {
+        self.options(path: path, handler: handler)
+    }
+
+    /// Creates a `TitanPathParametersFunc` at the provided path using the `HEAD` method.
+    public func head(path: String, handler: @escaping TitanPathParametersFunc) {
+        self.head(path: path, handler: toTitanFunc(handler, with: path))
+    }
+
+    /// Creates a `TitanPathParametersFunc` at the provided path using the `HEAD` method.
+    public func head(_ path: String, _ handler: @escaping TitanPathParametersFunc) {
+        self.head(path: path, handler: handler)
     }
 }

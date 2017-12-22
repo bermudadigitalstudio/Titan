@@ -22,7 +22,7 @@ import TitanCore
  no other function has returned a ResponseType. Otherwise, any other function that returns a response will
  effectively overwrite it.
  */
-public let defaultTo404: Function = { (request, response) -> (RequestType, ResponseType) in
+public let defaultTo404: TitanFunc = { (request, response) -> (RequestType, ResponseType) in
 
     do {
         return (request, try Response(code: 404, body: "Not found", headers: HTTPHeaders(dictionaryLiteral: ("Content-Type", "text/plain"))))

@@ -13,32 +13,36 @@
 //   limitations under the License.
 import Foundation
 
-public typealias Function = (RequestType, ResponseType) -> (RequestType, ResponseType)
+public typealias TitanFunc = (RequestType, ResponseType) -> (request: RequestType, response: ResponseType)
 
 public final class Titan {
 
     public let log: TitanLogger?
 
+    /// Creates a Titan instance
+    ///
+    /// - parameters:
+    ///   - logger: a TitanLogger
     public init(_ logger: TitanLogger? = nil) {
         self.log = logger
     }
 
     // A chain of Functions that are executed in order. The output of one is the input of the next; the final output is sent to the client.
-    private var functionStack = [Function]()
+    private var functionStack = [TitanFunc]()
 
     /// add a function to Titan’s request / response processing flow
-    public func addFunction(_ function: @escaping Function) {
+    public func addFunction(_ function: @escaping TitanFunc) {
         functionStack.append(function)
     }
 
     /// Titan handler which should be given to a server
-    public func app(request: RequestType, response: ResponseType) -> (RequestType, ResponseType) {
+    public func app(request: RequestType, response: ResponseType) -> (request: RequestType, response: ResponseType) {
         typealias Result = (RequestType, ResponseType)
 
         let initial: Result = (request, response)
         // Apply the function one at a time to the request and the response, returning the result to the next function.
         return functionStack.reduce(initial) { (res, next) -> Result in
-            return next(res.0, res.1)
+            return next(res.request, res.response)
         }
     }
 
