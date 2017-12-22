@@ -13,7 +13,6 @@
 //   limitations under the License.
 import Foundation
 
-
 /// A protocol defining an HTTP request
 public protocol RequestType {
     /// The HTTP request body.
