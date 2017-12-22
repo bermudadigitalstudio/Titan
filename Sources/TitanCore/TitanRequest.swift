@@ -13,43 +13,6 @@
 //   limitations under the License.
 import Foundation
 
-/// An enumeration of available HTTP Request Methods
-public indirect enum HTTPMethod: Equatable {
-    case get
-    case head
-    case put
-    case post
-    case patch
-    case delete
-    case trace
-    case options
-    case custom(named: String)
-
-    public static func == (lhs: HTTPMethod, rhs: HTTPMethod) -> Bool {
-        switch (lhs, rhs) {
-        case (.get, .get):
-            return true
-        case (.head, .head):
-            return true
-        case (.put, .put):
-            return true
-        case (.post, .post):
-            return true
-        case (.patch, .patch):
-            return true
-        case (.delete, .delete):
-            return true
-        case (.trace, .trace):
-            return true
-        case (.options, .options):
-            return true
-        case (.custom(let a), .custom(let b)):
-            return a == b
-        default:
-            return false
-        }
-    }
-}
 
 /// A protocol defining an HTTP request
 public protocol RequestType {

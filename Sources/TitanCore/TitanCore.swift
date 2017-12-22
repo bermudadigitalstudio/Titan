@@ -19,6 +19,10 @@ public final class Titan {
 
     public let log: TitanLogger?
 
+    /// Creates a Titan instance
+    ///
+    /// - parameters:
+    ///   - logger: a TitanLogger
     public init(_ logger: TitanLogger? = nil) {
         self.log = logger
     }
